@@ -18,6 +18,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::group(['middleware' => ['auth']], function () {
 
     // Le rotte custom vanno PRIMA di resource per evitare conflitti
+    Route::post('/product-categories/list/table', [App\Http\Controllers\ProductCategoryController::class, 'listDataTable'])->name('product-categories.datatable');
+    Route::post('/product-categories/delete', [App\Http\Controllers\ProductCategoryController::class, 'delete'])->name('product-categories.delete');
+    Route::resource('product-categories', App\Http\Controllers\ProductCategoryController::class);
+
     Route::post('/unit-of-measures/list/table', [App\Http\Controllers\UnitOfMeasureController::class, 'listDataTable'])->name('unit-of-measures.datatable');
     Route::post('/unit-of-measures/delete', [App\Http\Controllers\UnitOfMeasureController::class, 'delete'])->name('unit-of-measures.delete');
     Route::resource('unit-of-measures', App\Http\Controllers\UnitOfMeasureController::class);

@@ -332,6 +332,11 @@ return [
                     'url'  => '/unit-of-measures',
                     'icon' => 'fas fa-ruler',
                 ],
+                [
+                    'text' => 'Categoria Prodotto',
+                    'url'  => '/product-categories',
+                    'icon' => 'fas fa-boxes',
+                ],
             ],
         ],
     ],
