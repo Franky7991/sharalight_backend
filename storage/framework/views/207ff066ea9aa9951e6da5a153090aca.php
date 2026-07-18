@@ -1,10 +1,11 @@
 
-<?php $__env->startSection('title', 'Unità di Misura'); ?>
+<?php $__env->startSection('title', 'Categorie Prodotto'); ?>
 <?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
-        <h4 class="mb-0">Unità di Misura</h4>
+        <h4 class="mb-0">Categorie Prodotto</h4>
     </div>
     <div class="card-body">
         <div class="row">
@@ -13,12 +14,12 @@
                     <div class="col-6"></div>
                     <div class="col-3">
                         <button type="button" class="btn btn-danger btn-block btn-sm js-delete"
-                            data-list="table_list" data-url="<?php echo e(route('unit-of-measures.delete')); ?>">
+                            data-list="table_list" data-url="<?php echo e(route('product-categories.delete')); ?>">
                             <i class="fa fa-trash"></i> Cancella
                         </button>
                     </div>
                     <div class="col-3">
-                        <a href="<?php echo e(route('unit-of-measures.create')); ?>">
+                        <a href="<?php echo e(route('product-categories.create')); ?>">
                             <button type="button" class="btn btn-primary btn-block btn-sm">
                                 <i class="fa fa-plus"></i> Nuovo
                             </button>
@@ -32,7 +33,7 @@
                         <tr>
                             <th><input class="form-check-input" type="checkbox" onClick="toggle(this, 'selected[]')"></th>
                             <th>Nome</th>
-                            <th>Simbolo</th>
+                            <th>Unità di Misura</th>
                             <th>Azioni</th>
                         </tr>
                     </thead>
@@ -43,11 +44,13 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('js'); ?>
 <script>
 $(document).ready(function () {
+
     $(document).on('click', '.btn_edit', function () {
-        var url = "<?php echo e(route('unit-of-measures.show', ['_id_'])); ?>";
+        var url = "<?php echo e(route('product-categories.show', ['_id_'])); ?>";
         window.location.href = url.replace('_id_', $(this).data('id'));
     });
 
@@ -56,14 +59,14 @@ $(document).ready(function () {
         pageLength: -1,
         ajax: {
             type: 'POST',
-            url: '<?php echo e(route('unit-of-measures.datatable')); ?>',
+            url: '<?php echo e(route('product-categories.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             data: {},
         },
         columns: [
             { searchable: false, orderable: false, data: null, defaultContent: "", class: "disableEdit" },
             { data: "name", name: "name" },
-            { data: "symbol", name: "symbol" },
+            { data: "unit_of_measure_name", name: "unit_of_measure_name" },
             { data: "id", name: "id" },
         ],
         columnDefs: [
@@ -81,8 +84,9 @@ $(document).ready(function () {
             },
         ],
     });
+
 });
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/unit_of_measure/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views\product_category\index.blade.php ENDPATH**/ ?>

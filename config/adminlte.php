@@ -337,6 +337,11 @@ return [
                     'url'  => '/product-categories',
                     'icon' => 'fas fa-boxes',
                 ],
+                [
+                    'text' => 'Prodotto',
+                    'url'  => '/products',
+                    'icon' => 'fas fa-box',
+                ],
             ],
         ],
     ],
