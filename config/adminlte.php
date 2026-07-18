@@ -319,6 +319,21 @@ return [
                 ],
             ],
         ],
+        [
+            'header' => 'TABELLE',
+        ],
+        [
+            'text'       => 'Tabella',
+            'icon'       => 'fas fa-table',
+            'icon_color' => 'green',
+            'submenu'    => [
+                [
+                    'text' => 'Unità di Misura',
+                    'url'  => '/unit-of-measures',
+                    'icon' => 'fas fa-ruler',
+                ],
+            ],
+        ],
     ],
 
     /*
