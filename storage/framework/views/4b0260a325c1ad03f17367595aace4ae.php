@@ -1,11 +1,11 @@
 
-<?php $__env->startSection('title', 'Prodotti'); ?>
+<?php $__env->startSection('title', 'Magazzini'); ?>
 <?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
-        <h4 class="mb-0">Prodotti</h4>
+        <h4 class="mb-0">Magazzini</h4>
     </div>
     <div class="card-body">
         <div class="row">
@@ -14,12 +14,12 @@
                     <div class="col-6"></div>
                     <div class="col-3">
                         <button type="button" class="btn btn-danger btn-block btn-sm js-delete"
-                            data-list="table_list" data-url="<?php echo e(route('products.delete')); ?>">
+                            data-list="table_list" data-url="<?php echo e(route('warehouses.delete')); ?>">
                             <i class="fa fa-trash"></i> Cancella
                         </button>
                     </div>
                     <div class="col-3">
-                        <a href="<?php echo e(route('products.create')); ?>">
+                        <a href="<?php echo e(route('warehouses.create')); ?>">
                             <button type="button" class="btn btn-primary btn-block btn-sm">
                                 <i class="fa fa-plus"></i> Nuovo
                             </button>
@@ -33,8 +33,6 @@
                         <tr>
                             <th><input class="form-check-input" type="checkbox" onClick="toggle(this, 'selected[]')"></th>
                             <th>Nome</th>
-                            <th>Categoria</th>
-                            <th>Prodotto Finito</th>
                             <th>Azioni</th>
                         </tr>
                     </thead>
@@ -51,7 +49,7 @@
 $(document).ready(function () {
 
     $(document).on('click', '.btn_edit', function () {
-        var url = "<?php echo e(route('products.show', ['_id_'])); ?>";
+        var url = "<?php echo e(route('warehouses.show', ['_id_'])); ?>";
         window.location.href = url.replace('_id_', $(this).data('id'));
     });
 
@@ -60,16 +58,14 @@ $(document).ready(function () {
         pageLength: -1,
         ajax: {
             type: 'POST',
-            url: '<?php echo e(route('products.datatable')); ?>',
+            url: '<?php echo e(route('warehouses.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             data: {},
         },
         columns: [
             { searchable: false, orderable: false, data: null, defaultContent: "", class: "disableEdit" },
-            { data: "name",                   name: "name" },
-            { data: "product_category_name",  name: "product_category_name" },
-            { data: "finished_product_label", name: "finished_product_label" },
-            { data: "id",                     name: "id" },
+            { data: "name", name: "name" },
+            { data: "id", name: "id" },
         ],
         columnDefs: [
             {
@@ -79,7 +75,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 4,
+                targets: 2,
                 render: function (data) {
                     return '<button type="button" class="btn btn-primary btn-sm btn_edit" data-id="' + data + '"><i class="fa fa-edit"></i></button>';
                 }
@@ -91,4 +87,4 @@ $(document).ready(function () {
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/product/index.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views\warehouse\index.blade.php ENDPATH**/ ?>

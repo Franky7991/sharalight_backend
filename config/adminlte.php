@@ -320,6 +320,21 @@ return [
             ],
         ],
         [
+            'header' => 'MAGAZZINO',
+        ],
+        [
+            'text'       => 'Magazzino',
+            'icon'       => 'fas fa-warehouse',
+            'icon_color' => 'orange',
+            'submenu'    => [
+                [
+                    'text' => 'Magazzini',
+                    'url'  => '/warehouses',
+                    'icon' => 'fas fa-warehouse',
+                ],
+            ],
+        ],
+        [
             'header' => 'TABELLE',
         ],
         [

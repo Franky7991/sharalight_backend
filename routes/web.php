@@ -36,4 +36,8 @@ Route::group(['middleware' => ['auth']], function () {
     // User CRUD
     Route::resource('users', App\Http\Controllers\UserController::class);
 
+    Route::post('/warehouses/list/table', [App\Http\Controllers\WarehouseController::class, 'listDataTable'])->name('warehouses.datatable');
+    Route::post('/warehouses/delete', [App\Http\Controllers\WarehouseController::class, 'delete'])->name('warehouses.delete');
+    Route::resource('warehouses', App\Http\Controllers\WarehouseController::class);
+
 });

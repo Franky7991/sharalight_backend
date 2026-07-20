@@ -240,9 +240,28 @@
       ),
       3 => 
       array (
-        'header' => 'TABELLE',
+        'header' => 'MAGAZZINO',
       ),
       4 => 
+      array (
+        'text' => 'Magazzino',
+        'icon' => 'fas fa-warehouse',
+        'icon_color' => 'orange',
+        'submenu' => 
+        array (
+          0 => 
+          array (
+            'text' => 'Magazzini',
+            'url' => '/warehouses',
+            'icon' => 'fas fa-warehouse',
+          ),
+        ),
+      ),
+      5 => 
+      array (
+        'header' => 'TABELLE',
+      ),
+      6 => 
       array (
         'text' => 'Tabella',
         'icon' => 'fas fa-table',
