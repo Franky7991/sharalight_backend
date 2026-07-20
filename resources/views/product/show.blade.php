@@ -125,6 +125,12 @@
 
 @section('js')
 @if($product->hasRecipe())
+<style>
+    /* Fix backdrop per modal annidate (Bootstrap 4) */
+    .modal-backdrop + .modal-backdrop { z-index: 1055; }
+    #modal-detail-pick { z-index: 1060; }
+    #modal-detail-pick + .modal-backdrop { z-index: 1055; }
+</style>
 @include('product.tabs.recipe_js', ['product' => $product])
 @endif
 @stop

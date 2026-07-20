@@ -24,4 +24,9 @@ class Recipe extends Model
     {
         return $this->belongsTo(ProductCategory::class);
     }
+
+    public function details()
+    {
+        return $this->hasMany(RecipeDetail::class);
+    }
 }

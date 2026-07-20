@@ -127,6 +127,12 @@
 
 <?php $__env->startSection('js'); ?>
 <?php if($product->hasRecipe()): ?>
+<style>
+    /* Fix backdrop per modal annidate (Bootstrap 4) */
+    .modal-backdrop + .modal-backdrop { z-index: 1055; }
+    #modal-detail-pick { z-index: 1060; }
+    #modal-detail-pick + .modal-backdrop { z-index: 1055; }
+</style>
 <?php echo $__env->make('product.tabs.recipe_js', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php endif; ?>
 <?php $__env->stopSection(); ?>

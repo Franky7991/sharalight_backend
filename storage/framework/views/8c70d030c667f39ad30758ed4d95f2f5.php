@@ -14,7 +14,7 @@
             <th>Categoria Prodotto</th>
             <th class="text-right">Quantità</th>
             <th>U.M.</th>
-            <th style="width:80px;">Azioni</th>
+            <th style="width:110px;">Azioni</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -69,6 +69,80 @@
                 </button>
                 <button type="button" class="btn btn-primary btn-sm" id="btn-save-recipe">
                     <i class="fa fa-save"></i> Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-recipe-detail" tabindex="-1" role="dialog"
+     aria-labelledby="modal-recipe-detail-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-recipe-detail-label">
+                    Prodotti — <span id="detail-category-name"></span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="detail-recipe-id" value="">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span></span>
+                    <button type="button" class="btn btn-primary btn-sm" id="btn-add-detail">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+
+                <table id="table_detail_selected" class="table table-sm table-hover" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Prodotto</th>
+                            <th style="width:60px;">Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Chiudi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modal-detail-pick" tabindex="-1" role="dialog"
+     aria-labelledby="modal-detail-pick-label" aria-hidden="true"
+     style="z-index:1060;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-detail-pick-label">Aggiungi prodotto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="table_detail_available" class="table table-sm table-hover" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Prodotto</th>
+                            <th style="width:60px;">Aggiungi</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Chiudi
                 </button>
             </div>
         </div>

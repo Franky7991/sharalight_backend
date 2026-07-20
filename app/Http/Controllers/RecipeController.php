@@ -12,6 +12,7 @@ class RecipeController extends Controller
     {
         $query = Recipe::query()
             ->with(['productCategory.unitOfMeasure'])
+            ->withCount('details')
             ->where('product_id', $productId)
             ->get();
 

@@ -46,4 +46,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/recipes/{recipe}', [App\Http\Controllers\RecipeController::class, 'update'])->name('recipes.update');
     Route::delete('/recipes/{recipe}', [App\Http\Controllers\RecipeController::class, 'destroy'])->name('recipes.destroy');
 
+    // Recipe detail routes
+    Route::post('/recipe-details/list/details/{recipe}', [App\Http\Controllers\RecipeDetailController::class, 'listDetails'])->name('recipe-details.datatable');
+    Route::post('/recipe-details/list/products/{recipe}', [App\Http\Controllers\RecipeDetailController::class, 'listAvailableProducts'])->name('recipe-details.products');
+    Route::post('/recipe-details', [App\Http\Controllers\RecipeDetailController::class, 'store'])->name('recipe-details.store');
+    Route::delete('/recipe-details/{recipeDetail}', [App\Http\Controllers\RecipeDetailController::class, 'destroy'])->name('recipe-details.destroy');
+
 });
