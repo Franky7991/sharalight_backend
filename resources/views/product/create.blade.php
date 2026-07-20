@@ -47,17 +47,19 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <label>Prodotto Finito</label>
-                    <div class="mb-3">
-                        <div class="custom-control custom-switch">
-                            <input type="hidden" name="finished_product" value="0">
-                            <input type="checkbox" class="custom-control-input" id="finished_product"
-                                name="finished_product" value="1"
-                                {{ old('finished_product') ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="finished_product">
-                                Sì, è un prodotto finito
-                            </label>
+                    <label for="type">Tipo *</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-tag"></i></span>
                         </div>
+                        <select id="type" name="type" class="form-control" required>
+                            <option value="">-- Seleziona --</option>
+                            @foreach($productTypes as $value => $label)
+                                <option value="{{ $value }}" {{ old('type') === $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="col-12">

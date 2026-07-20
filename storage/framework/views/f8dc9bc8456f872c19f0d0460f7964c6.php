@@ -34,7 +34,7 @@
                             <th><input class="form-check-input" type="checkbox" onClick="toggle(this, 'selected[]')"></th>
                             <th>Nome</th>
                             <th>Categoria</th>
-                            <th>Prodotto Finito</th>
+                            <th>Tipo</th>
                             <th>Azioni</th>
                         </tr>
                     </thead>
@@ -66,10 +66,10 @@ $(document).ready(function () {
         },
         columns: [
             { searchable: false, orderable: false, data: null, defaultContent: "", class: "disableEdit" },
-            { data: "name",                   name: "name" },
-            { data: "product_category_name",  name: "product_category_name" },
-            { data: "finished_product_label", name: "finished_product_label" },
-            { data: "id",                     name: "id" },
+            { data: "name",                  name: "name" },
+            { data: "product_category_name", name: "product_category_name" },
+            { data: "type_label",            name: "type_label" },
+            { data: "id",                    name: "id" },
         ],
         columnDefs: [
             {

@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::b03kgcxptIBhYEJH',
+            '_route' => 'generated::o6fNKAVoEt2X1yd1',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::DQurczb5KdyifFEt',
+            '_route' => 'generated::g9XcNujpWK0PtaVP',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Em4cvruGB06Q05my',
+            '_route' => 'generated::f0HZc2oz0FFxQx7s',
           ),
           1 => NULL,
           2 => 
@@ -611,10 +611,29 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/recipes' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'recipes.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
     ),
     2 => 
     array (
-      0 => '{^(?|/product(?|s/([^/]++)(?|(*:31)|/edit(*:43)|(*:50))|\\-categories/([^/]++)(?|(*:82)|/edit(*:94)|(*:101)))|/u(?|nit\\-of\\-measures/([^/]++)(?|(*:145)|/edit(*:158)|(*:166))|sers/([^/]++)(?|(*:191)|/edit(*:204)|(*:212)))|/warehouses/([^/]++)(?|(*:245)|/edit(*:258)|(*:266))|/storage/(.*)(*:288))/?$}sDu',
+      0 => '{^(?|/product(?|s/([^/]++)(?|(*:31)|/edit(*:43)|(*:50))|\\-categories/([^/]++)(?|(*:82)|/edit(*:94)|(*:101)))|/u(?|nit\\-of\\-measures/([^/]++)(?|(*:145)|/edit(*:158)|(*:166))|sers/([^/]++)(?|(*:191)|/edit(*:204)|(*:212)))|/warehouses/([^/]++)(?|(*:245)|/edit(*:258)|(*:266))|/recipes/(?|list/table/([^/]++)(*:306)|([^/]++)(?|(*:325)))|/storage/(.*)(*:348))/?$}sDu',
     ),
     3 => 
     array (
@@ -1058,7 +1077,70 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      288 => 
+      306 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'recipes.datatable',
+          ),
+          1 => 
+          array (
+            0 => 'product',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      325 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'recipes.update',
+          ),
+          1 => 
+          array (
+            0 => 'recipe',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'recipes.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'recipe',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      348 => 
       array (
         0 => 
         array (
@@ -1132,7 +1214,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::b03kgcxptIBhYEJH' => 
+    'generated::o6fNKAVoEt2X1yd1' => 
     array (
       'methods' => 
       array (
@@ -1161,7 +1243,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010f0000000000000000";}}',
-        'as' => 'generated::b03kgcxptIBhYEJH',
+        'as' => 'generated::o6fNKAVoEt2X1yd1',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1177,7 +1259,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::DQurczb5KdyifFEt' => 
+    'generated::g9XcNujpWK0PtaVP' => 
     array (
       'methods' => 
       array (
@@ -1193,13 +1275,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:57:"function () {
     return \\redirect()->route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000008490000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000008510000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::DQurczb5KdyifFEt',
+        'as' => 'generated::g9XcNujpWK0PtaVP',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1252,7 +1334,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Em4cvruGB06Q05my' => 
+    'generated::f0HZc2oz0FFxQx7s' => 
     array (
       'methods' => 
       array (
@@ -1272,7 +1354,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Em4cvruGB06Q05my',
+        'as' => 'generated::f0HZc2oz0FFxQx7s',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3051,6 +3133,154 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'recipes.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'recipes/list/table/{product}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\RecipeController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'recipes.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'recipes.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'recipes',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeController@store',
+        'controller' => 'App\\Http\\Controllers\\RecipeController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'recipes.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'recipes.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'recipes/{recipe}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeController@update',
+        'controller' => 'App\\Http\\Controllers\\RecipeController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'recipes.update',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'recipes.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'recipes/{recipe}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RecipeController@destroy',
+        'controller' => 'App\\Http\\Controllers\\RecipeController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'recipes.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'storage.local' => 
     array (
       'methods' => 
@@ -3067,7 +3297,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"000000000000084c0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008540000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

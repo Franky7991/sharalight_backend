@@ -40,4 +40,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/warehouses/delete', [App\Http\Controllers\WarehouseController::class, 'delete'])->name('warehouses.delete');
     Route::resource('warehouses', App\Http\Controllers\WarehouseController::class);
 
+    // Recipe routes
+    Route::post('/recipes/list/table/{product}', [App\Http\Controllers\RecipeController::class, 'listDataTable'])->name('recipes.datatable');
+    Route::post('/recipes', [App\Http\Controllers\RecipeController::class, 'store'])->name('recipes.store');
+    Route::put('/recipes/{recipe}', [App\Http\Controllers\RecipeController::class, 'update'])->name('recipes.update');
+    Route::delete('/recipes/{recipe}', [App\Http\Controllers\RecipeController::class, 'destroy'])->name('recipes.destroy');
+
 });

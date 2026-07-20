@@ -19,17 +19,24 @@ class ProductController extends Controller
         $query = Product::query()->with('productCategory')->get();
         return datatables($query)
             ->addColumn('product_category_name', fn($row) => $row->productCategory?->name ?? '-')
-            ->addColumn('finished_product_label', fn($row) => $row->finished_product
-                ? '<span class="badge badge-success">Sì</span>'
-                : '<span class="badge badge-secondary">No</span>')
-            ->rawColumns(['finished_product_label'])
+            ->addColumn('type_label', function ($row) {
+                $colors = [
+                    Product::TYPE_RAW_MATERIAL  => 'secondary',
+                    Product::TYPE_SEMI_FINISHED  => 'warning',
+                    Product::TYPE_FINISHED       => 'success',
+                ];
+                $color = $colors[$row->type] ?? 'secondary';
+                return '<span class="badge badge-' . $color . '">' . $row->typeLabel() . '</span>';
+            })
+            ->rawColumns(['type_label'])
             ->toJson();
     }
 
     public function create()
     {
         $productCategories = ProductCategory::query()->orderBy('name')->get();
-        return view('product.create', compact('productCategories'));
+        $productTypes      = Product::TYPES;
+        return view('product.create', compact('productCategories', 'productTypes'));
     }
 
     public function store(Request $request)
@@ -37,13 +44,13 @@ class ProductController extends Controller
         $request->validate([
             'name'                => ['required', 'string', 'max:255'],
             'product_category_id' => ['required', 'exists:product_categories,id'],
-            'finished_product'    => ['nullable', 'boolean'],
+            'type'                => ['required', 'in:' . implode(',', array_keys(Product::TYPES))],
         ]);
 
         Product::query()->create([
             'name'                => $request->name,
             'product_category_id' => $request->product_category_id,
-            'finished_product'    => $request->boolean('finished_product'),
+            'type'                => $request->type,
         ]);
 
         return redirect(route('products.index'));
@@ -52,8 +59,9 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product           = Product::query()->findOrFail($id);
-        $productCategories = ProductCategory::query()->orderBy('name')->get();
-        return view('product.show', compact('product', 'productCategories'));
+        $productCategories = ProductCategory::query()->with('unitOfMeasure')->orderBy('name')->get();
+        $productTypes      = Product::TYPES;
+        return view('product.show', compact('product', 'productCategories', 'productTypes'));
     }
 
     public function update(Request $request, string $id)
@@ -63,13 +71,13 @@ class ProductController extends Controller
         $request->validate([
             'name'                => ['required', 'string', 'max:255'],
             'product_category_id' => ['required', 'exists:product_categories,id'],
-            'finished_product'    => ['nullable', 'boolean'],
+            'type'                => ['required', 'in:' . implode(',', array_keys(Product::TYPES))],
         ]);
 
         $product->update([
             'name'                => $request->name,
             'product_category_id' => $request->product_category_id,
-            'finished_product'    => $request->boolean('finished_product'),
+            'type'                => $request->type,
         ]);
 
         return redirect(route('products.index'));
