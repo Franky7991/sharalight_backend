@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::lFzzZheIPi7jlYMc',
+            '_route' => 'generated::bgziJEoUdTYOhs8K',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::tzsAr27qfNsKzp7n',
+            '_route' => 'generated::ue2GjxevGwpLXCdm',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::9js6MHpqOOTrCSK4',
+            '_route' => 'generated::kYro02DAXxtsVFvi',
           ),
           1 => NULL,
           2 => 
@@ -743,10 +743,104 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/unit-conversions/list/table' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.datatable',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/unit-conversions/delete' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.delete',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/unit-conversions' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/unit-conversions/create' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.create',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
     ),
     2 => 
     array (
-      0 => '{^(?|/product(?|s/([^/]++)(?|(*:31)|/edit(*:43)|(*:50))|\\-categories/([^/]++)(?|(*:82)|/edit(*:94)|(*:101)))|/u(?|nit\\-of\\-measures/([^/]++)(?|(*:145)|/edit(*:158)|(*:166))|sers/([^/]++)(?|(*:191)|/edit(*:204)|(*:212)))|/warehouses/([^/]++)(?|(*:245)|/edit(*:258)|(*:266))|/recipe(?|s/(?|list/table/([^/]++)(*:309)|([^/]++)(?|(*:328)))|\\-details/(?|list/(?|details/([^/]++)(*:375)|products/([^/]++)(*:400))|([^/]++)(*:417)))|/causals/([^/]++)(?|(*:447)|/edit(*:460)|(*:468))|/storage/(.*)(*:490))/?$}sDu',
+      0 => '{^(?|/product(?|s/([^/]++)(?|(*:31)|/edit(*:43)|(*:50))|\\-categories/([^/]++)(?|(*:82)|/edit(*:94)|(*:101)))|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:148)|/edit(*:161)|(*:169))|conversions/([^/]++)(?|(*:201)|/edit(*:214)|(*:222)))|sers/([^/]++)(?|(*:248)|/edit(*:261)|(*:269)))|/warehouses/([^/]++)(?|(*:302)|/edit(*:315)|(*:323))|/recipe(?|s/(?|list/table/([^/]++)(*:366)|([^/]++)(?|(*:385)))|\\-details/(?|list/(?|details/([^/]++)(*:432)|products/([^/]++)(*:457))|([^/]++)(*:474)))|/causals/([^/]++)(?|(*:504)|/edit(*:517)|(*:525))|/storage/(.*)(*:547))/?$}sDu',
     ),
     3 => 
     array (
@@ -926,7 +1020,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      145 => 
+      148 => 
       array (
         0 => 
         array (
@@ -949,7 +1043,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      158 => 
+      161 => 
       array (
         0 => 
         array (
@@ -972,7 +1066,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      166 => 
+      169 => 
       array (
         0 => 
         array (
@@ -1014,7 +1108,95 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      191 => 
+      201 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.show',
+          ),
+          1 => 
+          array (
+            0 => 'unit_conversion',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      214 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.edit',
+          ),
+          1 => 
+          array (
+            0 => 'unit_conversion',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      222 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.update',
+          ),
+          1 => 
+          array (
+            0 => 'unit_conversion',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+            'PATCH' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'unit-conversions.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'unit_conversion',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      248 => 
       array (
         0 => 
         array (
@@ -1037,7 +1219,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      204 => 
+      261 => 
       array (
         0 => 
         array (
@@ -1060,7 +1242,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      212 => 
+      269 => 
       array (
         0 => 
         array (
@@ -1102,7 +1284,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      245 => 
+      302 => 
       array (
         0 => 
         array (
@@ -1125,7 +1307,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      258 => 
+      315 => 
       array (
         0 => 
         array (
@@ -1148,7 +1330,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      266 => 
+      323 => 
       array (
         0 => 
         array (
@@ -1190,7 +1372,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      309 => 
+      366 => 
       array (
         0 => 
         array (
@@ -1212,7 +1394,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      328 => 
+      385 => 
       array (
         0 => 
         array (
@@ -1253,7 +1435,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      375 => 
+      432 => 
       array (
         0 => 
         array (
@@ -1275,7 +1457,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      400 => 
+      457 => 
       array (
         0 => 
         array (
@@ -1297,7 +1479,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      417 => 
+      474 => 
       array (
         0 => 
         array (
@@ -1319,7 +1501,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      447 => 
+      504 => 
       array (
         0 => 
         array (
@@ -1342,7 +1524,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      460 => 
+      517 => 
       array (
         0 => 
         array (
@@ -1365,7 +1547,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      468 => 
+      525 => 
       array (
         0 => 
         array (
@@ -1407,7 +1589,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      490 => 
+      547 => 
       array (
         0 => 
         array (
@@ -1481,7 +1663,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::lFzzZheIPi7jlYMc' => 
+    'generated::bgziJEoUdTYOhs8K' => 
     array (
       'methods' => 
       array (
@@ -1510,7 +1692,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010f0000000000000000";}}',
-        'as' => 'generated::lFzzZheIPi7jlYMc',
+        'as' => 'generated::bgziJEoUdTYOhs8K',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1526,7 +1708,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::tzsAr27qfNsKzp7n' => 
+    'generated::ue2GjxevGwpLXCdm' => 
     array (
       'methods' => 
       array (
@@ -1542,13 +1724,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:57:"function () {
     return \\redirect()->route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000086b0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000087d0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::tzsAr27qfNsKzp7n',
+        'as' => 'generated::ue2GjxevGwpLXCdm',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1601,7 +1783,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::9js6MHpqOOTrCSK4' => 
+    'generated::kYro02DAXxtsVFvi' => 
     array (
       'methods' => 
       array (
@@ -1621,7 +1803,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::9js6MHpqOOTrCSK4',
+        'as' => 'generated::kYro02DAXxtsVFvi',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4034,6 +4216,344 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'unit-conversions.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'unit-conversions/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'unit-conversions.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.delete' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'unit-conversions/delete',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@delete',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@delete',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'unit-conversions.delete',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'unit-conversions',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.index',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@index',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@index',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.create' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'unit-conversions/create',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.create',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@create',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@create',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'unit-conversions',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.store',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@store',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'unit-conversions/{unit_conversion}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.show',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@show',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@show',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'unit-conversions/{unit_conversion}/edit',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.edit',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@edit',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@edit',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+        1 => 'PATCH',
+      ),
+      'uri' => 'unit-conversions/{unit_conversion}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.update',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@update',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'unit-conversions.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'unit-conversions/{unit_conversion}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'as' => 'unit-conversions.destroy',
+        'uses' => 'App\\Http\\Controllers\\UnitConversionController@destroy',
+        'controller' => 'App\\Http\\Controllers\\UnitConversionController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'storage.local' => 
     array (
       'methods' => 
@@ -4050,7 +4570,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"000000000000086e0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008800000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

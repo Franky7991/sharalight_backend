@@ -362,6 +362,11 @@ return [
                     'url'  => '/causals',
                     'icon' => 'fas fa-exchange-alt',
                 ],
+                [
+                    'text' => 'Conversioni U.M.',
+                    'url'  => '/unit-conversions',
+                    'icon' => 'fas fa-sync-alt',
+                ],
             ],
         ],
     ],

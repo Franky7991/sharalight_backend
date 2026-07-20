@@ -57,4 +57,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/causals/delete', [App\Http\Controllers\CausalController::class, 'delete'])->name('causals.delete');
     Route::resource('causals', App\Http\Controllers\CausalController::class);
 
+    // UnitConversion routes
+    Route::post('/unit-conversions/list/table', [App\Http\Controllers\UnitConversionController::class, 'listDataTable'])->name('unit-conversions.datatable');
+    Route::post('/unit-conversions/delete', [App\Http\Controllers\UnitConversionController::class, 'delete'])->name('unit-conversions.delete');
+    Route::resource('unit-conversions', App\Http\Controllers\UnitConversionController::class);
+
 });

@@ -292,6 +292,12 @@
             'url' => '/causals',
             'icon' => 'fas fa-exchange-alt',
           ),
+          4 => 
+          array (
+            'text' => 'Conversioni U.M.',
+            'url' => '/unit-conversions',
+            'icon' => 'fas fa-sync-alt',
+          ),
         ),
       ),
     ),

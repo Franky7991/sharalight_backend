@@ -52,6 +52,14 @@
                 render: function (data) { return formatIt(data, 2); }
             },
             {
+                targets: 2,
+                render: function (data, type, row) {
+                    if (!data || data === '-') return '-';
+                    var name = row.unit_of_measure_name || '';
+                    return name ? data + ' (' + name + ')' : data;
+                }
+            },
+            {
                 targets: 3,
                 render: function (id, type, row) {
                     var count       = row.details_count || 0;
