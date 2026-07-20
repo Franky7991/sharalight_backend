@@ -44,9 +44,22 @@
                         <option value="">-- Seleziona --</option>
                         @foreach($productCategories as $cat)
                             <option value="{{ $cat->id }}"
+                                data-uom-id="{{ $cat->unitOfMeasure?->id ?? '' }}"
                                 data-uom-symbol="{{ $cat->unitOfMeasure?->symbol ?? '' }}"
                                 data-uom-name="{{ $cat->unitOfMeasure?->name ?? '' }}">
                                 {{ $cat->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="form-group" id="uom-select-group" style="display:none;">
+                    <label for="recipe_unit_of_measure_id">Unità di Misura *</label>
+                    <select id="recipe_unit_of_measure_id" class="form-control">
+                        <option value="">-- Seleziona --</option>
+                        @foreach($unitOfMeasures as $uom)
+                            <option value="{{ $uom->id }}" data-symbol="{{ $uom->symbol }}">
+                                {{ $uom->name }} ({{ $uom->symbol }})
                             </option>
                         @endforeach
                     </select>

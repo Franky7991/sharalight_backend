@@ -12,6 +12,7 @@ class Recipe extends Model
     protected $fillable = [
         'product_id',
         'product_category_id',
+        'unit_of_measure_id',
         'quantity',
     ];
 
@@ -23,6 +24,11 @@ class Recipe extends Model
     public function productCategory()
     {
         return $this->belongsTo(ProductCategory::class);
+    }
+
+    public function unitOfMeasure()
+    {
+        return $this->belongsTo(UnitOfMeasure::class);
     }
 
     public function details()

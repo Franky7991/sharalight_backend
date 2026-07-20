@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\UnitOfMeasure;
 
 class ProductController extends Controller
 {
@@ -61,7 +62,8 @@ class ProductController extends Controller
         $product           = Product::query()->findOrFail($id);
         $productCategories = ProductCategory::query()->with('unitOfMeasure')->orderBy('name')->get();
         $productTypes      = Product::TYPES;
-        return view('product.show', compact('product', 'productCategories', 'productTypes'));
+        $unitOfMeasures    = UnitOfMeasure::query()->orderBy('name')->get();
+        return view('product.show', compact('product', 'productCategories', 'productTypes', 'unitOfMeasures'));
     }
 
     public function update(Request $request, string $id)

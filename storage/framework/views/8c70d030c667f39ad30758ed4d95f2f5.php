@@ -42,10 +42,23 @@
                         <option value="">-- Seleziona --</option>
                         <?php $__currentLoopData = $productCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($cat->id); ?>"
+                                data-uom-id="<?php echo e($cat->unitOfMeasure?->id ?? ''); ?>"
                                 data-uom-symbol="<?php echo e($cat->unitOfMeasure?->symbol ?? ''); ?>"
                                 data-uom-name="<?php echo e($cat->unitOfMeasure?->name ?? ''); ?>">
                                 <?php echo e($cat->name); ?>
 
+                            </option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    </select>
+                </div>
+
+                <div class="form-group" id="uom-select-group" style="display:none;">
+                    <label for="recipe_unit_of_measure_id">Unità di Misura *</label>
+                    <select id="recipe_unit_of_measure_id" class="form-control">
+                        <option value="">-- Seleziona --</option>
+                        <?php $__currentLoopData = $unitOfMeasures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($uom->id); ?>" data-symbol="<?php echo e($uom->symbol); ?>">
+                                <?php echo e($uom->name); ?> (<?php echo e($uom->symbol); ?>)
                             </option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>

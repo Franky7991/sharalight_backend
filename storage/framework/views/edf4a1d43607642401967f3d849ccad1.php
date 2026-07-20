@@ -52,6 +52,14 @@
                 render: function (data) { return formatIt(data, 2); }
             },
             {
+                targets: 2,
+                render: function (data, type, row) {
+                    if (!data || data === '-') return '-';
+                    var name = row.unit_of_measure_name || '';
+                    return name ? data + ' (' + name + ')' : data;
+                }
+            },
+            {
                 targets: 3,
                 render: function (id, type, row) {
                     var count       = row.details_count || 0;
@@ -67,6 +75,7 @@
                          + '<button class="btn btn-primary btn-xs btn-edit-recipe mr-1"'
                          + ' data-id="' + id + '"'
                          + ' data-category="' + row.product_category_id + '"'
+                         + ' data-uom-id="' + (row.unit_of_measure_id || '') + '"'
                          + ' data-uom-symbol="' + (row.unit_of_measure_symbol || '') + '"'
                          + ' data-qty="' + row.quantity + '"'
                          + ' title="Modifica">'
@@ -88,8 +97,28 @@
         $('#uom-symbol-addon').text(symbol || '—');
     }
 
+    // Al cambio categoria: preseleziona la UdM della categoria e mostra la select
     $('#recipe_product_category_id').on('change', function () {
-        updateUomAddon($(this).find('option:selected').data('uom-symbol'));
+        var opt       = $(this).find('option:selected');
+        var uomId     = opt.data('uom-id');
+        var uomSymbol = opt.data('uom-symbol');
+
+        if (opt.val()) {
+            // Preseleziona la UdM della categoria
+            $('#recipe_unit_of_measure_id').val(uomId || '');
+            updateUomAddon(uomSymbol);
+            $('#uom-select-group').show();
+        } else {
+            $('#recipe_unit_of_measure_id').val('');
+            updateUomAddon('');
+            $('#uom-select-group').hide();
+        }
+    });
+
+    // Aggiorna il simbolo nell'addon quando si cambia manualmente la UdM
+    $('#recipe_unit_of_measure_id').on('change', function () {
+        var symbol = $(this).find('option:selected').data('symbol');
+        updateUomAddon(symbol);
     });
 
     $('#recipe_quantity').on('blur', function () {
@@ -105,6 +134,8 @@
         $('#modal-recipe-label').text('Aggiungi riga ricetta');
         $('#recipe_id, #recipe_quantity').val('');
         $('#recipe_product_category_id').val('');
+        $('#recipe_unit_of_measure_id').val('');
+        $('#uom-select-group').hide();
         updateUomAddon('');
         hideRecipeErrors();
         $('#modal-recipe').modal('show');
@@ -115,8 +146,10 @@
         $('#modal-recipe-label').text('Modifica riga ricetta');
         $('#recipe_id').val(btn.data('id'));
         $('#recipe_product_category_id').val(btn.data('category'));
+        $('#recipe_unit_of_measure_id').val(btn.data('uom-id'));
         $('#recipe_quantity').val(formatIt(btn.data('qty'), 2));
         updateUomAddon(btn.data('uom-symbol'));
+        $('#uom-select-group').show();
         hideRecipeErrors();
         $('#modal-recipe').modal('show');
     });
@@ -141,6 +174,7 @@
             data: {
                 product_id:          productId,
                 product_category_id: $('#recipe_product_category_id').val(),
+                unit_of_measure_id:  $('#recipe_unit_of_measure_id').val(),
                 quantity:            $('#recipe_quantity').val().trim(),
             },
             success: function () {
