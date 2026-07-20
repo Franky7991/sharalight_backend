@@ -357,6 +357,11 @@ return [
                     'url'  => '/products',
                     'icon' => 'fas fa-box',
                 ],
+                [
+                    'text' => 'Causali',
+                    'url'  => '/causals',
+                    'icon' => 'fas fa-exchange-alt',
+                ],
             ],
         ],
     ],

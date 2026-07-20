@@ -52,4 +52,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/recipe-details', [App\Http\Controllers\RecipeDetailController::class, 'store'])->name('recipe-details.store');
     Route::delete('/recipe-details/{recipeDetail}', [App\Http\Controllers\RecipeDetailController::class, 'destroy'])->name('recipe-details.destroy');
 
+    // Causal routes
+    Route::post('/causals/list/table', [App\Http\Controllers\CausalController::class, 'listDataTable'])->name('causals.datatable');
+    Route::post('/causals/delete', [App\Http\Controllers\CausalController::class, 'delete'])->name('causals.delete');
+    Route::resource('causals', App\Http\Controllers\CausalController::class);
+
 });
