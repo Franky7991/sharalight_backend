@@ -1,15 +1,16 @@
 
-<?php $__env->startSection('title', 'Nuova Conversione'); ?>
+<?php $__env->startSection('title', 'Modifica Conversione'); ?>
 <?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
-        <h4 class="mb-0">Nuova Conversione Unità di Misura</h4>
+        <h4 class="mb-0">Modifica Conversione Unità di Misura</h4>
     </div>
     <div class="card-body">
-        <form method="POST" action="<?php echo e(route('unit-conversions.store')); ?>">
+        <form method="POST" action="<?php echo e(route('unit-conversions.update', [$unitConversion->id])); ?>">
             <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
             <?php if($errors->any()): ?>
                 <div class="alert alert-danger">
                     <ul class="mb-0">
@@ -31,7 +32,7 @@
                         <select id="from_unit_of_measure_id" name="from_unit_of_measure_id" class="form-control" required>
                             <option value="">-- Seleziona --</option>
                             <?php $__currentLoopData = $unitOfMeasures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($uom->id); ?>" <?php echo e(old('from_unit_of_measure_id') == $uom->id ? 'selected' : ''); ?>>
+                                <option value="<?php echo e($uom->id); ?>" <?php echo e($unitConversion->from_unit_of_measure_id == $uom->id ? 'selected' : ''); ?>>
                                     <?php echo e($uom->name); ?> (<?php echo e($uom->symbol); ?>)
                                 </option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -46,7 +47,7 @@
                             <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
                         </div>
                         <input type="text" id="from_quantity" name="from_quantity"
-                            value="<?php echo e(old('from_quantity')); ?>"
+                            value="<?php echo e(number_format($unitConversion->from_quantity, 2, ',', '.')); ?>"
                             class="form-control" placeholder="0,00" autocomplete="off" required>
                     </div>
                 </div>
@@ -61,7 +62,7 @@
                         <select id="to_unit_of_measure_id" name="to_unit_of_measure_id" class="form-control" required>
                             <option value="">-- Seleziona --</option>
                             <?php $__currentLoopData = $unitOfMeasures; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $uom): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($uom->id); ?>" <?php echo e(old('to_unit_of_measure_id') == $uom->id ? 'selected' : ''); ?>>
+                                <option value="<?php echo e($uom->id); ?>" <?php echo e($unitConversion->to_unit_of_measure_id == $uom->id ? 'selected' : ''); ?>>
                                     <?php echo e($uom->name); ?> (<?php echo e($uom->symbol); ?>)
                                 </option>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -76,7 +77,7 @@
                             <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
                         </div>
                         <input type="text" id="to_quantity" name="to_quantity"
-                            value="<?php echo e(old('to_quantity')); ?>"
+                            value="<?php echo e(number_format($unitConversion->to_quantity, 2, ',', '.')); ?>"
                             class="form-control" placeholder="0,00" autocomplete="off" required>
                     </div>
                 </div>
@@ -125,4 +126,4 @@ $(document).ready(function () {
 </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/unit_conversion/create.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/unit_conversion/show.blade.php ENDPATH**/ ?>

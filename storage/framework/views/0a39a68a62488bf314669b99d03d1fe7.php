@@ -14,6 +14,7 @@
             <th>Categoria Prodotto</th>
             <th class="text-right">Quantità</th>
             <th>U.M.</th>
+            <th>Conversione</th>
             <th style="width:110px;">Azioni</th>
         </tr>
     </thead>

@@ -44,6 +44,7 @@
             { data: 'product_category_name',  name: 'product_category_name' },
             { data: 'quantity',               name: 'quantity', className: 'text-right' },
             { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
+            { data: 'conversion_label',       name: 'conversion_label',       orderable: false },
             { data: 'id',                     name: 'id', orderable: false, searchable: false },
         ],
         columnDefs: [
@@ -61,6 +62,12 @@
             },
             {
                 targets: 3,
+                render: function (data) {
+                    return data || '<span class="text-muted">—</span>';
+                }
+            },
+            {
+                targets: 4,
                 render: function (id, type, row) {
                     var count       = row.details_count || 0;
                     var btnClass    = count > 0 ? 'btn-success' : 'btn-info';
