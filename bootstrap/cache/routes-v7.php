@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::6J3T5SVAiaMVQfw6',
+            '_route' => 'generated::tPfyaIrLnOVtntT6',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Rz6mb6bqWLrg1Zur',
+            '_route' => 'generated::KVlcHK9LCfduIIon',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::2j12w93Z09E1Ie7j',
+            '_route' => 'generated::ZYGYHDR9iWIW905A',
           ),
           1 => NULL,
           2 => 
@@ -1044,7 +1044,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/c(?|ustomer\\-orders/([^/]++)(?|(*:39))|ausals/([^/]++)(?|(*:65)|/edit(*:77)|(*:84)))|/movements/([^/]++)(*:112)|/product(?|s/([^/]++)(?|/(?|tree(*:152)|edit(*:164))|(*:173))|\\-categories/([^/]++)(?|(*:206)|/edit(*:219)|(*:227)))|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:274)|/edit(*:287)|(*:295))|conversions/([^/]++)(?|(*:327)|/edit(*:340)|(*:348)))|sers/([^/]++)(?|(*:374)|/edit(*:387)|(*:395)))|/warehouses/([^/]++)(?|(*:428)|/edit(*:441)|(*:449))|/recipe(?|s/(?|list/table/([^/]++)(*:492)|([^/]++)(?|(*:511)))|\\-details/(?|list/(?|details/([^/]++)(*:558)|products/([^/]++)(*:583))|([^/]++)(*:600)))|/storage/(.*)(*:623))/?$}sDu',
+      0 => '{^(?|/c(?|ustomer\\-orders/([^/]++)(?|(*:39)|/products(?|/(?|list/table(*:72)|([^/]++)(?|(*:90)|/details(?|/config(*:115)|(*:123))))|(*:134)))|ausals/([^/]++)(?|(*:162)|/edit(*:175)|(*:183)))|/movements/([^/]++)(*:212)|/product(?|s/([^/]++)(?|/(?|tree(*:252)|edit(*:264))|(*:273))|\\-categories/([^/]++)(?|(*:306)|/edit(*:319)|(*:327)))|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:374)|/edit(*:387)|(*:395))|conversions/([^/]++)(?|(*:427)|/edit(*:440)|(*:448)))|sers/([^/]++)(?|(*:474)|/edit(*:487)|(*:495)))|/warehouses/([^/]++)(?|(*:528)|/edit(*:541)|(*:549))|/recipe(?|s/(?|list/table/([^/]++)(*:592)|([^/]++)(?|(*:611)))|\\-details/(?|list/(?|details/([^/]++)(*:658)|products/([^/]++)(*:683))|([^/]++)(*:700)))|/storage/(.*)(*:723))/?$}sDu',
     ),
     3 => 
     array (
@@ -1088,8 +1088,142 @@ app('router')->setCompiledRoutes(
           5 => true,
           6 => NULL,
         ),
+        2 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.show',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
       ),
-      65 => 
+      72 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-order-products.datatable',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      90 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-order-products.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+            1 => 'product',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      115 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-order-product-details.config',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+            1 => 'orderProduct',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      123 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-order-product-details.save',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+            1 => 'orderProduct',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      134 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-order-products.store',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      162 => 
       array (
         0 => 
         array (
@@ -1112,7 +1246,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      77 => 
+      175 => 
       array (
         0 => 
         array (
@@ -1135,7 +1269,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      84 => 
+      183 => 
       array (
         0 => 
         array (
@@ -1177,7 +1311,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      112 => 
+      212 => 
       array (
         0 => 
         array (
@@ -1199,7 +1333,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      152 => 
+      252 => 
       array (
         0 => 
         array (
@@ -1222,7 +1356,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      164 => 
+      264 => 
       array (
         0 => 
         array (
@@ -1245,7 +1379,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      173 => 
+      273 => 
       array (
         0 => 
         array (
@@ -1307,7 +1441,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      206 => 
+      306 => 
       array (
         0 => 
         array (
@@ -1330,7 +1464,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      219 => 
+      319 => 
       array (
         0 => 
         array (
@@ -1353,7 +1487,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      227 => 
+      327 => 
       array (
         0 => 
         array (
@@ -1395,7 +1529,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      274 => 
+      374 => 
       array (
         0 => 
         array (
@@ -1418,7 +1552,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      287 => 
+      387 => 
       array (
         0 => 
         array (
@@ -1441,7 +1575,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      295 => 
+      395 => 
       array (
         0 => 
         array (
@@ -1483,7 +1617,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      327 => 
+      427 => 
       array (
         0 => 
         array (
@@ -1506,7 +1640,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      340 => 
+      440 => 
       array (
         0 => 
         array (
@@ -1529,7 +1663,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      348 => 
+      448 => 
       array (
         0 => 
         array (
@@ -1571,7 +1705,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      374 => 
+      474 => 
       array (
         0 => 
         array (
@@ -1594,7 +1728,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      387 => 
+      487 => 
       array (
         0 => 
         array (
@@ -1617,7 +1751,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      395 => 
+      495 => 
       array (
         0 => 
         array (
@@ -1659,7 +1793,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      428 => 
+      528 => 
       array (
         0 => 
         array (
@@ -1682,7 +1816,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      441 => 
+      541 => 
       array (
         0 => 
         array (
@@ -1705,7 +1839,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      449 => 
+      549 => 
       array (
         0 => 
         array (
@@ -1747,7 +1881,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      492 => 
+      592 => 
       array (
         0 => 
         array (
@@ -1769,7 +1903,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      511 => 
+      611 => 
       array (
         0 => 
         array (
@@ -1810,7 +1944,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      558 => 
+      658 => 
       array (
         0 => 
         array (
@@ -1832,7 +1966,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      583 => 
+      683 => 
       array (
         0 => 
         array (
@@ -1854,7 +1988,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      600 => 
+      700 => 
       array (
         0 => 
         array (
@@ -1876,7 +2010,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      623 => 
+      723 => 
       array (
         0 => 
         array (
@@ -1950,7 +2084,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::6J3T5SVAiaMVQfw6' => 
+    'generated::tPfyaIrLnOVtntT6' => 
     array (
       'methods' => 
       array (
@@ -1979,7 +2113,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010d0000000000000000";}}',
-        'as' => 'generated::6J3T5SVAiaMVQfw6',
+        'as' => 'generated::tPfyaIrLnOVtntT6',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1995,7 +2129,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Rz6mb6bqWLrg1Zur' => 
+    'generated::KVlcHK9LCfduIIon' => 
     array (
       'methods' => 
       array (
@@ -2017,7 +2151,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Rz6mb6bqWLrg1Zur',
+        'as' => 'generated::KVlcHK9LCfduIIon',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2070,7 +2204,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::2j12w93Z09E1Ie7j' => 
+    'generated::ZYGYHDR9iWIW905A' => 
     array (
       'methods' => 
       array (
@@ -2090,7 +2224,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::2j12w93Z09E1Ie7j',
+        'as' => 'generated::ZYGYHDR9iWIW905A',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2364,6 +2498,44 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'customer-orders.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'customer-orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@show',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@show',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.show',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'customer-orders.index' => 
     array (
       'methods' => 
@@ -2387,6 +2559,192 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'customer-orders.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-order-products.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders/{order}/products/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-order-products.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-order-products.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders/{order}/products',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@store',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-order-products.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-order-products.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'customer-orders/{order}/products/{product}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@destroy',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderHasProductController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-order-products.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-order-product-details.config' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'customer-orders/{order}/products/{orderProduct}/details/config',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderHasProductDetailController@config',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderHasProductDetailController@config',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-order-product-details.config',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-order-product-details.save' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders/{order}/products/{orderProduct}/details',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderHasProductDetailController@save',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderHasProductDetailController@save',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-order-product-details.save',
       ),
       'fallback' => false,
       'defaults' => 

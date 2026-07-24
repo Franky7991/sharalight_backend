@@ -23,7 +23,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/customer-orders',            [App\Http\Controllers\CustomerOrderController::class, 'store'])->name('customer-orders.store');
     Route::put('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'update'])->name('customer-orders.update');
     Route::delete('/customer-orders/{order}',  [App\Http\Controllers\CustomerOrderController::class, 'destroy'])->name('customer-orders.destroy');
+    Route::get('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'show'])->name('customer-orders.show');
     Route::get('/customer-orders',             [App\Http\Controllers\CustomerOrderController::class, 'index'])->name('customer-orders.index');
+
+    // CustomerOrderHasProduct routes
+    Route::post('/customer-orders/{order}/products/list/table', [App\Http\Controllers\CustomerOrderHasProductController::class, 'listDataTable'])->name('customer-order-products.datatable');
+    Route::post('/customer-orders/{order}/products',            [App\Http\Controllers\CustomerOrderHasProductController::class, 'store'])->name('customer-order-products.store');
+    Route::delete('/customer-orders/{order}/products/{product}',[App\Http\Controllers\CustomerOrderHasProductController::class, 'destroy'])->name('customer-order-products.destroy');
+
+    // CustomerOrderHasProductDetail routes
+    Route::get('/customer-orders/{order}/products/{orderProduct}/details/config', [App\Http\Controllers\CustomerOrderHasProductDetailController::class, 'config'])->name('customer-order-product-details.config');
+    Route::post('/customer-orders/{order}/products/{orderProduct}/details',       [App\Http\Controllers\CustomerOrderHasProductDetailController::class, 'save'])->name('customer-order-product-details.save');
 
     // Stock routes
     Route::post('/stocks/list/table', [App\Http\Controllers\StockController::class, 'listDataTable'])->name('stocks.datatable');

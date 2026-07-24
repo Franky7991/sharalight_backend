@@ -18,4 +18,9 @@ class ProductCategory extends Model
     {
         return $this->belongsTo(UnitOfMeasure::class);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

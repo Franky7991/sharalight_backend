@@ -5,12 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CustomerOrder;
+use App\Models\Product;
+use App\Models\UnitOfMeasure;
 
 class CustomerOrderController extends Controller
 {
     public function index()
     {
         return view('customer_order.index');
+    }
+
+    public function show(string $id)
+    {
+        $order          = CustomerOrder::query()->with('user')->findOrFail($id);
+        $products       = Product::query()
+            ->whereIn('type', Product::TYPES_WITH_RECIPE)
+            ->with('productCategory.unitOfMeasure')
+            ->orderBy('name')
+            ->get();
+        $unitOfMeasures = UnitOfMeasure::query()->orderBy('name')->get();
+
+        return view('customer_order.show', compact('order', 'products', 'unitOfMeasures'));
     }
 
     public function listDataTable(Request $request)

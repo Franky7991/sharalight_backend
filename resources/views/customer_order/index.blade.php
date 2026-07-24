@@ -129,10 +129,11 @@ $(document).ready(function () {
             {
                 targets: 6,
                 render: function (id, type, row) {
-                    return '<button class="btn btn-primary btn-xs btn-edit-order mr-1"'
+                    return '<a href="/customer-orders/' + id + '" class="btn btn-info btn-xs mr-1" title="Apri">'
+                         + '<i class="fa fa-eye"></i></a>'
+                         + '<button class="btn btn-primary btn-xs btn-edit-order mr-1"'
                          + ' data-id="' + id + '"'
                          + ' data-address="' + $('<span>').text(row.address).html() + '"'
-                         + ' data-user="' + row.user_id + '"'
                          + ' data-date="' + row.order_date + '"'
                          + ' title="Modifica"><i class="fa fa-edit"></i></button>'
                          + '<button class="btn btn-danger btn-xs btn-delete-order"'
