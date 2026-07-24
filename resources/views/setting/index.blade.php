@@ -24,36 +24,79 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- ── Causale Carico in Magazzino ───────────────────────────── --}}
+                    {{-- ── Sezione Magazzino ──────────────────────────────────────── --}}
+                    <h6 class="text-uppercase text-muted font-weight-bold mb-3" style="font-size:.7rem; letter-spacing:.08em;">
+                        <i class="fas fa-warehouse mr-1"></i> Magazzino
+                    </h6>
+
+                    @php $key = \App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL; @endphp
                     <div class="form-group">
-                        <label for="{{ \App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL }}">
-                            Causale <em>Carico in Magazzino</em>
-                        </label>
+                        <label for="{{ $key }}">Causale <em>Carico in Magazzino</em></label>
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <span class="input-group-text">
-                                    <i class="fas fa-arrow-circle-down"></i>
-                                </span>
+                                <span class="input-group-text"><i class="fas fa-arrow-circle-down text-success"></i></span>
                             </div>
-                            <select
-                                id="{{ \App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL }}"
-                                name="{{ \App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL }}"
-                                class="form-control @error(\App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL) is-invalid @enderror">
+                            <select id="{{ $key }}" name="{{ $key }}"
+                                class="form-control @error($key) is-invalid @enderror">
                                 <option value="">— Nessuna —</option>
-                                @foreach($causals as $causal)
-                                    <option value="{{ $causal->id }}"
-                                        {{ ($settings[\App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL] ?? '') == $causal->id ? 'selected' : '' }}>
-                                        {{ $causal->name }}
+                                @foreach($loadCausals as $c)
+                                    <option value="{{ $c->id }}" {{ ($settings[$key] ?? '') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }}
                                     </option>
                                 @endforeach
                             </select>
-                            @error(\App\Models\Setting::KEY_WAREHOUSE_LOAD_CAUSAL)
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            @error($key)<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
-                        <small class="form-text text-muted">
-                            Causale usata di default per i movimenti di carico in magazzino.
-                        </small>
+                        <small class="form-text text-muted">Causale di default per i carichi manuali in magazzino.</small>
+                    </div>
+
+                    <hr>
+
+                    {{-- ── Sezione Produzione ─────────────────────────────────────── --}}
+                    <h6 class="text-uppercase text-muted font-weight-bold mb-3" style="font-size:.7rem; letter-spacing:.08em;">
+                        <i class="fas fa-industry mr-1"></i> Produzione
+                    </h6>
+
+                    @php $key = \App\Models\Setting::KEY_PRODUCTION_UNLOAD_CAUSAL; @endphp
+                    <div class="form-group">
+                        <label for="{{ $key }}">Causale <em>Scarico per Produzione</em></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-arrow-circle-up text-danger"></i></span>
+                            </div>
+                            <select id="{{ $key }}" name="{{ $key }}"
+                                class="form-control @error($key) is-invalid @enderror">
+                                <option value="">— Nessuna —</option>
+                                @foreach($unloadCausals as $c)
+                                    <option value="{{ $c->id }}" {{ ($settings[$key] ?? '') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error($key)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <small class="form-text text-muted">Causale usata per scaricare le materie prime durante la produzione.</small>
+                    </div>
+
+                    @php $key = \App\Models\Setting::KEY_PRODUCTION_LOAD_CAUSAL; @endphp
+                    <div class="form-group">
+                        <label for="{{ $key }}">Causale <em>Carico per Produzione</em></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-arrow-circle-down text-success"></i></span>
+                            </div>
+                            <select id="{{ $key }}" name="{{ $key }}"
+                                class="form-control @error($key) is-invalid @enderror">
+                                <option value="">— Nessuna —</option>
+                                @foreach($loadCausals as $c)
+                                    <option value="{{ $c->id }}" {{ ($settings[$key] ?? '') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error($key)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <small class="form-text text-muted">Causale usata per caricare il prodotto finito/semi-lavorato dopo la produzione.</small>
                     </div>
 
                     <hr>
