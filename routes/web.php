@@ -17,6 +17,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
 
+    // Movement routes
+    Route::post('/movements/list/table', [App\Http\Controllers\MovementController::class, 'listDataTable'])->name('movements.datatable');
+    Route::post('/movements', [App\Http\Controllers\MovementController::class, 'store'])->name('movements.store');
+    Route::delete('/movements/{movement}', [App\Http\Controllers\MovementController::class, 'destroy'])->name('movements.destroy');
+    Route::get('/movements', [App\Http\Controllers\MovementController::class, 'index'])->name('movements.index');
+
     // Settings
     Route::get('/settings', [App\Http\Controllers\SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [App\Http\Controllers\SettingController::class, 'update'])->name('settings.update');

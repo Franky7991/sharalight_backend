@@ -332,6 +332,11 @@ return [
                     'url'  => '/warehouses',
                     'icon' => 'fas fa-warehouse',
                 ],
+                [
+                    'text' => 'Movimenti',
+                    'url'  => '/movements',
+                    'icon' => 'fas fa-exchange-alt',
+                ],
             ],
         ],
         [

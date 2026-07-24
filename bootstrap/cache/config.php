@@ -255,6 +255,12 @@
             'url' => '/warehouses',
             'icon' => 'fas fa-warehouse',
           ),
+          1 => 
+          array (
+            'text' => 'Movimenti',
+            'url' => '/movements',
+            'icon' => 'fas fa-exchange-alt',
+          ),
         ),
       ),
       5 => 
