@@ -121,8 +121,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>Categoria</th>
-                                <th class="text-right" style="width:90px;">Qtà</th>
-                                <th style="width:60px;">U.M.</th>
+                                <th class="text-right">Totale necessario</th>
                                 <th>Prodotto</th>
                             </tr>
                         </thead>
@@ -402,13 +401,15 @@ $(document).ready(function () {
                               + $('<span>').text(p.name).html()
                               + '</option>';
                     });
+
+                    // totale con conversione
+                    var totalFmt = parseFloat(row.total).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
+                    var totalCell = totalFmt + ' ' + $('<span>').text(row.recipe_uom_symbol).html();
+
                     tbody.append(
                         '<tr data-recipe-id="' + row.recipe_id + '">'
                       + '<td>' + $('<span>').text(row.category_name).html() + '</td>'
-                      + '<td class="text-right">'
-                      + parseFloat(row.quantity).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:2})
-                      + '</td>'
-                      + '<td>' + $('<span>').text(row.uom_symbol).html() + '</td>'
+                      + '<td class="text-right">' + totalCell + '</td>'
                       + '<td><select class="form-control form-control-sm ing-product-select">' + opts + '</select></td>'
                       + '</tr>'
                     );
