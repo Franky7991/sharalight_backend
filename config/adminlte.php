@@ -337,6 +337,11 @@ return [
                     'url'  => '/movements',
                     'icon' => 'fas fa-exchange-alt',
                 ],
+                [
+                    'text' => 'Giacenza',
+                    'url'  => '/stocks',
+                    'icon' => 'fas fa-boxes',
+                ],
             ],
         ],
         [

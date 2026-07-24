@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::O6dGk97YZo2ZWBuY',
+            '_route' => 'generated::2oZMUGSrIBsN47v3',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::IAOiDPTDEMitGBwv',
+            '_route' => 'generated::45AjiKug7cH0NnBN',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::2AbbfYE0uxPCUDoc',
+            '_route' => 'generated::VTogdZaCqX40p1lS',
           ),
           1 => NULL,
           2 => 
@@ -128,6 +128,45 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'home',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/stocks/list/table' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'stocks.datatable',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/stocks' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'stocks.index',
           ),
           1 => NULL,
           2 => 
@@ -1796,7 +1835,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::O6dGk97YZo2ZWBuY' => 
+    'generated::2oZMUGSrIBsN47v3' => 
     array (
       'methods' => 
       array (
@@ -1824,8 +1863,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'C:\\\\project\\\\shara_light\\\\backend\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010d0000000000000000";}}',
-        'as' => 'generated::O6dGk97YZo2ZWBuY',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010f0000000000000000";}}',
+        'as' => 'generated::2oZMUGSrIBsN47v3',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1841,7 +1880,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::IAOiDPTDEMitGBwv' => 
+    'generated::45AjiKug7cH0NnBN' => 
     array (
       'methods' => 
       array (
@@ -1857,13 +1896,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:57:"function () {
     return \\redirect()->route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000052f0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000088f0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::IAOiDPTDEMitGBwv',
+        'as' => 'generated::45AjiKug7cH0NnBN',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1916,7 +1955,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::2AbbfYE0uxPCUDoc' => 
+    'generated::VTogdZaCqX40p1lS' => 
     array (
       'methods' => 
       array (
@@ -1936,7 +1975,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::2AbbfYE0uxPCUDoc',
+        'as' => 'generated::VTogdZaCqX40p1lS',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2010,6 +2049,81 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'home',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'stocks.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'stocks/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\StockController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\StockController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'stocks.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'stocks.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'stocks',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\StockController@index',
+        'controller' => 'App\\Http\\Controllers\\StockController@index',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'stocks.index',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4965,7 +5079,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005320000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008920000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

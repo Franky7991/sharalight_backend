@@ -261,6 +261,12 @@
             'url' => '/movements',
             'icon' => 'fas fa-exchange-alt',
           ),
+          2 => 
+          array (
+            'text' => 'Giacenza',
+            'url' => '/stocks',
+            'icon' => 'fas fa-boxes',
+          ),
         ),
       ),
       5 => 

@@ -17,6 +17,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
 
+    // Stock routes
+    Route::post('/stocks/list/table', [App\Http\Controllers\StockController::class, 'listDataTable'])->name('stocks.datatable');
+    Route::get('/stocks', [App\Http\Controllers\StockController::class, 'index'])->name('stocks.index');
+
     // Movement routes
     Route::post('/movements/list/table', [App\Http\Controllers\MovementController::class, 'listDataTable'])->name('movements.datatable');
     Route::post('/movements', [App\Http\Controllers\MovementController::class, 'store'])->name('movements.store');
