@@ -320,6 +320,21 @@ return [
             ],
         ],
         [
+            'header' => 'ORDINI',
+        ],
+        [
+            'text'       => 'Ordini',
+            'icon'       => 'fas fa-clipboard-list',
+            'icon_color' => 'blue',
+            'submenu'    => [
+                [
+                    'text' => 'Ordini Cliente',
+                    'url'  => '/customer-orders',
+                    'icon' => 'fas fa-shopping-cart',
+                ],
+            ],
+        ],
+        [
             'header' => 'MAGAZZINO',
         ],
         [

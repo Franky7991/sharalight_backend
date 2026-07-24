@@ -17,6 +17,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function () {
 
+    // CustomerOrder routes
+    Route::post('/customer-orders/list/table', [App\Http\Controllers\CustomerOrderController::class, 'listDataTable'])->name('customer-orders.datatable');
+    Route::post('/customer-orders/delete',     [App\Http\Controllers\CustomerOrderController::class, 'delete'])->name('customer-orders.delete');
+    Route::post('/customer-orders',            [App\Http\Controllers\CustomerOrderController::class, 'store'])->name('customer-orders.store');
+    Route::put('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'update'])->name('customer-orders.update');
+    Route::delete('/customer-orders/{order}',  [App\Http\Controllers\CustomerOrderController::class, 'destroy'])->name('customer-orders.destroy');
+    Route::get('/customer-orders',             [App\Http\Controllers\CustomerOrderController::class, 'index'])->name('customer-orders.index');
+
     // Stock routes
     Route::post('/stocks/list/table', [App\Http\Controllers\StockController::class, 'listDataTable'])->name('stocks.datatable');
     Route::get('/stocks', [App\Http\Controllers\StockController::class, 'index'])->name('stocks.index');

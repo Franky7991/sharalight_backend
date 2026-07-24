@@ -66,7 +66,6 @@ class MovementController extends Controller
 
     public function destroy(string $id)
     {
-        Movement::query()->findOrFail($id)->delete();
-        return response()->json(['success' => true]);
+        abort(403, 'Eliminazione di un movimento non consentita.');
     }
 }

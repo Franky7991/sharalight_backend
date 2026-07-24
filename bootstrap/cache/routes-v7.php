@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::kIIGbxLFu9CSOQds',
+            '_route' => 'generated::6J3T5SVAiaMVQfw6',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::RfmUsRXqKbNwAAJf',
+            '_route' => 'generated::Rz6mb6bqWLrg1Zur',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::yLMAjQw4AqRtEKAJ',
+            '_route' => 'generated::2j12w93Z09E1Ie7j',
           ),
           1 => NULL,
           2 => 
@@ -128,6 +128,80 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'home',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/customer-orders/list/table' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.datatable',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/customer-orders/delete' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.delete',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/customer-orders' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.index',
           ),
           1 => NULL,
           2 => 
@@ -970,11 +1044,140 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/movements/([^/]++)(*:26)|/product(?|s/([^/]++)(?|/(?|tree(*:65)|edit(*:76))|(*:84))|\\-categories/([^/]++)(?|(*:116)|/edit(*:129)|(*:137)))|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:184)|/edit(*:197)|(*:205))|conversions/([^/]++)(?|(*:237)|/edit(*:250)|(*:258)))|sers/([^/]++)(?|(*:284)|/edit(*:297)|(*:305)))|/warehouses/([^/]++)(?|(*:338)|/edit(*:351)|(*:359))|/recipe(?|s/(?|list/table/([^/]++)(*:402)|([^/]++)(?|(*:421)))|\\-details/(?|list/(?|details/([^/]++)(*:468)|products/([^/]++)(*:493))|([^/]++)(*:510)))|/causals/([^/]++)(?|(*:540)|/edit(*:553)|(*:561))|/storage/(.*)(*:583))/?$}sDu',
+      0 => '{^(?|/c(?|ustomer\\-orders/([^/]++)(?|(*:39))|ausals/([^/]++)(?|(*:65)|/edit(*:77)|(*:84)))|/movements/([^/]++)(*:112)|/product(?|s/([^/]++)(?|/(?|tree(*:152)|edit(*:164))|(*:173))|\\-categories/([^/]++)(?|(*:206)|/edit(*:219)|(*:227)))|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:274)|/edit(*:287)|(*:295))|conversions/([^/]++)(?|(*:327)|/edit(*:340)|(*:348)))|sers/([^/]++)(?|(*:374)|/edit(*:387)|(*:395)))|/warehouses/([^/]++)(?|(*:428)|/edit(*:441)|(*:449))|/recipe(?|s/(?|list/table/([^/]++)(*:492)|([^/]++)(?|(*:511)))|\\-details/(?|list/(?|details/([^/]++)(*:558)|products/([^/]++)(*:583))|([^/]++)(*:600)))|/storage/(.*)(*:623))/?$}sDu',
     ),
     3 => 
     array (
-      26 => 
+      39 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.update',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'customer-orders.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'order',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      65 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'causals.show',
+          ),
+          1 => 
+          array (
+            0 => 'causal',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      77 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'causals.edit',
+          ),
+          1 => 
+          array (
+            0 => 'causal',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      84 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'causals.update',
+          ),
+          1 => 
+          array (
+            0 => 'causal',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+            'PATCH' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'causals.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'causal',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      112 => 
       array (
         0 => 
         array (
@@ -996,7 +1199,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      65 => 
+      152 => 
       array (
         0 => 
         array (
@@ -1019,7 +1222,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      76 => 
+      164 => 
       array (
         0 => 
         array (
@@ -1042,7 +1245,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      84 => 
+      173 => 
       array (
         0 => 
         array (
@@ -1104,7 +1307,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      116 => 
+      206 => 
       array (
         0 => 
         array (
@@ -1127,7 +1330,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      129 => 
+      219 => 
       array (
         0 => 
         array (
@@ -1150,7 +1353,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      137 => 
+      227 => 
       array (
         0 => 
         array (
@@ -1192,7 +1395,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      184 => 
+      274 => 
       array (
         0 => 
         array (
@@ -1215,7 +1418,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      197 => 
+      287 => 
       array (
         0 => 
         array (
@@ -1238,7 +1441,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      205 => 
+      295 => 
       array (
         0 => 
         array (
@@ -1280,7 +1483,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      237 => 
+      327 => 
       array (
         0 => 
         array (
@@ -1303,7 +1506,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      250 => 
+      340 => 
       array (
         0 => 
         array (
@@ -1326,7 +1529,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      258 => 
+      348 => 
       array (
         0 => 
         array (
@@ -1368,7 +1571,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      284 => 
+      374 => 
       array (
         0 => 
         array (
@@ -1391,7 +1594,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      297 => 
+      387 => 
       array (
         0 => 
         array (
@@ -1414,7 +1617,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      305 => 
+      395 => 
       array (
         0 => 
         array (
@@ -1456,7 +1659,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      338 => 
+      428 => 
       array (
         0 => 
         array (
@@ -1479,7 +1682,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      351 => 
+      441 => 
       array (
         0 => 
         array (
@@ -1502,7 +1705,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      359 => 
+      449 => 
       array (
         0 => 
         array (
@@ -1544,7 +1747,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      402 => 
+      492 => 
       array (
         0 => 
         array (
@@ -1566,7 +1769,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      421 => 
+      511 => 
       array (
         0 => 
         array (
@@ -1607,7 +1810,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      468 => 
+      558 => 
       array (
         0 => 
         array (
@@ -1629,7 +1832,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      493 => 
+      583 => 
       array (
         0 => 
         array (
@@ -1651,7 +1854,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      510 => 
+      600 => 
       array (
         0 => 
         array (
@@ -1673,95 +1876,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      540 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'causals.show',
-          ),
-          1 => 
-          array (
-            0 => 'causal',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      553 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'causals.edit',
-          ),
-          1 => 
-          array (
-            0 => 'causal',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-      ),
-      561 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'causals.update',
-          ),
-          1 => 
-          array (
-            0 => 'causal',
-          ),
-          2 => 
-          array (
-            'PUT' => 0,
-            'PATCH' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-        1 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'causals.destroy',
-          ),
-          1 => 
-          array (
-            0 => 'causal',
-          ),
-          2 => 
-          array (
-            'DELETE' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      583 => 
+      623 => 
       array (
         0 => 
         array (
@@ -1835,7 +1950,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::kIIGbxLFu9CSOQds' => 
+    'generated::6J3T5SVAiaMVQfw6' => 
     array (
       'methods' => 
       array (
@@ -1864,7 +1979,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010d0000000000000000";}}',
-        'as' => 'generated::kIIGbxLFu9CSOQds',
+        'as' => 'generated::6J3T5SVAiaMVQfw6',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1880,7 +1995,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::RfmUsRXqKbNwAAJf' => 
+    'generated::Rz6mb6bqWLrg1Zur' => 
     array (
       'methods' => 
       array (
@@ -1902,7 +2017,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::RfmUsRXqKbNwAAJf',
+        'as' => 'generated::Rz6mb6bqWLrg1Zur',
       ),
       'fallback' => false,
       'defaults' => 
@@ -1955,7 +2070,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::yLMAjQw4AqRtEKAJ' => 
+    'generated::2j12w93Z09E1Ie7j' => 
     array (
       'methods' => 
       array (
@@ -1975,7 +2090,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::yLMAjQw4AqRtEKAJ',
+        'as' => 'generated::2j12w93Z09E1Ie7j',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2049,6 +2164,229 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'home',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.delete' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders/delete',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@delete',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@delete',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.delete',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'customer-orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@store',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'customer-orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@update',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.update',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'customer-orders/{order}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@destroy',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'customer-orders.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'customer-orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\CustomerOrderController@index',
+        'controller' => 'App\\Http\\Controllers\\CustomerOrderController@index',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'customer-orders.index',
       ),
       'fallback' => false,
       'defaults' => 

@@ -240,9 +240,28 @@
       ),
       3 => 
       array (
-        'header' => 'MAGAZZINO',
+        'header' => 'ORDINI',
       ),
       4 => 
+      array (
+        'text' => 'Ordini',
+        'icon' => 'fas fa-clipboard-list',
+        'icon_color' => 'blue',
+        'submenu' => 
+        array (
+          0 => 
+          array (
+            'text' => 'Ordini Cliente',
+            'url' => '/customer-orders',
+            'icon' => 'fas fa-shopping-cart',
+          ),
+        ),
+      ),
+      5 => 
+      array (
+        'header' => 'MAGAZZINO',
+      ),
+      6 => 
       array (
         'text' => 'Magazzino',
         'icon' => 'fas fa-warehouse',
@@ -269,11 +288,11 @@
           ),
         ),
       ),
-      5 => 
+      7 => 
       array (
         'header' => 'TABELLE',
       ),
-      6 => 
+      8 => 
       array (
         'text' => 'Tabella',
         'icon' => 'fas fa-table',
@@ -312,11 +331,11 @@
           ),
         ),
       ),
-      7 => 
+      9 => 
       array (
         'header' => 'SISTEMA',
       ),
-      8 => 
+      10 => 
       array (
         'text' => 'Impostazioni',
         'url' => '/settings',

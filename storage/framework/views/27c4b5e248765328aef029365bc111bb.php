@@ -23,7 +23,6 @@
                     <th>Tipo</th>
                     <th class="text-right">Quantità</th>
                     <th>U.M.</th>
-                    <th style="width:60px;">Azioni</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -159,7 +158,6 @@ $(document).ready(function () {
             { data: 'causal_type_label',     name: 'causal_type_label', orderable: false },
             { data: 'qnt',                   name: 'qnt', className: 'text-right' },
             { data: 'unit_of_measure_symbol',name: 'unit_of_measure_symbol', orderable: false },
-            { data: 'id',                    name: 'id', orderable: false, searchable: false },
         ],
         columnDefs: [
             {
@@ -174,27 +172,7 @@ $(document).ready(function () {
                 targets: 5,
                 render: function (data) { return formatIt(data, 2); }
             },
-            {
-                targets: 7,
-                render: function (id) {
-                    return '<button class="btn btn-danger btn-xs btn-delete-movement" data-id="' + id + '" title="Elimina">'
-                         + '<i class="fa fa-trash"></i></button>';
-                }
-            },
         ],
-    });
-
-    // Elimina movimento
-    $('#table_movements').on('click', '.btn-delete-movement', function () {
-        if (!confirm('Eliminare questo movimento?')) return;
-        var id = $(this).data('id');
-        $.ajax({
-            url:     '/movements/' + id,
-            type:    'DELETE',
-            headers: { 'X-CSRF-TOKEN': csrfToken },
-            success: function () { movTable.ajax.reload(null, false); },
-            error:   function () { alert('Errore durante l\'eliminazione.'); },
-        });
     });
 
     // ---- Modal Carico in Magazzino --------------------------------------

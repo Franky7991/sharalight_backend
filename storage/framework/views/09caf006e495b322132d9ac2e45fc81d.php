@@ -1,8 +1,8 @@
-@extends('adminlte::page')
-@section('title', 'Movimenti')
-@section('content_header')@stop
 
-@section('content')
+<?php $__env->startSection('title', 'Movimenti'); ?>
+<?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
         <div class="d-flex align-items-center justify-content-between">
@@ -30,9 +30,7 @@
     </div>
 </div>
 
-{{-- ================================================================
-     Modal: Carico in Magazzino
-     ================================================================ --}}
+
 <div class="modal fade" id="modal-load" tabindex="-1" role="dialog"
      aria-labelledby="modal-load-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -52,11 +50,11 @@
                     <ul class="mb-0" id="modal-load-errors-list"></ul>
                 </div>
 
-                {{-- Campi hidden --}}
-                <input type="hidden" id="load_causal_id"          value="{{ $defaultLoadCausalId ?? '' }}">
+                
+                <input type="hidden" id="load_causal_id"          value="<?php echo e($defaultLoadCausalId ?? ''); ?>">
                 <input type="hidden" id="load_unit_of_measure_id" value="">
 
-                {{-- Magazzino --}}
+                
                 <div class="form-group">
                     <label for="load_warehouse_id">Magazzino <span class="text-danger">*</span></label>
                     <div class="input-group">
@@ -65,14 +63,14 @@
                         </div>
                         <select id="load_warehouse_id" class="form-control">
                             <option value="">— Seleziona —</option>
-                            @foreach($warehouses as $wh)
-                                <option value="{{ $wh->id }}">{{ $wh->name }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $wh): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($wh->id); ?>"><?php echo e($wh->name); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
 
-                {{-- Prodotto --}}
+                
                 <div class="form-group">
                     <label for="load_product_id">Prodotto <span class="text-danger">*</span></label>
                     <div class="input-group">
@@ -81,18 +79,19 @@
                         </div>
                         <select id="load_product_id" class="form-control">
                             <option value="">— Seleziona —</option>
-                            @foreach($products as $p)
-                                <option value="{{ $p->id }}"
-                                    data-uom-id="{{ $p->productCategory?->unitOfMeasure?->id ?? '' }}"
-                                    data-uom-symbol="{{ $p->productCategory?->unitOfMeasure?->symbol ?? '' }}">
-                                    {{ $p->name }}
+                            <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($p->id); ?>"
+                                    data-uom-id="<?php echo e($p->productCategory?->unitOfMeasure?->id ?? ''); ?>"
+                                    data-uom-symbol="<?php echo e($p->productCategory?->unitOfMeasure?->symbol ?? ''); ?>">
+                                    <?php echo e($p->name); ?>
+
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
 
-                {{-- Quantità + UdM bloccata --}}
+                
                 <div class="form-group">
                     <label for="load_qnt">Quantità <span class="text-danger">*</span></label>
                     <div class="input-group">
@@ -122,9 +121,9 @@
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 <script>
 $(document).ready(function () {
 
@@ -148,7 +147,7 @@ $(document).ready(function () {
         pageLength: 25,
         ajax: {
             type: 'POST',
-            url: '{{ route('movements.datatable') }}',
+            url: '<?php echo e(route('movements.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': csrfToken },
         },
         columns: [
@@ -212,7 +211,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url:     '{{ route('movements.store') }}',
+            url:     '<?php echo e(route('movements.store')); ?>',
             type:    'POST',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: {
@@ -257,4 +256,6 @@ $(document).ready(function () {
 
 });
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/movement/index.blade.php ENDPATH**/ ?>
