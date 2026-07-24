@@ -18,9 +18,8 @@ class RecipeController extends Controller
             ->get();
 
         // Carica tutte le conversioni indicizzate per from_unit_of_measure_id
-        // (potenzialmente più conversioni per la stessa UdM — prendiamo la prima)
         $conversions = UnitConversion::query()
-            ->with(['toUnitOfMeasure'])
+            ->with(['fromUnitOfMeasure', 'toUnitOfMeasure'])
             ->get()
             ->groupBy('from_unit_of_measure_id');
 
@@ -33,13 +32,21 @@ class RecipeController extends Controller
                 $matches = $conversions->get($row->unit_of_measure_id);
                 if (! $matches || $matches->isEmpty()) return '';
 
-                return $matches->map(function ($c) {
-                    $fromQty = number_format($c->from_quantity, 2, ',', '.');
-                    $toQty   = number_format($c->to_quantity,   2, ',', '.');
-                    $toSym   = $c->toUnitOfMeasure?->symbol ?? '?';
-                    $toName  = $c->toUnitOfMeasure?->name   ?? '';
-                    return $fromQty . ' → ' . $toQty . ' ' . $toSym
-                         . ($toName ? ' (' . $toName . ')' : '');
+                $recipeQty = (float) $row->quantity;
+
+                return $matches->map(function ($c) use ($recipeQty) {
+                    // Proporziona la conversione alla quantità della riga ricetta
+                    $factor    = $c->from_quantity > 0 ? ($c->to_quantity / $c->from_quantity) : 0;
+                    $converted = $recipeQty * $factor;
+
+                    $fromQty = number_format($recipeQty, 2, ',', '.');
+                    $toQty   = number_format($converted,  2, ',', '.');
+                    $fromSym = $c->fromUnitOfMeasure?->symbol ?? '?';
+                    $toSym   = $c->toUnitOfMeasure?->symbol   ?? '?';
+                    $toName  = $c->toUnitOfMeasure?->name     ?? '';
+
+                    return $fromQty . ' ' . $fromSym . ' → ' . $toQty . ' ' . $toSym
+                         . ($toName ? ' <small class="text-muted">(' . $toName . ')</small>' : '');
                 })->implode('<br>');
             })
             ->rawColumns(['conversion_label'])

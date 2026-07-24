@@ -27,23 +27,53 @@ class RecipeDetailController extends Controller
 
     /**
      * DataTable dei prodotti disponibili per la categoria della recipe.
-     * Esclude i prodotti già inseriti nel dettaglio.
+     * Esclude i prodotti già inseriti nel dettaglio e il prodotto principale della ricetta.
      */
     public function listAvailableProducts(Request $request, string $recipeId)
     {
-        $recipe = Recipe::query()->findOrFail($recipeId);
+        $recipe = Recipe::query()->with('product')->findOrFail($recipeId);
 
         $usedIds = RecipeDetail::query()
             ->where('recipe_id', $recipeId)
-            ->pluck('product_id');
+            ->pluck('product_id')
+            ->toArray();
+
+        // Escludi anche il prodotto principale (quello per cui si sta costruendo la ricetta)
+        $excludeIds = array_merge($usedIds, [$recipe->product_id]);
 
         $products = Product::query()
             ->where('product_category_id', $recipe->product_category_id)
-            ->whereNotIn('id', $usedIds)
+            ->whereNotIn('id', $excludeIds)
+            ->orderBy('name')
             ->get();
 
-        return datatables($products)
-            ->toJson();
+        // Debug: log per verificare il risultato
+        \Log::info('RecipeDetailController::listAvailableProducts', [
+            'recipe_id'           => $recipeId,
+            'product_id'          => $recipe->product_id,
+            'product_category_id' => $recipe->product_category_id,
+            'used_ids'            => $usedIds,
+            'exclude_ids'         => $excludeIds,
+            'found_products'      => $products->pluck('name', 'id')->toArray(),
+            'total_found'         => $products->count(),
+        ]);
+
+        // Se il parametro ?debug=1 è presente, restituisci JSON semplice per debug
+        if ($request->get('debug')) {
+            return response()->json([
+                'recipe'          => $recipe->only(['id', 'product_id', 'product_category_id']),
+                'recipe_product'  => $recipe->product->only(['id', 'name', 'product_category_id']),
+                'exclude_ids'     => $excludeIds,
+                'found_products'  => $products->map(fn($p) => [
+                    'id'   => $p->id,
+                    'name' => $p->name,
+                    'type' => $p->type,
+                    'product_category_id' => $p->product_category_id,
+                ]),
+            ]);
+        }
+
+        return datatables($products)->toJson();
     }
 
     /**

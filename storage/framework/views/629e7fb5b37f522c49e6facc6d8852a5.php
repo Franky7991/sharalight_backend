@@ -132,6 +132,38 @@
     .modal-backdrop + .modal-backdrop { z-index: 1055; }
     #modal-detail-pick { z-index: 1060; }
     #modal-detail-pick + .modal-backdrop { z-index: 1055; }
+
+    /* Albero ingredienti */
+    #recipe-tree-root {
+        font-size: 0.9rem;
+        padding: 4px 0;
+    }
+    .tree-node {
+        margin: 2px 0;
+    }
+    .tree-node__label {
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background .15s;
+        cursor: default;
+        user-select: none;
+    }
+    .tree-node--parent > .tree-node__label:hover {
+        background: rgba(0,0,0,.04);
+    }
+    .tree-toggle {
+        cursor: pointer;
+        width: 16px;
+        color: #6c757d;
+        flex-shrink: 0;
+    }
+    .tree-children {
+        margin-left: 24px;
+        border-left: 2px solid #dee2e6;
+        padding-left: 8px;
+    }
 </style>
 <?php echo $__env->make('product.tabs.recipe_js', ['product' => $product], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php endif; ?>

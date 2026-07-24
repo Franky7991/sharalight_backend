@@ -544,3 +544,5 @@ Did you mean one of these?
 #53 C:/project/shara_light/backend/vendor/laravel/framework/src/Illuminate/Foundation/resources/server.php(23): require_once('C://project//shar...')
 #54 {main}
 "} 
+[2026-07-24 12:27:01] local.INFO: RecipeDetailController::listAvailableProducts {"recipe_id":"7","product_id":10,"product_category_id":7,"used_ids":[],"exclude_ids":[10],"found_products":{"9":"Busta Rosa"},"total_found":1} 
+[2026-07-24 12:27:15] local.INFO: RecipeDetailController::listAvailableProducts {"recipe_id":"6","product_id":10,"product_category_id":4,"used_ids":[],"exclude_ids":[10],"found_products":{"4":"Candela Piccola"},"total_found":1} 

@@ -279,6 +279,7 @@
 
     $('#modal-detail-pick').on('shown.bs.modal', function () {
         var recipeId = $('#detail-recipe-id').val();
+        console.log('Opening modal-detail-pick for recipe:', recipeId);
         if (detailAvailableTable) { detailAvailableTable.destroy(); detailAvailableTable = null; }
         detailAvailableTable = $('#table_detail_available').DataTable({
             pageLength: -1,
@@ -290,6 +291,9 @@
                 type: 'POST',
                 url: urlDetailProducts(recipeId),
                 headers: { 'X-CSRF-TOKEN': csrfToken },
+                error: function (xhr, error, code) {
+                    console.error('Error loading available products:', error, code, xhr.responseText);
+                },
             },
             columns: [
                 { data: 'name', name: 'name' },
