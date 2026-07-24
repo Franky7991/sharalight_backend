@@ -300,6 +300,17 @@
           ),
         ),
       ),
+      7 => 
+      array (
+        'header' => 'SISTEMA',
+      ),
+      8 => 
+      array (
+        'text' => 'Impostazioni',
+        'url' => '/settings',
+        'icon' => 'fas fa-cog',
+        'icon_color' => 'gray',
+      ),
     ),
     'filters' => 
     array (

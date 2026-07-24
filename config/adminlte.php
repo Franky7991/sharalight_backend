@@ -369,6 +369,15 @@ return [
                 ],
             ],
         ],
+        [
+            'header' => 'SISTEMA',
+        ],
+        [
+            'text' => 'Impostazioni',
+            'url'  => '/settings',
+            'icon' => 'fas fa-cog',
+            'icon_color' => 'gray',
+        ],
     ],
 
     /*
