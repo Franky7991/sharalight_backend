@@ -38,12 +38,14 @@ class CustomerOrderHasProductController extends Controller
                     return '<span class="text-muted small">—</span>';
                 }
 
+                $uomSymbol = $r->unitOfMeasure?->symbol ?? '';
                 $parts = [];
                 foreach ($warehouses as $w) {
                     $a = $allocations->get($w->id);
                     if ($a && (float) $a->qnt > 0) {
                         $parts[] = '<span class="badge badge-light border mr-1">'
                                  . e($w->name) . ': <strong>' . number_format((float) $a->qnt, 2, ',', '.') . '</strong>'
+                                 . ($uomSymbol ? ' ' . e($uomSymbol) : '')
                                  . '</span>';
                     }
                 }
