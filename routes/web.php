@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'update'])->name('customer-orders.update');
     Route::delete('/customer-orders/{order}',  [App\Http\Controllers\CustomerOrderController::class, 'destroy'])->name('customer-orders.destroy');
     Route::get('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'show'])->name('customer-orders.show');
+    Route::get('/customer-orders/{order}/summary', [App\Http\Controllers\CustomerOrderController::class, 'summary'])->name('customer-orders.summary');
     Route::get('/customer-orders',             [App\Http\Controllers\CustomerOrderController::class, 'index'])->name('customer-orders.index');
 
     // CustomerOrderHasProduct routes

@@ -50,6 +50,12 @@
                             <i class="fas fa-boxes mr-1"></i> Prodotti
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-summary" data-toggle="tab"
+                           href="#pane-summary" role="tab">
+                            <i class="fas fa-calculator mr-1"></i> Riepilogo
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body">
@@ -78,6 +84,29 @@
                             <tbody></tbody>
                         </table>
 
+                    </div>
+
+                    
+                    <div class="tab-pane fade" id="pane-summary" role="tabpanel">
+                        <div id="summary-loading" class="text-center py-3">
+                            <i class="fas fa-spinner fa-spin"></i> Caricamento…
+                        </div>
+                        <div id="summary-body" class="d-none">
+                            <table id="table_summary" class="table table-hover table-sm" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Prodotto</th>
+                                        <th class="text-right">Quantità Totale</th>
+                                        <th>U.M.</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="summary-empty" class="d-none text-muted text-center py-3">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Nessun dato da riepilogare.
+                        </div>
                     </div>
 
                 </div>
@@ -116,7 +145,7 @@
                             <tr>
                                 <th>Categoria</th>
                                 <th class="text-right">Totale necessario</th>
-                                <th>Convertito in</th>
+                                <th class="text-right">Convertito in</th>
                                 <th>Prodotto</th>
                             </tr>
                         </thead>
@@ -295,6 +324,59 @@ $(document).ready(function () {
     });
 
     // ================================================================
+    // Tab Riepilogo
+    // ================================================================
+    var summaryTable = null;
+
+    function loadSummary() {
+        $('#summary-loading').removeClass('d-none');
+        $('#summary-body').addClass('d-none');
+        $('#summary-empty').addClass('d-none');
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/summary',
+            type:    'GET',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            success: function (data) {
+                $('#summary-loading').addClass('d-none');
+
+                if (!data || data.length === 0) {
+                    $('#summary-empty').removeClass('d-none');
+                    return;
+                }
+
+                if (summaryTable) {
+                    summaryTable.destroy();
+                }
+
+                summaryTable = $('#table_summary').DataTable({
+                    data: data,
+                    pageLength: 25,
+                    order: [[0, 'asc']],
+                    columns: [
+                        { data: 'product_name', name: 'product_name' },
+                        { data: 'total_qnt', name: 'total_qnt', className: 'text-right', render: function (data) { return formatIt(data, 2); } },
+                        { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
+                    ],
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it.json'
+                    }
+                });
+
+                $('#summary-body').removeClass('d-none');
+            },
+            error: function () {
+                $('#summary-loading').addClass('d-none');
+                $('#summary-empty').removeClass('d-none').text('Errore durante il caricamento del riepilogo.');
+            },
+        });
+    }
+
+    $('#tab-summary').on('shown.bs.tab', function () {
+        loadSummary();
+    });
+
+    // ================================================================
     // Modal aggiungi prodotto
     // ================================================================
     $('#btn-add-product').on('click', function () {
@@ -386,33 +468,59 @@ $(document).ready(function () {
                 }
 
                 var tbody = $('#ing-rows').empty();
-                $.each(data.rows, function (i, row) {
-                    var opts = '<option value="">— Seleziona —</option>';
-                    $.each(row.products, function (j, p) {
-                        var sel = (row.selected_product_id == p.id) ? ' selected' : '';
-                        opts += '<option value="' + p.id + '"' + sel + '>'
-                              + $('<span>').text(p.name).html()
-                              + '</option>';
+
+                // Funzione ricorsiva per aggiungere righe
+                function addRecipeRows(rows, depth) {
+                    $.each(rows, function (i, row) {
+                        var opts = '<option value="">— Seleziona —</option>';
+                        $.each(row.products, function (j, p) {
+                            var sel = (row.selected_product_id == p.id) ? ' selected' : '';
+                            var typeLabel = p.type === 'semi_finished' ? ' (Semi)' : '';
+                            opts += '<option value="' + p.id + '"' + sel + '>'
+                                  + $('<span>').text(p.name + typeLabel).html()
+                                  + '</option>';
+                        });
+
+                        // totale con conversione
+                        var totalFmt = parseFloat(row.total).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
+                        var totalCell = totalFmt + ' ' + $('<span>').text(row.recipe_uom_symbol).html();
+
+                        // convertito in (dall'unità ricetta all'unità categoria) - mostra solo se diverso
+                        var conversionCell = '';
+                        if (row.recipe_uom_symbol !== row.category_uom_symbol || Math.abs(row.total - row.converted_total) > 0.0001) {
+                            var convertedTotalFmt = parseFloat(row.converted_total).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
+                            conversionCell = totalFmt + ' ' + $('<span>').text(row.recipe_uom_symbol).html() + ' → ' + convertedTotalFmt + ' ' + $('<span>').text(row.category_uom_symbol).html();
+                        }
+
+                        // Indentazione basata sulla profondità
+                        var indent = depth * 20;
+                        var categoryCell = '<span style="margin-left:' + indent + 'px;">' + $('<span>').text(row.category_name).html() + '</span>';
+                        if (depth > 0) {
+                            categoryCell = '<i class="fas fa-angle-right text-muted mr-1"></i>' + categoryCell;
+                        }
+
+                        tbody.append(
+                            '<tr data-recipe-id="' + row.recipe_id + '" '
+                          + 'data-depth="' + depth + '" '
+                          + 'data-original-qnt="' + row.original_qnt + '" '
+                          + 'data-original-unit-of-measure-id="' + row.original_unit_of_measure_id + '" '
+                          + 'data-conversion-qnt="' + row.conversion_qnt + '" '
+                          + 'data-conversion-unit-of-measure-id="' + row.conversion_unit_of_measure_id + '">'
+                          + '<td>' + categoryCell + '</td>'
+                          + '<td class="text-right">' + totalCell + '</td>'
+                          + '<td class="text-right small">' + conversionCell + '</td>'
+                          + '<td><select class="form-control form-control-sm ing-product-select">' + opts + '</select></td>'
+                          + '</tr>'
+                        );
+
+                        // Ricorsione per ricette annidate
+                        if (row.nested_recipes && row.nested_recipes.length > 0) {
+                            addRecipeRows(row.nested_recipes, depth + 1);
+                        }
                     });
+                }
 
-                    // totale con conversione
-                    var totalFmt = parseFloat(row.total).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
-                    var totalCell = totalFmt + ' ' + $('<span>').text(row.recipe_uom_symbol).html();
-
-                    // convertito in
-                    var originalFmt = parseFloat(row.original_qnt).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
-                    var convertedFmt = parseFloat(row.converted_qnt).toLocaleString('it-IT', {minimumFractionDigits:2, maximumFractionDigits:4});
-                    var conversionCell = originalFmt + ' ' + $('<span>').text(row.original_uom_symbol).html() + ' → ' + convertedFmt + ' ' + $('<span>').text(row.recipe_uom_symbol).html();
-
-                    tbody.append(
-                        '<tr data-recipe-id="' + row.recipe_id + '">'
-                      + '<td>' + $('<span>').text(row.category_name).html() + '</td>'
-                      + '<td class="text-right">' + totalCell + '</td>'
-                      + '<td class="text-right small">' + conversionCell + '</td>'
-                      + '<td><select class="form-control form-control-sm ing-product-select">' + opts + '</select></td>'
-                      + '</tr>'
-                    );
-                });
+                addRecipeRows(data.rows, 0);
 
                 $('#ing-body').removeClass('d-none');
                 $('#btn-save-ingredients').removeClass('d-none');
@@ -434,7 +542,14 @@ $(document).ready(function () {
             var recipeId  = $(this).data('recipe-id');
             var productId = $(this).find('.ing-product-select').val();
             if (!productId) { valid = false; return false; }
-            selections.push({ recipe_id: recipeId, product_id: productId });
+            selections.push({
+                recipe_id: recipeId,
+                product_id: productId,
+                original_qnt: $(this).data('original-qnt'),
+                original_unit_of_measure_id: $(this).data('original-unit-of-measure-id'),
+                conversion_qnt: $(this).data('conversion-qnt'),
+                conversion_unit_of_measure_id: $(this).data('conversion-unit-of-measure-id'),
+            });
         });
 
         if (!valid) {
@@ -453,6 +568,10 @@ $(document).ready(function () {
             success: function () {
                 $('#modal-ingredients').modal('hide');
                 prodTable.ajax.reload(null, false);
+                // Ricarica il riepilogo se la tab è attiva
+                if ($('#tab-summary').hasClass('active')) {
+                    loadSummary();
+                }
             },
             error: function (xhr) {
                 if (xhr.status === 422) {

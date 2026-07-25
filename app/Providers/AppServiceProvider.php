@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Movement;
 use App\Observers\MovementObserver;
+use App\Models\CustomerOrderHasProductDetail;
+use App\Observers\CustomerOrderHasProductDetailObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Movement::observe(MovementObserver::class);
+        CustomerOrderHasProductDetail::observe(CustomerOrderHasProductDetailObserver::class);
     }
 }

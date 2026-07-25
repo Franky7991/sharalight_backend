@@ -50,6 +50,12 @@
                             <i class="fas fa-boxes mr-1"></i> Prodotti
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tab-summary" data-toggle="tab"
+                           href="#pane-summary" role="tab">
+                            <i class="fas fa-calculator mr-1"></i> Riepilogo
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body">
@@ -78,6 +84,29 @@
                             <tbody></tbody>
                         </table>
 
+                    </div>
+
+                    
+                    <div class="tab-pane fade" id="pane-summary" role="tabpanel">
+                        <div id="summary-loading" class="text-center py-3">
+                            <i class="fas fa-spinner fa-spin"></i> Caricamento…
+                        </div>
+                        <div id="summary-body" class="d-none">
+                            <table id="table_summary" class="table table-hover table-sm" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Prodotto</th>
+                                        <th class="text-right">Quantità Totale</th>
+                                        <th>U.M.</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div id="summary-empty" class="d-none text-muted text-center py-3">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Nessun dato da riepilogare.
+                        </div>
                     </div>
 
                 </div>
@@ -295,6 +324,92 @@ $(document).ready(function () {
     });
 
     // ================================================================
+    // Tab Riepilogo
+    // ================================================================
+    var summaryTable = null;
+
+    function loadSummary() {
+        $('#summary-loading').removeClass('d-none');
+        $('#summary-body').addClass('d-none');
+        $('#summary-empty').addClass('d-none');
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/summary',
+            type:    'GET',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            success: function (response) {
+                $('#summary-loading').addClass('d-none');
+
+                if (!response.summaries || response.summaries.length === 0) {
+                    $('#summary-empty').removeClass('d-none');
+                    return;
+                }
+
+                // Costruisci le colonne dinamiche per i magazzini
+                var columns = [
+                    { data: 'product_name', name: 'product_name', title: 'Prodotto' },
+                    { data: 'total_qnt', name: 'total_qnt', className: 'text-right', title: 'Quantità Totale', render: function (data) { return formatIt(data, 2); } },
+                    { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false, title: 'U.M.' },
+                ];
+
+                // Aggiungi colonne per ogni magazzino
+                response.warehouses.forEach(function (warehouse) {
+                    columns.push({
+                        data: null,
+                        name: 'warehouse_' + warehouse.id,
+                        title: warehouse.name,
+                        className: 'text-right',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var stock = row.warehouse_stocks[warehouse.id];
+                            if (!stock) return '-';
+                            var qnt = formatIt(stock.qnt, 2);
+                            var uom = row.unit_of_measure_symbol;
+                            var text = qnt + ' ' + uom;
+                            if (stock.is_negative) {
+                                return '<span class="text-danger font-weight-bold">' + text + '</span>';
+                            }
+                            return text;
+                        }
+                    });
+                });
+
+                // Aggiorna l'header della tabella
+                var thead = $('#table_summary thead').empty();
+                var headerRow = $('<tr></tr>');
+                columns.forEach(function (col) {
+                    headerRow.append('<th>' + col.title + '</th>');
+                });
+                thead.append(headerRow);
+
+                if (summaryTable) {
+                    summaryTable.destroy();
+                }
+
+                summaryTable = $('#table_summary').DataTable({
+                    data: response.summaries,
+                    pageLength: 25,
+                    order: [[0, 'asc']],
+                    columns: columns,
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it.json'
+                    }
+                });
+
+                $('#summary-body').removeClass('d-none');
+            },
+            error: function () {
+                $('#summary-loading').addClass('d-none');
+                $('#summary-empty').removeClass('d-none').text('Errore durante il caricamento del riepilogo.');
+            },
+        });
+    }
+
+    $('#tab-summary').on('shown.bs.tab', function () {
+        loadSummary();
+    });
+
+    // ================================================================
     // Modal aggiungi prodotto
     // ================================================================
     $('#btn-add-product').on('click', function () {
@@ -486,6 +601,10 @@ $(document).ready(function () {
             success: function () {
                 $('#modal-ingredients').modal('hide');
                 prodTable.ajax.reload(null, false);
+                // Ricarica il riepilogo se la tab è attiva
+                if ($('#tab-summary').hasClass('active')) {
+                    loadSummary();
+                }
             },
             error: function (xhr) {
                 if (xhr.status === 422) {
