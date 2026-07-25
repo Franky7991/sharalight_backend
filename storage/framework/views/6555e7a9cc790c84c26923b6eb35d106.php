@@ -31,10 +31,15 @@
                     </dd>
                 </dl>
                 <div class="mt-3">
-                    <button type="button" class="btn btn-success btn-sm btn-block <?php if($order->isProductsDefined() || !$order->canBeModified()): ?> d-none <?php endif; ?>"
+                    <button type="button" class="btn btn-success btn-sm btn-block"
                             id="btn-define-products"
                             title="Blocca l'ordine e conferma i prodotti">
                         <i class="fa fa-check mr-1"></i> Prodotti Definiti
+                    </button>
+                    <button type="button" class="btn btn-warning btn-sm btn-block"
+                            id="btn-allocate-products"
+                            title="Conferma l'allocazione ai magazzini">
+                        <i class="fa fa-warehouse mr-1"></i> Prodotti Allocati
                     </button>
                     <a href="<?php echo e(route('customer-orders.index')); ?>" class="btn btn-secondary btn-sm btn-block mt-1">
                         <i class="fa fa-backward mr-1"></i> Indietro
@@ -237,6 +242,57 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal-warehouse" tabindex="-1" role="dialog"
+     aria-labelledby="modal-warehouse-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-warehouse-label">
+                    <i class="fas fa-warehouse mr-1"></i> Allocazione magazzini (per la produzione) — <span id="wh-product-name"></span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Chiudi">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-wh-errors" class="alert alert-danger d-none">
+                    <ul class="mb-0" id="modal-wh-errors-list"></ul>
+                </div>
+                <div id="wh-loading" class="text-center py-3">
+                    <i class="fas fa-spinner fa-spin"></i> Caricamento…
+                </div>
+                <div id="wh-body" class="d-none">
+                    <p class="text-muted small mb-2">
+                        Quantità richiesta dall'ordine: <strong id="wh-order-qnt"></strong>
+                    </p>
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Magazzino</th>
+                                <th class="text-right">Quantità da allocare</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wh-rows"></tbody>
+                    </table>
+                </div>
+                <div id="wh-empty" class="d-none text-muted text-center py-3">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Nessun magazzino disponibile.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                    <i class="fa fa-times"></i> Annulla
+                </button>
+                <button type="button" class="btn btn-primary btn-sm d-none" id="btn-save-warehouses">
+                    <i class="fa fa-save"></i> Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('js'); ?>
@@ -251,6 +307,7 @@ $(document).ready(function () {
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     var orderId   = <?php echo e($order->id); ?>;
     var canModify = <?php echo e($order->canBeModified() ? 'true' : 'false'); ?>;
+    var orderState = '<?php echo e($order->state); ?>';
 
     function formatIt(val, dec) {
         dec = dec === undefined ? 2 : dec;
@@ -281,6 +338,8 @@ $(document).ready(function () {
             { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
             // 4 - azioni
             { data: 'id',                     name: 'id', orderable: false, searchable: false },
+            // 5 - warehouses_allocated (hidden, used for rendering)
+            { data: 'warehouses_allocated',   name: 'warehouses_allocated', orderable: false, searchable: false, visible: false },
         ],
         columnDefs: [
             {
@@ -295,14 +354,19 @@ $(document).ready(function () {
             },
             {
                 targets: 4,
-                render: function (id) {
-                    var html = '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'
-                             + '<i class="fas fa-list-ul"></i></button>';
+                render: function (id, type, row) {
                     if (canModify) {
-                        html += '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
-                              + '<i class="fa fa-trash"></i></button>';
+                        return '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'
+                             + '<i class="fas fa-list-ul"></i></button>'
+                             + '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
+                             + '<i class="fa fa-trash"></i></button>';
                     }
-                    return html;
+                    var allocated = row.warehouses_allocated == 1;
+                    var saved = allocated ? ' btn-success' : ' btn-outline-success';
+                    var icon = allocated ? 'fa-check-circle' : 'fa-warehouse';
+                    var disabled = orderState === 'products_allocated' ? ' disabled' : '';
+                    return '<button class="btn btn-xs btn-warehouse-op' + saved + disabled + '" data-id="' + id + '" title="Allocazione magazzini">'
+                         + '<i class="fas ' + icon + '"></i></button>';
                 }
             },
         ],
@@ -310,10 +374,14 @@ $(document).ready(function () {
 
     // ---- Expand / collapse riga dettagli --------------------------------
     function buildDetailRow(rowData) {
-        var html = rowData.details_html || '<span class="text-muted small">Nessun ingrediente configurato.</span>';
+        var ingredientsHtml = rowData.details_html || '<span class="text-muted small">Nessun ingrediente configurato.</span>';
+        var warehousesHtml = rowData.warehouses_html || '<span class="text-muted small">—</span>';
         return '<div style="padding:6px 8px 6px 32px;">'
              + '<span class="text-muted small mr-1"><i class="fas fa-cubes mr-1"></i>Ingredienti:</span> '
-             + html
+             + ingredientsHtml
+             + '<br>'
+             + '<span class="text-muted small mr-1"><i class="fas fa-warehouse mr-1"></i>Magazzini:</span> '
+             + warehousesHtml
              + '</div>';
     }
 
@@ -331,6 +399,22 @@ $(document).ready(function () {
             tr.addClass('shown');
             icon.css('transform', 'rotate(90deg)');
         }
+    });
+
+    // Apri automaticamente tutte le righe di dettaglio al caricamento
+    prodTable.on('draw.dt', function () {
+        setTimeout(function () {
+            prodTable.rows().every(function () {
+                var tr   = $(this.node());
+                var row  = this;
+                var icon = tr.find('.dt-chevron');
+                if (!row.child.isShown()) {
+                    row.child(buildDetailRow(row.data())).show();
+                    tr.addClass('shown');
+                    icon.css('transform', 'rotate(90deg)');
+                }
+            });
+        }, 0);
     });
 
     // ================================================================
@@ -651,13 +735,163 @@ $(document).ready(function () {
                 // Nascondi pulsante "Aggiungi prodotto"
                 $('#btn-add-product').addClass('d-none');
 
-                // Ricarica tabella prodotti (le azioni verranno nascoste)
+                // Aggiorna flag per nascondere pulsanti elimina
+                canModify = false;
+
+                // Ricarica tabella prodotti per aggiornare le azioni
                 prodTable.ajax.reload(null, false);
             },
             error: function (xhr) {
                 var msg = 'Errore durante il cambio di stato.';
                 if (xhr.responseJSON && xhr.responseJSON.message) msg += ' (' + xhr.responseJSON.message + ')';
                 alert(msg);
+            },
+        });
+    });
+
+    // ================================================================
+    // Cambio stato: "Prodotti Allocati"
+    // ================================================================
+    $('#btn-allocate-products').on('click', function () {
+        if (!confirm('Confermi che tutti i prodotti sono allocati ai magazzini? Dopo questa operazione non sarà più possibile modificare l\'allocazione.')) return;
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/state',
+            type:    'PUT',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            data:    { state: 'products_allocated' },
+            success: function (response) {
+                // Aggiorna etichetta stato
+                $('#order-state-label').text(response.state_label);
+
+                // Nascondi pulsante "Prodotti Allocati"
+                $('#btn-allocate-products').addClass('d-none');
+
+                // Aggiorna variabile stato
+                orderState = '<?php echo e(\App\Models\CustomerOrder::STATE_PRODUCTS_ALLOCATED); ?>';
+
+                // Ricarica tabella prodotti per aggiornare le azioni
+                prodTable.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                var msg = 'Errore durante il cambio di stato.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg += ' (' + xhr.responseJSON.message + ')';
+                alert(msg);
+            },
+        });
+    });
+
+    // ================================================================
+    // Modal allocazione magazzini
+    // ================================================================
+    var currentWarehouseProductId = null;
+    var currentWarehouseOrderQnt = 0;
+    var savedWarehouses = {}; // { productId: true }
+
+    $('#table_order_products').on('click', '.btn-warehouse-op', function (e) {
+        e.stopPropagation();
+        currentWarehouseProductId = $(this).data('id');
+
+        $('#wh-product-name').text('');
+        $('#wh-rows').empty();
+        $('#wh-loading').removeClass('d-none');
+        $('#wh-body').addClass('d-none');
+        $('#wh-empty').addClass('d-none');
+        $('#btn-save-warehouses').addClass('d-none');
+        $('#modal-wh-errors').addClass('d-none');
+        $('#modal-wh-errors-list').empty();
+
+        $('#modal-warehouse').modal('show');
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/products/' + currentWarehouseProductId + '/warehouses',
+            type:    'GET',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            success: function (data) {
+                $('#wh-loading').addClass('d-none');
+                $('#wh-product-name').text(data.product_name);
+                $('#wh-order-qnt').text(formatIt(data.order_qnt, 2) + ' ' + data.uom_symbol);
+                currentWarehouseOrderQnt = data.order_qnt;
+
+                if (!data.rows || data.rows.length === 0) {
+                    $('#wh-empty').removeClass('d-none');
+                    return;
+                }
+
+                var tbody = $('#wh-rows').empty();
+                $.each(data.rows, function (i, row) {
+                    tbody.append(
+                        '<tr>'
+                        + '<td>' + $('<span>').text(row.warehouse_name).html() + '</td>'
+                        + '<td class="text-right">'
+                        + '<input type="number" class="form-control form-control-sm wh-qnt-input text-right"'
+                        + ' step="0.01" min="0" style="width:120px;display:inline-block;"'
+                        + ' data-wh-id="' + row.warehouse_id + '"'
+                        + ' value="' + formatIt(row.qnt, 2).replace(/\./g, '').replace(',', '.') + '">'
+                        + '</td>'
+                        + '</tr>'
+                    );
+                });
+
+                $('#wh-body').removeClass('d-none');
+                $('#btn-save-warehouses').removeClass('d-none');
+            },
+            error: function (xhr) {
+                $('#wh-loading').addClass('d-none');
+                var msg = 'Errore durante il caricamento.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg += ' (' + xhr.responseJSON.message + ')';
+                $('#wh-empty').removeClass('d-none').text(msg);
+            },
+        });
+    });
+
+    $('#btn-save-warehouses').on('click', function () {
+        var allocations = [];
+        var total = 0;
+        $('#wh-rows tr').each(function () {
+            var input = $(this).find('.wh-qnt-input');
+            var val = parseFloat(input.val().replace(',', '.'));
+            if (isNaN(val)) val = 0;
+            total += val;
+            allocations.push({
+                warehouse_id: parseInt(input.data('wh-id')),
+                qnt: val,
+            });
+        });
+
+        // Verifica che la somma corrisponda alla quantità richiesta
+        if (Math.abs(total - currentWarehouseOrderQnt) > 0.01) {
+            $('#modal-wh-errors-list').html(
+                '<li>La somma delle quantità allocate (' + formatIt(total, 2) + ') non corrisponde alla quantità richiesta dall\'ordine (' + formatIt(currentWarehouseOrderQnt, 2) + ').</li>'
+            );
+            $('#modal-wh-errors').removeClass('d-none');
+            return;
+        }
+
+        $('#modal-wh-errors').addClass('d-none');
+
+        $.ajax({
+            url:         '/customer-orders/' + orderId + '/products/' + currentWarehouseProductId + '/warehouses',
+            type:        'POST',
+            contentType: 'application/json',
+            headers:     { 'X-CSRF-TOKEN': csrfToken },
+            data:        JSON.stringify({ allocations: allocations }),
+            success: function () {
+                savedWarehouses[currentWarehouseProductId] = true;
+                $('#modal-warehouse').modal('hide');
+                // Ricarica tabella per aggiornare l'icona del pulsante
+                prodTable.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                if (xhr.status === 422) {
+                    var list = $('#modal-wh-errors-list').empty();
+                    $.each(xhr.responseJSON.errors, function (f, msgs) {
+                        $.each(msgs, function (i, msg) { list.append('<li>' + msg + '</li>'); });
+                    });
+                    $('#modal-wh-errors').removeClass('d-none');
+                } else {
+                    alert('Errore durante il salvataggio.');
+                }
             },
         });
     });

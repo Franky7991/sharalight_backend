@@ -12,4 +12,9 @@ class Warehouse extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function customerOrderProductWarehouses()
+    {
+        return $this->hasMany(CustomerOrderHasProductWarehouse::class);
+    }
 }

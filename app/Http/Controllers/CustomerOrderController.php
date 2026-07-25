@@ -81,10 +81,10 @@ class CustomerOrderController extends Controller
     {
         $order = CustomerOrder::query()->findOrFail($id);
 
-        if ($order->isProductsDefined()) {
+        if (! $order->canBeModified()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Impossibile eliminare l\'ordine nello stato "Prodotti Definiti".',
+                'message' => 'Impossibile eliminare l\'ordine in questo stato.',
             ], 403);
         }
 
@@ -101,7 +101,7 @@ class CustomerOrderController extends Controller
             $order = CustomerOrder::find($id);
             if (! $order) continue;
 
-            if ($order->isProductsDefined()) {
+            if (! $order->canBeModified()) {
                 $blocked++;
                 continue;
             }
@@ -133,9 +133,26 @@ class CustomerOrderController extends Controller
 
         $newState = $request->input('state');
 
-        // Solo il passaggio da "created" a "products_defined" è permesso
+        // Passaggio da "created" a "products_defined"
         if ($order->state === CustomerOrder::STATE_CREATED
             && $newState === CustomerOrder::STATE_PRODUCTS_DEFINED) {
+            $order->update(['state' => $newState]);
+            return response()->json([
+                'success'     => true,
+                'state'       => $order->state,
+                'state_label' => $order->stateLabel(),
+            ]);
+        }
+
+        // Passaggio da "products_defined" a "products_allocated"
+        if ($order->state === CustomerOrder::STATE_PRODUCTS_DEFINED
+            && $newState === CustomerOrder::STATE_PRODUCTS_ALLOCATED) {
+            if (! $order->areAllProductsAllocated()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Non tutti i prodotti sono allocati ai magazzini.',
+                ], 400);
+            }
             $order->update(['state' => $newState]);
             return response()->json([
                 'success'     => true,

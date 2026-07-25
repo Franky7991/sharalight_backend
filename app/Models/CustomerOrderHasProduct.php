@@ -14,6 +14,7 @@ class CustomerOrderHasProduct extends Model
         'product_id',
         'qnt',
         'qnt_produced',
+        'warehouses_allocated',
         'unit_of_measure_id',
     ];
 
@@ -22,6 +23,7 @@ class CustomerOrderHasProduct extends Model
         return [
             'qnt' => 'decimal:2',
             'qnt_produced' => 'decimal:2',
+            'warehouses_allocated' => 'boolean',
         ];
     }
 
@@ -43,5 +45,10 @@ class CustomerOrderHasProduct extends Model
     public function details()
     {
         return $this->hasMany(CustomerOrderHasProductDetail::class);
+    }
+
+    public function warehouses()
+    {
+        return $this->hasMany(CustomerOrderHasProductWarehouse::class, 'customer_order_has_product_id');
     }
 }

@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/customer-orders/{order}/products/list/table', [App\Http\Controllers\CustomerOrderHasProductController::class, 'listDataTable'])->name('customer-order-products.datatable');
     Route::post('/customer-orders/{order}/products',            [App\Http\Controllers\CustomerOrderHasProductController::class, 'store'])->name('customer-order-products.store');
     Route::delete('/customer-orders/{order}/products/{product}',[App\Http\Controllers\CustomerOrderHasProductController::class, 'destroy'])->name('customer-order-products.destroy');
+    Route::get('/customer-orders/{order}/products/{product}/warehouses', [App\Http\Controllers\CustomerOrderHasProductController::class, 'warehouseConfig'])->name('customer-order-products.warehouses.config');
+    Route::post('/customer-orders/{order}/products/{product}/warehouses', [App\Http\Controllers\CustomerOrderHasProductController::class, 'saveWarehouses'])->name('customer-order-products.warehouses.save');
 
     // CustomerOrderHasProductDetail routes
     Route::get('/customer-orders/{order}/products/{orderProduct}/details/config', [App\Http\Controllers\CustomerOrderHasProductDetailController::class, 'config'])->name('customer-order-product-details.config');
