@@ -13,6 +13,10 @@ class CustomerOrderHasProductDetail extends Model
         'customer_order_has_product_id',
         'recipe_id',
         'product_id',
+        'original_qnt',
+        'original_unit_of_measure_id',
+        'conversion_qnt',
+        'conversion_unit_of_measure_id',
     ];
 
     public function customerOrderHasProduct()

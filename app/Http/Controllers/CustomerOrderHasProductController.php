@@ -33,26 +33,34 @@ class CustomerOrderHasProductController extends Controller
                     return '<span class="text-muted small">—</span>';
                 }
 
-                // UdM dell'ordine (quella del prodotto / categoria)
-                $orderUomId = (int) $r->unit_of_measure_id;
-                $orderQnt   = (float) $r->qnt;
-
-                $parts = $r->details->map(function ($d) use ($conv, $orderQnt, $orderUomId) {
+                $parts = $r->details->map(function ($d) {
                     $cat          = $d->recipe?->productCategory?->name ?? '?';
                     $prod         = $d->product?->name ?? '?';
-                    $recipeUomId  = (int) ($d->recipe?->unit_of_measure_id ?? 0);
-                    $recipeUomSym = $d->recipe?->unitOfMeasure?->symbol ?? '';
-                    $recipeQnt    = (float) ($d->recipe?->quantity ?? 0);
 
-                    $total    = $recipeQnt * $conv->convert($orderQnt, $orderUomId, $recipeUomId);
-                    $totalStr = '<span class="text-muted">'
-                              . number_format($total, 2, ',', '.')
-                              . ($recipeUomSym ? ' ' . e($recipeUomSym) : '')
-                              . '</span>';
+                    // Se c'è conversione salvata, usa quella, altrimenti usa la quantità originale
+                    if ($d->conversion_qnt !== null && $d->conversion_unit_of_measure_id !== null) {
+                        $qnt   = $d->conversion_qnt;
+                        $uomId = $d->conversion_unit_of_measure_id;
+                    } else {
+                        $qnt   = $d->original_qnt;
+                        $uomId = $d->original_unit_of_measure_id;
+                    }
+
+                    // Ottieni il simbolo dell'unità di misura
+                    $uomSym = '';
+                    if ($uomId) {
+                        $uom = \App\Models\UnitOfMeasure::find($uomId);
+                        $uomSym = $uom?->symbol ?? '';
+                    }
+
+                    $qntStr = '<span class="text-muted">'
+                            . number_format($qnt, 2, ',', '.')
+                            . ($uomSym ? ' ' . e($uomSym) : '')
+                            . '</span>';
 
                     return '<span class="badge badge-light border mr-1">'
                          . '<strong>' . e($cat) . ':</strong> '
-                         . e($prod) . ' ' . $totalStr
+                         . e($prod) . ' ' . $qntStr
                          . '</span>';
                 });
 

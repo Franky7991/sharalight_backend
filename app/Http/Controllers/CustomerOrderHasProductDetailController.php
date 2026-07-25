@@ -37,7 +37,7 @@ class CustomerOrderHasProductDetailController extends Controller
         $orderQnt    = (float) $orderProduct->qnt;
         $orderUomSym = $orderProduct->unitOfMeasure?->symbol ?? '';
 
-        $result = $recipes->map(function ($recipe) use ($saved, $conv, $orderUomId, $orderQnt, $orderUomSym) {
+        $result = $recipes->map(function ($recipe) use ($saved, $conv, $orderUomId, $orderQnt, $orderUomSym, $orderProduct) {
             $category = $recipe->productCategory;
             if (! $category) return null;
 
@@ -50,17 +50,42 @@ class CustomerOrderHasProductDetailController extends Controller
 
             $availableProducts = Product::query()
                 ->where('product_category_id', $category->id)
+                ->where('id', '!=', $orderProduct->product_id)
+                ->with('productCategory.unitOfMeasure')
                 ->orderBy('name')
-                ->get(['id', 'name']);
+                ->get();
+
+            $selectedProduct = $availableProducts->firstWhere('id', $saved->get($recipe->id)?->product_id);
+            $categoryUomId = $selectedProduct?->productCategory?->unit_of_measure_id ?? $category->unit_of_measure_id;
+            $categoryUomSym = $selectedProduct?->productCategory?->unitOfMeasure?->symbol ?? $category->unitOfMeasure?->symbol ?? '';
+
+            // Converti il totale necessario dall'unità della ricetta all'unità della categoria
+            $convertedTotal = $conv->convert($total, $recipeUomId, $categoryUomId);
+
+            // Se non c'è conversione necessaria (stessa unità), i campi conversion sono null
+            $needsConversion = ($recipeUomId !== $categoryUomId) ? true : false;
+
+            // Carica ricette annidate se il prodotto selezionato è semi-lavorato
+            $nestedRecipes = [];
+            if ($selectedProduct && $selectedProduct->hasRecipe()) {
+                $nestedRecipes = $this->loadNestedRecipes($selectedProduct->id, $total, $recipeUomId, $conv, $saved, 0, [$orderProduct->product_id], $orderProduct);
+            }
 
             return [
-                'recipe_id'           => $recipe->id,
-                'category_id'         => $category->id,
-                'category_name'       => $category->name,
-                'recipe_uom_symbol'   => $recipeUomSym,
-                'total'               => round($total, 4),
-                'products'            => $availableProducts->map(fn($p) => ['id' => $p->id, 'name' => $p->name]),
-                'selected_product_id' => $saved->get($recipe->id)?->product_id,
+                'recipe_id'                    => $recipe->id,
+                'category_id'                  => $category->id,
+                'category_name'                => $category->name,
+                'recipe_uom_symbol'            => $recipeUomSym,
+                'total'                        => round($total, 4),
+                'category_uom_symbol'          => $categoryUomSym,
+                'converted_total'              => round($convertedTotal, 4),
+                'original_qnt'                 => round($total, 4),
+                'original_unit_of_measure_id'  => $recipeUomId,
+                'conversion_qnt'               => $needsConversion ? round($convertedTotal, 4) : null,
+                'conversion_unit_of_measure_id'=> $needsConversion ? $categoryUomId : null,
+                'products'                     => $availableProducts->map(fn($p) => ['id' => $p->id, 'name' => $p->name, 'type' => $p->type]),
+                'selected_product_id'          => $saved->get($recipe->id)?->product_id,
+                'nested_recipes'               => $nestedRecipes,
             ];
         })->filter()->values();
 
@@ -71,6 +96,77 @@ class CustomerOrderHasProductDetailController extends Controller
             'order_uom_symbol' => $orderUomSym,
             'rows'             => $result,
         ]);
+    }
+
+    /**
+     * Carica ricorsivamente le ricette per prodotti semi-lavorati
+     */
+    private function loadNestedRecipes($productId, $parentQnt, $parentUomId, $conv, $saved, $depth = 0, $excludeProductIds = [], $orderProduct = null)
+    {
+        if ($depth > 5) return []; // Limite di profondità per evitare loop infiniti
+
+        $recipes = Recipe::query()
+            ->where('product_id', $productId)
+            ->with(['productCategory.unitOfMeasure', 'unitOfMeasure'])
+            ->get();
+
+        return $recipes->map(function ($recipe) use ($parentQnt, $parentUomId, $conv, $saved, $depth, $excludeProductIds, $orderProduct) {
+            $category = $recipe->productCategory;
+            if (! $category) return null;
+
+            $recipeUomId  = (int) ($recipe->unit_of_measure_id ?? 0);
+            $recipeUomSym = $recipe->unitOfMeasure?->symbol ?? '';
+            $recipeQnt    = (float) $recipe->quantity;
+
+            $qntConverted = $conv->convert($parentQnt, $parentUomId, $recipeUomId);
+            $total        = $recipeQnt * $qntConverted;
+
+            $availableProducts = Product::query()
+                ->where('product_category_id', $category->id)
+                ->whereNotIn('id', $excludeProductIds);
+
+            // Escludi anche il prodotto principale se disponibile
+            if ($orderProduct) {
+                $availableProducts->where('id', '!=', $orderProduct->product_id);
+            }
+
+            $availableProducts = $availableProducts
+                ->with('productCategory.unitOfMeasure')
+                ->orderBy('name')
+                ->get();
+
+            $selectedProduct = $availableProducts->firstWhere('id', $saved->get($recipe->id)?->product_id);
+            $categoryUomId = $selectedProduct?->productCategory?->unit_of_measure_id ?? $category->unit_of_measure_id;
+            $categoryUomSym = $selectedProduct?->productCategory?->unitOfMeasure?->symbol ?? $category->unitOfMeasure?->symbol ?? '';
+
+            $convertedTotal = $conv->convert($total, $recipeUomId, $categoryUomId);
+            $needsConversion = ($recipeUomId !== $categoryUomId) ? true : false;
+
+            // Ricorsione per prodotti semi-lavorati annidati
+            $nestedRecipes = [];
+            if ($selectedProduct && $selectedProduct->hasRecipe()) {
+                $newExcludeIds = array_merge($excludeProductIds, [$selectedProduct->id]);
+                $nestedRecipes = $this->loadNestedRecipes($selectedProduct->id, $total, $recipeUomId, $conv, $saved, $depth + 1, $newExcludeIds, $orderProduct);
+            }
+
+            return [
+                'recipe_id'                    => $recipe->id,
+                'category_id'                  => $category->id,
+                'category_name'                => $category->name,
+                'recipe_uom_symbol'            => $recipeUomSym,
+                'total'                        => round($total, 4),
+                'category_uom_symbol'          => $categoryUomSym,
+                'converted_total'              => round($convertedTotal, 4),
+                'original_qnt'                 => round($total, 4),
+                'original_unit_of_measure_id'  => $recipeUomId,
+                'conversion_qnt'               => $needsConversion ? round($convertedTotal, 4) : null,
+                'conversion_unit_of_measure_id'=> $needsConversion ? $categoryUomId : null,
+                'products'                     => $availableProducts->map(fn($p) => ['id' => $p->id, 'name' => $p->name, 'type' => $p->type]),
+                'selected_product_id'          => $saved->get($recipe->id)?->product_id,
+                'nested_recipes'               => $nestedRecipes,
+                'depth'                        => $depth + 1,
+            ];
+        })->filter()->values()->toArray();
     }
 
     /**
@@ -86,9 +182,13 @@ class CustomerOrderHasProductDetailController extends Controller
             ->findOrFail($orderProductId);
 
         $request->validate([
-            'selections'               => ['required', 'array'],
-            'selections.*.recipe_id'  => ['required', 'exists:recipes,id'],
-            'selections.*.product_id' => ['required', 'exists:products,id'],
+            'selections'                          => ['required', 'array'],
+            'selections.*.recipe_id'             => ['required', 'exists:recipes,id'],
+            'selections.*.product_id'           => ['required', 'exists:products,id'],
+            'selections.*.original_qnt'          => ['nullable', 'numeric'],
+            'selections.*.original_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
+            'selections.*.conversion_qnt'         => ['nullable', 'numeric'],
+            'selections.*.conversion_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
         ]);
 
         foreach ($request->selections as $sel) {
@@ -98,7 +198,11 @@ class CustomerOrderHasProductDetailController extends Controller
                     'recipe_id'                     => $sel['recipe_id'],
                 ],
                 [
-                    'product_id' => $sel['product_id'],
+                    'product_id'                    => $sel['product_id'],
+                    'original_qnt'                  => $sel['original_qnt'] ?? null,
+                    'original_unit_of_measure_id'   => $sel['original_unit_of_measure_id'] ?? null,
+                    'conversion_qnt'                => $sel['conversion_qnt'] ?? null,
+                    'conversion_unit_of_measure_id' => $sel['conversion_unit_of_measure_id'] ?? null,
                 ]
             );
         }
