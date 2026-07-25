@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/customer-orders/delete',     [App\Http\Controllers\CustomerOrderController::class, 'delete'])->name('customer-orders.delete');
     Route::post('/customer-orders',            [App\Http\Controllers\CustomerOrderController::class, 'store'])->name('customer-orders.store');
     Route::put('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'update'])->name('customer-orders.update');
+    Route::put('/customer-orders/{order}/state',[App\Http\Controllers\CustomerOrderController::class, 'changeState'])->name('customer-orders.change-state');
     Route::delete('/customer-orders/{order}',  [App\Http\Controllers\CustomerOrderController::class, 'destroy'])->name('customer-orders.destroy');
     Route::get('/customer-orders/{order}',     [App\Http\Controllers\CustomerOrderController::class, 'show'])->name('customer-orders.show');
     Route::get('/customer-orders/{order}/summary', [App\Http\Controllers\CustomerOrderController::class, 'summary'])->name('customer-orders.summary');

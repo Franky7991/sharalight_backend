@@ -13,6 +13,7 @@ class CustomerOrderHasProduct extends Model
         'customer_order_id',
         'product_id',
         'qnt',
+        'qnt_produced',
         'unit_of_measure_id',
     ];
 
@@ -20,6 +21,7 @@ class CustomerOrderHasProduct extends Model
     {
         return [
             'qnt' => 'decimal:2',
+            'qnt_produced' => 'decimal:2',
         ];
     }
 

@@ -179,7 +179,11 @@ $(document).ready(function () {
             type:    'DELETE',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             success: function () { ordersTable.ajax.reload(null, false); },
-            error:   function () { alert('Errore durante l\'eliminazione.'); },
+            error:   function (xhr) {
+                var msg = 'Errore durante l\'eliminazione.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                alert(msg);
+            },
         });
     });
 

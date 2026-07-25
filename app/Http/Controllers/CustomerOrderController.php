@@ -79,16 +79,75 @@ class CustomerOrderController extends Controller
 
     public function destroy(string $id)
     {
-        CustomerOrder::query()->findOrFail($id)->delete();
+        $order = CustomerOrder::query()->findOrFail($id);
+
+        if ($order->isProductsDefined()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile eliminare l\'ordine nello stato "Prodotti Definiti".',
+            ], 403);
+        }
+
+        $order->delete();
         return response()->json(['success' => true]);
     }
 
     public function delete(Request $request)
     {
+        $deleted = 0;
+        $blocked = 0;
+
         foreach ($request->ids as $id) {
-            CustomerOrder::find($id)?->delete();
+            $order = CustomerOrder::find($id);
+            if (! $order) continue;
+
+            if ($order->isProductsDefined()) {
+                $blocked++;
+                continue;
+            }
+
+            $order->delete();
+            $deleted++;
         }
-        return response()->json(['success' => true]);
+
+        return response()->json([
+            'success' => true,
+            'deleted' => $deleted,
+            'blocked' => $blocked,
+        ]);
+    }
+
+    /**
+     * Cambia lo stato dell'ordine.
+     *
+     * PUT /customer-orders/{order}/state
+     * body: { state: "products_defined" }
+     */
+    public function changeState(Request $request, string $id)
+    {
+        $order = CustomerOrder::query()->findOrFail($id);
+
+        $request->validate([
+            'state' => ['required', 'string', 'in:' . implode(',', array_keys(CustomerOrder::STATES))],
+        ]);
+
+        $newState = $request->input('state');
+
+        // Solo il passaggio da "created" a "products_defined" è permesso
+        if ($order->state === CustomerOrder::STATE_CREATED
+            && $newState === CustomerOrder::STATE_PRODUCTS_DEFINED) {
+            $order->update(['state' => $newState]);
+            return response()->json([
+                'success'     => true,
+                'state'       => $order->state,
+                'state_label' => $order->stateLabel(),
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Transizione di stato non valida.',
+        ], 422);
     }
 
     /**

@@ -27,11 +27,16 @@
 
                     <dt class="col-5 text-muted">Stato</dt>
                     <dd class="col-7">
-                        <span class="badge badge-secondary"><?php echo e($order->stateLabel()); ?></span>
+                        <span class="badge badge-secondary" id="order-state-label"><?php echo e($order->stateLabel()); ?></span>
                     </dd>
                 </dl>
                 <div class="mt-3">
-                    <a href="<?php echo e(route('customer-orders.index')); ?>" class="btn btn-secondary btn-sm btn-block">
+                    <button type="button" class="btn btn-success btn-sm btn-block <?php if($order->isProductsDefined() || !$order->canBeModified()): ?> d-none <?php endif; ?>"
+                            id="btn-define-products"
+                            title="Blocca l'ordine e conferma i prodotti">
+                        <i class="fa fa-check mr-1"></i> Prodotti Definiti
+                    </button>
+                    <a href="<?php echo e(route('customer-orders.index')); ?>" class="btn btn-secondary btn-sm btn-block mt-1">
                         <i class="fa fa-backward mr-1"></i> Indietro
                     </a>
                 </div>
@@ -64,12 +69,13 @@
                     
                     <div class="tab-pane fade show active" id="pane-products" role="tabpanel">
 
-                        <div class="d-flex justify-content-end mb-2">
-                            <button type="button" class="btn btn-primary btn-sm" id="btn-add-product"
-                                    title="Aggiungi prodotto">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-primary btn-sm <?php if(!$order->canBeModified()): ?> d-none <?php endif; ?>"
+                            id="btn-add-product"
+                            title="Aggiungi prodotto">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
 
                         <table id="table_order_products" class="table table-hover table-sm" width="100%">
                             <thead>
@@ -244,6 +250,7 @@ $(document).ready(function () {
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     var orderId   = <?php echo e($order->id); ?>;
+    var canModify = <?php echo e($order->canBeModified() ? 'true' : 'false'); ?>;
 
     function formatIt(val, dec) {
         dec = dec === undefined ? 2 : dec;
@@ -289,10 +296,13 @@ $(document).ready(function () {
             {
                 targets: 4,
                 render: function (id) {
-                    return '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'
-                         + '<i class="fas fa-list-ul"></i></button>'
-                         + '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
-                         + '<i class="fa fa-trash"></i></button>';
+                    var html = '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'
+                             + '<i class="fas fa-list-ul"></i></button>';
+                    if (canModify) {
+                        html += '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
+                              + '<i class="fa fa-trash"></i></button>';
+                    }
+                    return html;
                 }
             },
         ],
@@ -337,27 +347,60 @@ $(document).ready(function () {
             url:     '/customer-orders/' + orderId + '/summary',
             type:    'GET',
             headers: { 'X-CSRF-TOKEN': csrfToken },
-            success: function (data) {
+            success: function (response) {
                 $('#summary-loading').addClass('d-none');
 
-                if (!data || data.length === 0) {
+                if (!response.summaries || response.summaries.length === 0) {
                     $('#summary-empty').removeClass('d-none');
                     return;
                 }
+
+                // Costruisci le colonne dinamiche per i magazzini
+                var columns = [
+                    { data: 'product_name', name: 'product_name', title: 'Prodotto' },
+                    { data: 'total_qnt', name: 'total_qnt', className: 'text-right', title: 'Quantità Totale', render: function (data) { return formatIt(data, 2); } },
+                    { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false, title: 'U.M.' },
+                ];
+
+                // Aggiungi colonne per ogni magazzino
+                response.warehouses.forEach(function (warehouse) {
+                    columns.push({
+                        data: null,
+                        name: 'warehouse_' + warehouse.id,
+                        title: warehouse.name,
+                        className: 'text-right',
+                        orderable: false,
+                        render: function (data, type, row) {
+                            var stock = row.warehouse_stocks[warehouse.id];
+                            if (!stock) return '-';
+                            var qnt = formatIt(stock.qnt, 2);
+                            var uom = row.unit_of_measure_symbol;
+                            var text = qnt + ' ' + uom;
+                            if (stock.is_negative) {
+                                return '<span class="text-danger font-weight-bold">' + text + '</span>';
+                            }
+                            return text;
+                        }
+                    });
+                });
+
+                // Aggiorna l'header della tabella
+                var thead = $('#table_summary thead').empty();
+                var headerRow = $('<tr></tr>');
+                columns.forEach(function (col) {
+                    headerRow.append('<th>' + col.title + '</th>');
+                });
+                thead.append(headerRow);
 
                 if (summaryTable) {
                     summaryTable.destroy();
                 }
 
                 summaryTable = $('#table_summary').DataTable({
-                    data: data,
+                    data: response.summaries,
                     pageLength: 25,
                     order: [[0, 'asc']],
-                    columns: [
-                        { data: 'product_name', name: 'product_name' },
-                        { data: 'total_qnt', name: 'total_qnt', className: 'text-right', render: function (data) { return formatIt(data, 2); } },
-                        { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
-                    ],
+                    columns: columns,
                     language: {
                         url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it.json'
                     }
@@ -583,6 +626,38 @@ $(document).ready(function () {
                 } else {
                     alert('Errore durante il salvataggio.');
                 }
+            },
+        });
+    });
+
+    // ================================================================
+    // Cambio stato: "Definisci Prodotti"
+    // ================================================================
+    $('#btn-define-products').on('click', function () {
+        if (!confirm('Confermi di voler definire i prodotti? Dopo questa operazione non sarà più possibile modificare l\'ordine.')) return;
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/state',
+            type:    'PUT',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            data:    { state: 'products_defined' },
+            success: function (response) {
+                // Aggiorna etichetta stato
+                $('#order-state-label').text(response.state_label);
+
+                // Nascondi pulsante "Definisci Prodotti"
+                $('#btn-define-products').addClass('d-none');
+
+                // Nascondi pulsante "Aggiungi prodotto"
+                $('#btn-add-product').addClass('d-none');
+
+                // Ricarica tabella prodotti (le azioni verranno nascoste)
+                prodTable.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                var msg = 'Errore durante il cambio di stato.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg += ' (' + xhr.responseJSON.message + ')';
+                alert(msg);
             },
         });
     });

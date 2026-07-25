@@ -72,7 +72,14 @@ class CustomerOrderHasProductController extends Controller
 
     public function store(Request $request, string $orderId)
     {
-        CustomerOrder::query()->findOrFail($orderId);
+        $order = CustomerOrder::query()->findOrFail($orderId);
+
+        if ($order->isProductsDefined()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile aggiungere prodotti: l\'ordine è nello stato "Prodotti Definiti".',
+            ], 403);
+        }
 
         $request->validate([
             'product_id'         => ['required', 'exists:products,id'],
@@ -87,17 +94,42 @@ class CustomerOrderHasProductController extends Controller
             'unit_of_measure_id' => $request->unit_of_measure_id,
         ]);
 
+        $this->recalculateOrderQnt($order);
+
         return response()->json(['success' => true]);
     }
 
     public function destroy(string $orderId, string $id)
     {
+        $order = CustomerOrder::query()->findOrFail($orderId);
+
+        if ($order->isProductsDefined()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile rimuovere prodotti: l\'ordine è nello stato "Prodotti Definiti".',
+            ], 403);
+        }
+
         $row = CustomerOrderHasProduct::query()
             ->where('customer_order_id', $orderId)
             ->findOrFail($id);
 
         $row->delete();
 
+        $this->recalculateOrderQnt($order);
+
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Ricalcola la quantità totale dell'ordine sommando le qnt di tutti i prodotti.
+     */
+    private function recalculateOrderQnt(CustomerOrder $order): void
+    {
+        $total = CustomerOrderHasProduct::query()
+            ->where('customer_order_id', $order->id)
+            ->sum('qnt');
+
+        $order->update(['qnt' => $total]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\CustomerOrderHasProductDetail;
 use App\Models\Recipe;
@@ -177,6 +178,15 @@ class CustomerOrderHasProductDetailController extends Controller
      */
     public function save(Request $request, string $orderId, string $orderProductId)
     {
+        $order = CustomerOrder::query()->findOrFail($orderId);
+
+        if ($order->isProductsDefined()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Impossibile modificare gli ingredienti: l\'ordine è nello stato "Prodotti Definiti".',
+            ], 403);
+        }
+
         $orderProduct = CustomerOrderHasProduct::query()
             ->where('customer_order_id', $orderId)
             ->findOrFail($orderProductId);

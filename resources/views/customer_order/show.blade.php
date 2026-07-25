@@ -29,11 +29,16 @@
 
                     <dt class="col-5 text-muted">Stato</dt>
                     <dd class="col-7">
-                        <span class="badge badge-secondary">{{ $order->stateLabel() }}</span>
+                        <span class="badge badge-secondary" id="order-state-label">{{ $order->stateLabel() }}</span>
                     </dd>
                 </dl>
                 <div class="mt-3">
-                    <a href="{{ route('customer-orders.index') }}" class="btn btn-secondary btn-sm btn-block">
+                    <button type="button" class="btn btn-success btn-sm btn-block @if($order->isProductsDefined() || !$order->canBeModified()) d-none @endif"
+                            id="btn-define-products"
+                            title="Blocca l'ordine e conferma i prodotti">
+                        <i class="fa fa-check mr-1"></i> Prodotti Definiti
+                    </button>
+                    <a href="{{ route('customer-orders.index') }}" class="btn btn-secondary btn-sm btn-block mt-1">
                         <i class="fa fa-backward mr-1"></i> Indietro
                     </a>
                 </div>
@@ -68,12 +73,13 @@
                     {{-- ---- Tab Prodotti ---- --}}
                     <div class="tab-pane fade show active" id="pane-products" role="tabpanel">
 
-                        <div class="d-flex justify-content-end mb-2">
-                            <button type="button" class="btn btn-primary btn-sm" id="btn-add-product"
-                                    title="Aggiungi prodotto">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-primary btn-sm @if(!$order->canBeModified()) d-none @endif"
+                            id="btn-add-product"
+                            title="Aggiungi prodotto">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
 
                         <table id="table_order_products" class="table table-hover table-sm" width="100%">
                             <thead>
@@ -252,6 +258,7 @@ $(document).ready(function () {
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
     var orderId   = {{ $order->id }};
+    var canModify = {{ $order->canBeModified() ? 'true' : 'false' }};
 
     function formatIt(val, dec) {
         dec = dec === undefined ? 2 : dec;
@@ -297,6 +304,7 @@ $(document).ready(function () {
             {
                 targets: 4,
                 render: function (id) {
+                    if (!canModify) return '';
                     return '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'
                          + '<i class="fas fa-list-ul"></i></button>'
                          + '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
@@ -624,6 +632,41 @@ $(document).ready(function () {
                 } else {
                     alert('Errore durante il salvataggio.');
                 }
+            },
+        });
+    });
+
+    // ================================================================
+    // Cambio stato: "Definisci Prodotti"
+    // ================================================================
+    $('#btn-define-products').on('click', function () {
+        if (!confirm('Confermi di voler definire i prodotti? Dopo questa operazione non sarà più possibile modificare l\'ordine.')) return;
+
+        $.ajax({
+            url:     '/customer-orders/' + orderId + '/state',
+            type:    'PUT',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            data:    { state: 'products_defined' },
+            success: function (response) {
+                // Aggiorna etichetta stato
+                $('#order-state-label').text(response.state_label);
+
+                // Nascondi pulsante "Definisci Prodotti"
+                $('#btn-define-products').addClass('d-none');
+
+                // Nascondi pulsante "Aggiungi prodotto"
+                $('#btn-add-product').addClass('d-none');
+
+                // Aggiorna flag per nascondere pulsanti elimina
+                canModify = false;
+
+                // Ricarica tabella prodotti per aggiornare le azioni
+                prodTable.ajax.reload(null, false);
+            },
+            error: function (xhr) {
+                var msg = 'Errore durante il cambio di stato.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg += ' (' + xhr.responseJSON.message + ')';
+                alert(msg);
             },
         });
     });

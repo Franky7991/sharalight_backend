@@ -10,9 +10,11 @@ class CustomerOrder extends Model
     use HasFactory;
 
     const STATE_CREATED = 'created';
+    const STATE_PRODUCTS_DEFINED = 'products_defined';
 
     const STATES = [
-        self::STATE_CREATED => 'Creato',
+        self::STATE_CREATED           => 'Creato',
+        self::STATE_PRODUCTS_DEFINED  => 'Prodotti Definiti',
     ];
 
     protected $fillable = [
@@ -21,6 +23,8 @@ class CustomerOrder extends Model
         'user_id',
         'order_date',
         'state',
+        'qnt',
+        'qnt_produced',
     ];
 
     /**
@@ -45,12 +49,31 @@ class CustomerOrder extends Model
     {
         return [
             'order_date' => 'date',
+            'qnt' => 'decimal:2',
+            'qnt_produced' => 'decimal:2',
         ];
     }
 
     public function stateLabel(): string
     {
         return self::STATES[$this->state] ?? $this->state;
+    }
+
+    /**
+     * L'ordine è nello stato "Prodotti Definiti".
+     */
+    public function isProductsDefined(): bool
+    {
+        return $this->state === self::STATE_PRODUCTS_DEFINED;
+    }
+
+    /**
+     * L'ordine può essere modificato (aggiunta/rimozione prodotti,
+     * configurazione ingredienti, cancellazione).
+     */
+    public function canBeModified(): bool
+    {
+        return ! $this->isProductsDefined();
     }
 
     public function user()
