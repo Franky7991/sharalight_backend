@@ -186,6 +186,7 @@
                             <tr>
                                 <th>Materiale</th>
                                 <th class="text-right">Richiesta</th>
+                                <th class="text-right">Conversione</th>
                                 <th class="text-right">Giacenza</th>
                                 <th class="text-right">Mancante</th>
                             </tr>
@@ -195,6 +196,14 @@
                                 <tr class="<?php echo e($m['is_missing'] ? 'table-danger' : ''); ?>">
                                     <td><?php echo e($m['product_name']); ?></td>
                                     <td class="text-right"><?php echo e(number_format($m['required_qnt'], 2, ',', '.')); ?> <?php echo e($m['uom_symbol']); ?></td>
+                                    <td class="text-right">
+                                        <?php if($m['has_conversion']): ?>
+                                            <?php echo e(number_format($m['original_qnt'], 2, ',', '.')); ?> <?php echo e($m['original_uom_symbol']); ?> → <?php echo e(number_format($m['required_qnt'], 2, ',', '.')); ?> <?php echo e($m['uom_symbol']); ?>
+
+                                        <?php else: ?>
+                                            <span class="text-muted">—</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td class="text-right"><?php echo e(number_format($m['available_qnt'], 2, ',', '.')); ?> <?php echo e($m['uom_symbol']); ?></td>
                                     <td class="text-right <?php echo e($m['is_missing'] ? 'text-danger font-weight-bold' : 'text-muted'); ?>">
                                         <?php echo e(number_format($m['missing_qnt'], 2, ',', '.')); ?> <?php echo e($m['uom_symbol']); ?>
@@ -276,6 +285,7 @@
                         <tr>
                             <th>Materiale</th>
                             <th class="text-right">Richiesta</th>
+                            <th class="text-right">Conversione</th>
                             <th class="text-right">Giacenza</th>
                             <th class="text-right">Mancante</th>
                         </tr>
@@ -409,7 +419,7 @@ $(document).ready(function () {
         var $tbody = $('#produce-materials-table');
 
         if (!produceDetailId || !qnt || parseFloat(qnt.replace(',', '.')) <= 0) {
-            $tbody.html('<tr><td colspan="4" class="text-center text-muted">Indicare una quantità da produrre.</td></tr>');
+            $tbody.html('<tr><td colspan="5" class="text-center text-muted">Indicare una quantità da produrre.</td></tr>');
             $status.html('');
             $btn.prop('disabled', true);
             return;
@@ -433,22 +443,26 @@ $(document).ready(function () {
                     data.materials.forEach(function (m) {
                         var cls = m.is_missing ? 'table-danger' : '';
                         var missingCls = m.is_missing ? 'text-danger font-weight-bold' : 'text-muted';
+                        var convCell = m.has_conversion
+                            ? formatIt(m.original_qnt) + ' ' + m.original_uom_symbol + ' → ' + formatIt(m.required_qnt) + ' ' + m.uom_symbol
+                            : '<span class="text-muted">—</span>';
                         rows += '<tr class="' + cls + '">'
                               + '<td>' + $('<span>').text(m.product_name).html() + '</td>'
                               + '<td class="text-right">' + formatIt(m.required_qnt) + ' ' + m.uom_symbol + '</td>'
+                              + '<td class="text-right">' + convCell + '</td>'
                               + '<td class="text-right">' + formatIt(m.available_qnt) + ' ' + m.uom_symbol + '</td>'
                               + '<td class="text-right ' + missingCls + '">' + formatIt(m.missing_qnt) + ' ' + m.uom_symbol + '</td>'
                               + '</tr>';
                     });
                 } else {
-                    rows = '<tr><td colspan="4" class="text-center text-muted">Nessuna materia prima richiesta.</td></tr>';
+                    rows = '<tr><td colspan="5" class="text-center text-muted">Nessuna materia prima richiesta.</td></tr>';
                 }
                 $tbody.html(rows);
             },
             error: function () {
                 $status.html('<span class="text-danger">Errore nel caricamento della giacenza.</span>');
                 $btn.prop('disabled', true);
-                $tbody.html('<tr><td colspan="4" class="text-center text-muted">Errore nel caricamento.</td></tr>');
+                $tbody.html('<tr><td colspan="5" class="text-center text-muted">Errore nel caricamento.</td></tr>');
             },
         });
     }
@@ -465,7 +479,7 @@ $(document).ready(function () {
         $('#produce-qnt').attr('max', btn.data('remaining'));
         $('#produce-qnt').val(btn.data('remaining'));
         $('#produce-status').html('');
-        $('#produce-materials-table').html('<tr><td colspan="4" class="text-center text-muted">Caricamento giacenza…</td></tr>');
+        $('#produce-materials-table').html('<tr><td colspan="5" class="text-center text-muted">Caricamento giacenza…</td></tr>');
         $('#modal-produce').modal('show');
 
         refreshProduceRequirements();

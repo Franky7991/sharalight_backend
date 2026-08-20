@@ -72,20 +72,27 @@ class ProductionService
 
                 if (! isset($materials[$key])) {
                     $materials[$key] = [
-                        'product_id'         => $m['product_id'],
-                        'product_name'       => $m['product_name'],
-                        'unit_of_measure_id' => $m['unit_of_measure_id'],
-                        'uom_symbol'         => $uomSymbols[$m['unit_of_measure_id']] ?? '-',
-                        'required_qnt'       => 0.0,
+                        'product_id'                  => $m['product_id'],
+                        'product_name'                => $m['product_name'],
+                        'unit_of_measure_id'          => $m['unit_of_measure_id'],
+                        'uom_symbol'                  => $uomSymbols[$m['unit_of_measure_id']] ?? '-',
+                        'required_qnt'                => 0.0,
+                        'has_conversion'              => $m['has_conversion'] ?? false,
+                        'original_qnt'                => 0.0,
+                        'original_unit_of_measure_id' => $m['original_unit_of_measure_id'] ?? $m['unit_of_measure_id'],
                     ];
                 }
 
                 $materials[$key]['required_qnt'] += $need;
+
+                if ($m['has_conversion'] ?? false) {
+                    $materials[$key]['original_qnt'] += $m['original_qnt'] * $ratio;
+                }
             }
         }
 
         // Giacenza attuale per ogni materia prima nel magazzino di produzione.
-        $materials = array_map(function (array $m) use ($warehouseId) {
+        $materials = array_map(function (array $m) use ($warehouseId, $uomSymbols) {
             $required = round($m['required_qnt'], 2);
 
             $stock = Stock::query()
@@ -101,6 +108,15 @@ class ProductionService
             $m['available_qnt'] = $available;
             $m['missing_qnt']   = $missing;
             $m['is_missing']    = $missing > 0;
+
+            if (empty($m['has_conversion'])) {
+                $m['has_conversion']      = false;
+                $m['original_qnt']        = null;
+                $m['original_uom_symbol'] = null;
+            } else {
+                $m['original_qnt']        = round($m['original_qnt'], 2);
+                $m['original_uom_symbol'] = $uomSymbols[$m['original_unit_of_measure_id']] ?? '-';
+            }
 
             return $m;
         }, $materials);
@@ -153,15 +169,20 @@ class ProductionService
                 $available = $stock ? (float) $stock->qnt : 0.0;
                 $missing   = round(max(0, $need - $available), 2);
 
+                $hasConversion = $m['has_conversion'] ?? false;
+
                 $materials[] = [
-                    'product_id'         => $m['product_id'],
-                    'product_name'       => $m['product_name'],
-                    'unit_of_measure_id' => $m['unit_of_measure_id'],
-                    'uom_symbol'         => $uomSymbols[$m['unit_of_measure_id']] ?? '-',
-                    'required_qnt'       => $need,
-                    'available_qnt'      => $available,
-                    'missing_qnt'        => $missing,
-                    'is_missing'         => $missing > 0,
+                    'product_id'          => $m['product_id'],
+                    'product_name'        => $m['product_name'],
+                    'unit_of_measure_id'  => $m['unit_of_measure_id'],
+                    'uom_symbol'          => $uomSymbols[$m['unit_of_measure_id']] ?? '-',
+                    'required_qnt'        => $need,
+                    'available_qnt'       => $available,
+                    'missing_qnt'         => $missing,
+                    'is_missing'          => $missing > 0,
+                    'has_conversion'      => $hasConversion,
+                    'original_qnt'        => $hasConversion ? round($m['original_qnt'] * $ratio, 2) : null,
+                    'original_uom_symbol' => $hasConversion ? ($uomSymbols[$m['original_unit_of_measure_id']] ?? '-') : null,
                 ];
             }
         }
@@ -272,8 +293,12 @@ class ProductionService
                 continue;
             }
 
-            $qnt   = (float) ($d->conversion_qnt ?? $d->original_qnt ?? 0);
-            $uomId = (int) ($d->conversion_unit_of_measure_id ?? $d->original_unit_of_measure_id ?? 0);
+            $hasConversion = $d->conversion_qnt !== null && $d->conversion_unit_of_measure_id !== null;
+
+            $qnt       = (float) ($d->conversion_qnt ?? $d->original_qnt ?? 0);
+            $uomId     = (int) ($d->conversion_unit_of_measure_id ?? $d->original_unit_of_measure_id ?? 0);
+            $origQnt   = (float) ($d->original_qnt ?? 0);
+            $origUomId = (int) ($d->original_unit_of_measure_id ?? 0);
 
             if ($qnt <= 0 || $uomId <= 0) {
                 continue;
@@ -284,14 +309,22 @@ class ProductionService
 
             if (! isset($materials[$key])) {
                 $materials[$key] = [
-                    'product_id'         => $productId,
-                    'product_name'       => $d->product->name,
-                    'unit_of_measure_id' => $uomId,
-                    'qnt'                => 0.0,
+                    'product_id'                  => $productId,
+                    'product_name'                => $d->product->name,
+                    'unit_of_measure_id'          => $uomId,
+                    'qnt'                         => 0.0,
+                    'original_qnt'                => 0.0,
+                    'original_unit_of_measure_id' => $origUomId,
+                    'has_conversion'              => false,
                 ];
             }
 
             $materials[$key]['qnt'] += $qnt;
+
+            if ($hasConversion) {
+                $materials[$key]['original_qnt'] += $origQnt;
+                $materials[$key]['has_conversion'] = true;
+            }
         }
 
         return array_values($materials);
