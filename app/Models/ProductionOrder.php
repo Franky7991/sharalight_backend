@@ -11,10 +11,12 @@ class ProductionOrder extends Model
 
     const STATE_CREATED = 'created';
     const STATE_IN_PROCESSING = 'in_processing';
+    const STATE_COMPLETED = 'completed';
 
     const STATES = [
         self::STATE_CREATED       => 'Creato',
         self::STATE_IN_PROCESSING => 'In Lavorazione',
+        self::STATE_COMPLETED     => 'Completato',
     ];
 
     protected $fillable = [
@@ -70,6 +72,14 @@ class ProductionOrder extends Model
         return $this->state === self::STATE_IN_PROCESSING;
     }
 
+    /**
+     * L'ordine di produzione è nello stato "Completato".
+     */
+    public function isCompleted(): bool
+    {
+        return $this->state === self::STATE_COMPLETED;
+    }
+
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class);
@@ -78,5 +88,10 @@ class ProductionOrder extends Model
     public function details()
     {
         return $this->hasMany(ProductionOrderDetail::class);
+    }
+
+    public function records()
+    {
+        return $this->hasMany(ProductionRecord::class);
     }
 }

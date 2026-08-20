@@ -23,4 +23,9 @@ class ProductionOrderDetail extends Model
     {
         return $this->belongsTo(CustomerOrderHasProduct::class);
     }
+
+    public function productionRecords()
+    {
+        return $this->hasMany(ProductionRecord::class);
+    }
 }

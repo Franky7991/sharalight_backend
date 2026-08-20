@@ -8,6 +8,7 @@ use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\ProductionOrder;
 use App\Models\ProductionOrderDetail;
+use App\Services\ProductionService;
 
 class ProductionOrderDetailController extends Controller
 {
@@ -19,14 +20,39 @@ class ProductionOrderDetailController extends Controller
                 'customerOrderHasProduct.product',
                 'customerOrderHasProduct.unitOfMeasure',
                 'customerOrderHasProduct.customerOrder',
+                'customerOrderHasProduct.details.product',
             ])
             ->get();
 
+        $service = app(ProductionService::class);
+
         return datatables($rows)
             ->addColumn('product_name', fn ($r) => $r->customerOrderHasProduct?->product?->name ?? '-')
+            ->addColumn('ingredients_html', function ($r) use ($service) {
+                $cop = $r->customerOrderHasProduct;
+                if (! $cop) {
+                    return '<span class="text-muted small">—</span>';
+                }
+
+                $ingredients = $service->ingredients($cop);
+                if (empty($ingredients)) {
+                    return '<span class="text-muted small">—</span>';
+                }
+
+                $parts = array_map(
+                    fn ($i) => e($i['product_name'])
+                        . ' <span class="text-muted">(' . number_format($i['qnt'], 2, ',', '.') . ' ' . e($i['uom_symbol']) . ')</span>',
+                    $ingredients
+                );
+
+                return '<ul class="list-unstyled mb-0 small">'
+                    . implode('', array_map(fn ($p) => '<li>' . $p . '</li>', $parts))
+                    . '</ul>';
+            })
             ->addColumn('customer_order_progressive', fn ($r) => $r->customerOrderHasProduct?->customerOrder?->progressive ?? '-')
             ->addColumn('qnt', fn ($r) => number_format((float) ($r->customerOrderHasProduct?->qnt ?? 0), 2, ',', '.'))
             ->addColumn('uom_symbol', fn ($r) => $r->customerOrderHasProduct?->unitOfMeasure?->symbol ?? '-')
+            ->rawColumns(['ingredients_html'])
             ->toJson();
     }
 

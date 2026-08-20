@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\ProductionOrder;
+use App\Models\ProductionOrderDetail;
 use App\Models\Warehouse;
+use App\Services\ProductionService;
 
 class ProductionOrderController extends Controller
 {
@@ -26,6 +28,8 @@ class ProductionOrderController extends Controller
                 'details.customerOrderHasProduct.product',
                 'details.customerOrderHasProduct.unitOfMeasure',
                 'details.customerOrderHasProduct.customerOrder',
+                'records.product',
+                'records.unitOfMeasure',
             ])
             ->findOrFail($id);
 
@@ -38,7 +42,9 @@ class ProductionOrderController extends Controller
             ->orderBy('id')
             ->get();
 
-        return view('production_order.show', compact('productionOrder', 'available'));
+        $plan = app(ProductionService::class)->plan($productionOrder);
+
+        return view('production_order.show', compact('productionOrder', 'available', 'plan'));
     }
 
     public function listDataTable(Request $request)
@@ -134,6 +140,67 @@ class ProductionOrderController extends Controller
             'success' => false,
             'message' => 'Transizione di stato non valida.',
         ], 422);
+    }
+
+    /**
+     * Registra la produzione di una quantità per una specifica riga:
+     * genera i movimenti di scarico materie prime e carico prodotto finito,
+     * aggiorna qnt_produced e (se tutte le righe sono prodotte) completa l'ordine.
+     *
+     * POST /production-orders/{order}/produce
+     */
+    public function produce(Request $request, string $id)
+    {
+        $order = ProductionOrder::query()->findOrFail($id);
+
+        if (! $order->isInProcessing()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'La produzione è consentita solo per ordini nello stato "In Lavorazione".',
+            ], 403);
+        }
+
+        $request->validate([
+            'production_order_detail_id' => ['required', 'exists:production_order_details,id'],
+            'qnt'                        => ['required', 'regex:/^\d{1,15}([.,]\d{1,2})?$/'],
+        ]);
+
+        $detail = ProductionOrderDetail::query()
+            ->where('production_order_id', $order->id)
+            ->findOrFail($request->production_order_detail_id);
+
+        $qnt = (float) str_replace(',', '.', $request->qnt);
+
+        try {
+            app(ProductionService::class)->produce($order, $detail, $qnt);
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Restituisce il fabbisogno di materie prime (con giacenza) per una quantità.
+     *
+     * GET /production-orders/{order}/products/{detail}/requirements
+     */
+    public function requirements(Request $request, string $orderId, string $detailId)
+    {
+        $order = ProductionOrder::query()->findOrFail($orderId);
+
+        $detail = ProductionOrderDetail::query()
+            ->where('production_order_id', $orderId)
+            ->findOrFail($detailId);
+
+        $qnt = (float) str_replace(',', '.', (string) $request->query('qnt', 0));
+
+        return response()->json(
+            app(ProductionService::class)->requirements($order, $detail, $qnt)
+        );
     }
 
     public function destroy(string $id)

@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/production-orders',              [App\Http\Controllers\ProductionOrderController::class, 'store'])->name('production-orders.store');
     Route::put('/production-orders/{order}',        [App\Http\Controllers\ProductionOrderController::class, 'update'])->name('production-orders.update');
     Route::put('/production-orders/{order}/state',  [App\Http\Controllers\ProductionOrderController::class, 'changeState'])->name('production-orders.change-state');
+    Route::post('/production-orders/{order}/produce', [App\Http\Controllers\ProductionOrderController::class, 'produce'])->name('production-orders.produce');
+    Route::get('/production-orders/{order}/products/{detail}/requirements', [App\Http\Controllers\ProductionOrderController::class, 'requirements'])->name('production-orders.requirements');
     Route::delete('/production-orders/{order}',     [App\Http\Controllers\ProductionOrderController::class, 'destroy'])->name('production-orders.destroy');
     Route::get('/production-orders/{order}',       [App\Http\Controllers\ProductionOrderController::class, 'show'])->name('production-orders.show');
     Route::get('/production-orders',               [App\Http\Controllers\ProductionOrderController::class, 'index'])->name('production-orders.index');
