@@ -51,4 +51,9 @@ class CustomerOrderHasProduct extends Model
     {
         return $this->hasMany(CustomerOrderHasProductWarehouse::class, 'customer_order_has_product_id');
     }
+
+    public function productionOrderDetails()
+    {
+        return $this->hasMany(ProductionOrderDetail::class);
+    }
 }

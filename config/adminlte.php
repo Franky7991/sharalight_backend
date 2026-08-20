@@ -335,6 +335,21 @@ return [
             ],
         ],
         [
+            'header' => 'PRODUZIONE',
+        ],
+        [
+            'text'       => 'Produzione',
+            'icon'       => 'fas fa-industry',
+            'icon_color' => 'purple',
+            'submenu'    => [
+                [
+                    'text' => 'Ordine di Produzione',
+                    'url'  => '/production-orders',
+                    'icon' => 'fas fa-clipboard-check',
+                ],
+            ],
+        ],
+        [
             'header' => 'MAGAZZINO',
         ],
         [

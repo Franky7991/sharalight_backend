@@ -39,6 +39,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/customer-orders/{order}/products/{orderProduct}/details/config', [App\Http\Controllers\CustomerOrderHasProductDetailController::class, 'config'])->name('customer-order-product-details.config');
     Route::post('/customer-orders/{order}/products/{orderProduct}/details',       [App\Http\Controllers\CustomerOrderHasProductDetailController::class, 'save'])->name('customer-order-product-details.save');
 
+    // ProductionOrder routes
+    Route::post('/production-orders/list/table', [App\Http\Controllers\ProductionOrderController::class, 'listDataTable'])->name('production-orders.datatable');
+    Route::post('/production-orders/delete',       [App\Http\Controllers\ProductionOrderController::class, 'delete'])->name('production-orders.delete');
+    Route::post('/production-orders',              [App\Http\Controllers\ProductionOrderController::class, 'store'])->name('production-orders.store');
+    Route::put('/production-orders/{order}',        [App\Http\Controllers\ProductionOrderController::class, 'update'])->name('production-orders.update');
+    Route::put('/production-orders/{order}/state',  [App\Http\Controllers\ProductionOrderController::class, 'changeState'])->name('production-orders.change-state');
+    Route::delete('/production-orders/{order}',     [App\Http\Controllers\ProductionOrderController::class, 'destroy'])->name('production-orders.destroy');
+    Route::get('/production-orders/{order}',       [App\Http\Controllers\ProductionOrderController::class, 'show'])->name('production-orders.show');
+    Route::get('/production-orders',               [App\Http\Controllers\ProductionOrderController::class, 'index'])->name('production-orders.index');
+
+    // ProductionOrderDetail routes
+    Route::post('/production-orders/{order}/details/list/table', [App\Http\Controllers\ProductionOrderDetailController::class, 'listDataTable'])->name('production-order-details.datatable');
+    Route::post('/production-orders/{order}/details',            [App\Http\Controllers\ProductionOrderDetailController::class, 'store'])->name('production-order-details.store');
+    Route::delete('/production-orders/{order}/details/{detail}', [App\Http\Controllers\ProductionOrderDetailController::class, 'destroy'])->name('production-order-details.destroy');
+
     // Stock routes
     Route::post('/stocks/list/table', [App\Http\Controllers\StockController::class, 'listDataTable'])->name('stocks.datatable');
     Route::get('/stocks', [App\Http\Controllers\StockController::class, 'index'])->name('stocks.index');
