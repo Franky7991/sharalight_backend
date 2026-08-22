@@ -242,34 +242,36 @@ class ProductionService
         }
 
         DB::transaction(function () use ($order, $detail, $cop, $qnt, $req, $unloadCausalId, $loadCausalId) {
-            // 1. Scarico materie prime (proporzionale alla quantità prodotta)
-            foreach ($req['materials'] as $m) {
-                Movement::query()->create([
-                    'warehouse_id'       => $order->warehouse_id,
-                    'product_id'         => $m['product_id'],
-                    'causal_id'          => $unloadCausalId,
-                    'qnt'                => $m['required_qnt'],
-                    'unit_of_measure_id' => $m['unit_of_measure_id'],
-                ]);
-            }
-
-            // 2. Carico prodotto finito
-            Movement::query()->create([
-                'warehouse_id'       => $order->warehouse_id,
-                'product_id'         => $cop->product_id,
-                'causal_id'          => $loadCausalId,
-                'qnt'                => $qnt,
-                'unit_of_measure_id' => $cop->unit_of_measure_id,
-            ]);
-
-            // 3. Registro della produzione
-            ProductionRecord::query()->create([
+            // 1. Registro della produzione (creato per primo così da collegarci i movements)
+            $record = ProductionRecord::query()->create([
                 'production_order_id'           => $order->id,
                 'production_order_detail_id'    => $detail->id,
                 'customer_order_has_product_id' => $cop->id,
                 'product_id'                    => $cop->product_id,
                 'qnt'                           => $qnt,
                 'unit_of_measure_id'            => $cop->unit_of_measure_id,
+            ]);
+
+            // 2. Scarico materie prime (proporzionale alla quantità prodotta)
+            foreach ($req['materials'] as $m) {
+                Movement::query()->create([
+                    'warehouse_id'          => $order->warehouse_id,
+                    'product_id'            => $m['product_id'],
+                    'causal_id'             => $unloadCausalId,
+                    'qnt'                   => $m['required_qnt'],
+                    'unit_of_measure_id'    => $m['unit_of_measure_id'],
+                    'production_record_id'  => $record->id,
+                ]);
+            }
+
+            // 3. Carico prodotto finito
+            Movement::query()->create([
+                'warehouse_id'          => $order->warehouse_id,
+                'product_id'            => $cop->product_id,
+                'causal_id'             => $loadCausalId,
+                'qnt'                   => $qnt,
+                'unit_of_measure_id'    => $cop->unit_of_measure_id,
+                'production_record_id'  => $record->id,
             ]);
 
             // 4. Aggiorna la quantità prodotta

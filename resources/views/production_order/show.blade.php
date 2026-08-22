@@ -56,6 +56,16 @@
                                 <option value="{{ $a->id }}">
                                     {{ $a->customerOrder?->progressive ?? '-' }} — {{ $a->product?->name ?? '-' }}
                                     ({{ number_format((float)$a->qnt, 2, ',', '.') }} {{ $a->unitOfMeasure?->symbol ?? '' }})
+                                    @php
+                                        $ingNames = $a->details
+                                            ->filter(fn($d) => $d->product && $d->product->type === \App\Models\Product::TYPE_RAW_MATERIAL)
+                                            ->map(fn($d) => $d->product->name)
+                                            ->unique()
+                                            ->toArray();
+                                    @endphp
+                                    @if(!empty($ingNames))
+                                        — {{ implode(', ', $ingNames) }}
+                                    @endif
                                 </option>
                             @endforeach
                         </select>
@@ -224,6 +234,7 @@
                             <tr>
                                 <th>Data</th>
                                 <th>Prodotto</th>
+                                <th>Ingredienti utilizzati</th>
                                 <th class="text-right">Quantità</th>
                                 <th>U.M.</th>
                             </tr>
@@ -233,6 +244,20 @@
                                 <tr>
                                     <td>{{ $rec->created_at?->format('d/m/Y H:i') }}</td>
                                     <td>{{ $rec->product?->name ?? '-' }}</td>
+                                    <td class="small">
+                                        @php
+                                            $ingMovements = $rec->movements->filter(fn($m) => $m->product_id !== $rec->product_id);
+                                        @endphp
+                                        @if($ingMovements->isNotEmpty())
+                                            <ul class="list-unstyled mb-0">
+                                                @foreach($ingMovements as $im)
+                                                    <li>{{ $im->product?->name ?? '?' }} — {{ number_format(abs((float)$im->qnt), 2, ',', '.') }} {{ $im->unitOfMeasure?->symbol ?? '' }}</li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
                                     <td class="text-right">{{ number_format((float)$rec->qnt, 2, ',', '.') }}</td>
                                     <td>{{ $rec->unitOfMeasure?->symbol ?? '-' }}</td>
                                 </tr>

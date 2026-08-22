@@ -15,6 +15,7 @@ class Movement extends Model
         'causal_id',
         'qnt',
         'unit_of_measure_id',
+        'production_record_id',
     ];
 
     public function warehouse()
@@ -35,5 +36,10 @@ class Movement extends Model
     public function unitOfMeasure()
     {
         return $this->belongsTo(UnitOfMeasure::class);
+    }
+
+    public function productionRecord()
+    {
+        return $this->belongsTo(ProductionRecord::class);
     }
 }

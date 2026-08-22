@@ -49,4 +49,9 @@ class ProductionRecord extends Model
     {
         return $this->belongsTo(UnitOfMeasure::class);
     }
+
+    public function movements()
+    {
+        return $this->hasMany(Movement::class);
+    }
 }

@@ -15,6 +15,7 @@
                     <th>Prodotto</th>
                     <th class="text-right">Quantità</th>
                     <th>U.M.</th>
+                    <th>Ingredienti</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -46,6 +47,7 @@ $(document).ready(function () {
             { data: 'product_name',           name: 'product_name' },
             { data: 'qnt',                    name: 'qnt', className: 'text-right' },
             { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
+            { data: 'ingredients',           name: 'ingredients',           orderable: false },
         ],
         columnDefs: [
             {

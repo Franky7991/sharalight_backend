@@ -30,6 +30,7 @@ class ProductionOrderController extends Controller
                 'details.customerOrderHasProduct.customerOrder',
                 'records.product',
                 'records.unitOfMeasure',
+                'records.movements.product',
             ])
             ->findOrFail($id);
 
@@ -38,7 +39,7 @@ class ProductionOrderController extends Controller
         $available = CustomerOrderHasProduct::query()
             ->whereHas('customerOrder', fn ($q) => $q->where('state', CustomerOrder::STATE_PRODUCTS_ALLOCATED))
             ->whereDoesntHave('productionOrderDetails')
-            ->with(['product', 'unitOfMeasure', 'customerOrder'])
+            ->with(['product', 'unitOfMeasure', 'customerOrder', 'details.product'])
             ->orderBy('id')
             ->get();
 

@@ -23,6 +23,7 @@
                     <th>Tipo</th>
                     <th class="text-right">Quantità</th>
                     <th>U.M.</th>
+                    <th>Produzione</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -159,6 +160,7 @@ $(document).ready(function () {
             { data: 'causal_type_label',     name: 'causal_type_label', orderable: false },
             { data: 'qnt',                   name: 'qnt', className: 'text-right' },
             { data: 'unit_of_measure_symbol',name: 'unit_of_measure_symbol', orderable: false },
+            { data: 'production_info',    name: 'production_info',    orderable: false },
         ],
         columnDefs: [
             {
