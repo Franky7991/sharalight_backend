@@ -12,9 +12,18 @@ class Stock extends Model
     protected $fillable = [
         'warehouse_id',
         'product_id',
+        'composition_key',
+        'composition_data',
         'qnt',
         'unit_of_measure_id',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'composition_data' => 'array',
+        ];
+    }
 
     public function warehouse()
     {

@@ -15,7 +15,7 @@
                     <th>Prodotto</th>
                     <th class="text-right">Quantità</th>
                     <th>U.M.</th>
-                    <th>Ingredienti</th>
+                    <th>Composizione</th>
                 </tr>
             </thead>
             <tbody></tbody>

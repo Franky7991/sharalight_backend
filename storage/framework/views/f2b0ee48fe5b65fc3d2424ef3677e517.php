@@ -1,8 +1,8 @@
-@extends('adminlte::page')
-@section('title', 'Giacenza')
-@section('content_header')@stop
 
-@section('content')
+<?php $__env->startSection('title', 'Giacenza'); ?>
+<?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
         <h4 class="mb-0">Giacenza</h4>
@@ -22,9 +22,9 @@
         </table>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 <script>
 $(document).ready(function () {
 
@@ -39,7 +39,7 @@ $(document).ready(function () {
         pageLength: 25,
         ajax: {
             type: 'POST',
-            url: '{{ route('stocks.datatable') }}',
+            url: '<?php echo e(route('stocks.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         },
         columns: [
@@ -64,4 +64,6 @@ $(document).ready(function () {
 
 });
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/stock/index.blade.php ENDPATH**/ ?>
