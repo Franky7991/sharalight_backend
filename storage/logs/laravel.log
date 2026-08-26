@@ -2113,3 +2113,9 @@ Did you mean one of these?
 #19 C:/project/shara_light/backend/artisan(13): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
 #20 {main}
 "} 
+[2026-08-26 13:33:15] local.ERROR: Attempt to read property "progressive" on null {"userId":1,"exception":"[object] (ErrorException(code: 0): Attempt to read property \"progressive\" on null at C:/project/shara_light/backend/__http_test.php:39)
+[stacktrace]
+#0 C:/project/shara_light/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(258): Illuminate/Foundation/Bootstrap/HandleExceptions->handleError(2, 'Attempt to read...', 'C://project//shar...', 39)
+#1 C:/project/shara_light/backend/__http_test.php(39): Illuminate/Foundation/Bootstrap/HandleExceptions->{closure:Illuminate/Foundation/Bootstrap/HandleExceptions::forwardsTo():257}(2, 'Attempt to read...', 'C://project//shar...', 39)
+#2 {main}
+"} 

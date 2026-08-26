@@ -350,6 +350,21 @@ return [
             ],
         ],
         [
+            'header' => 'SPEDIZIONE',
+        ],
+        [
+            'text'       => 'Spedizioni',
+            'icon'       => 'fas fa-truck',
+            'icon_color' => 'teal',
+            'submenu'    => [
+                [
+                    'text' => 'Spedizioni',
+                    'url'  => '/shipments',
+                    'icon' => 'fas fa-truck',
+                ],
+            ],
+        ],
+        [
             'header' => 'MAGAZZINO',
         ],
         [

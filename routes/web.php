@@ -56,6 +56,21 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/production-orders/{order}/details',            [App\Http\Controllers\ProductionOrderDetailController::class, 'store'])->name('production-order-details.store');
     Route::delete('/production-orders/{order}/details/{detail}', [App\Http\Controllers\ProductionOrderDetailController::class, 'destroy'])->name('production-order-details.destroy');
 
+    // Shipment routes
+    Route::post('/shipments/list/table',              [App\Http\Controllers\ShipmentController::class, 'listDataTable'])->name('shipments.datatable');
+    Route::post('/shipments/delete',                  [App\Http\Controllers\ShipmentController::class, 'delete'])->name('shipments.delete');
+    Route::post('/shipments',                         [App\Http\Controllers\ShipmentController::class, 'store'])->name('shipments.store');
+    Route::put('/shipments/{shipment}',               [App\Http\Controllers\ShipmentController::class, 'update'])->name('shipments.update');
+    Route::delete('/shipments/{shipment}',            [App\Http\Controllers\ShipmentController::class, 'destroy'])->name('shipments.destroy');
+    Route::get('/shipments/{shipment}',               [App\Http\Controllers\ShipmentController::class, 'show'])->name('shipments.show');
+    Route::get('/shipments',                          [App\Http\Controllers\ShipmentController::class, 'index'])->name('shipments.index');
+
+    // ShipmentDetail routes
+    Route::post('/shipments/{shipment}/orders/list/table', [App\Http\Controllers\ShipmentDetailController::class, 'listDataTable'])->name('shipment-details.datatable');
+    Route::post('/shipments/{shipment}/products/list/table', [App\Http\Controllers\ShipmentDetailController::class, 'listProductsDataTable'])->name('shipment-products.datatable');
+    Route::post('/shipments/{shipment}/orders',            [App\Http\Controllers\ShipmentDetailController::class, 'store'])->name('shipment-details.store');
+    Route::delete('/shipments/{shipment}/orders/{detail}', [App\Http\Controllers\ShipmentDetailController::class, 'destroy'])->name('shipment-details.destroy');
+
     // Stock routes
     Route::post('/stocks/list/table', [App\Http\Controllers\StockController::class, 'listDataTable'])->name('stocks.datatable');
     Route::get('/stocks', [App\Http\Controllers\StockController::class, 'index'])->name('stocks.index');

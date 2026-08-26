@@ -278,9 +278,28 @@
       ),
       7 => 
       array (
-        'header' => 'MAGAZZINO',
+        'header' => 'SPEDIZIONE',
       ),
       8 => 
+      array (
+        'text' => 'Spedizioni',
+        'icon' => 'fas fa-truck',
+        'icon_color' => 'teal',
+        'submenu' => 
+        array (
+          0 => 
+          array (
+            'text' => 'Spedizioni',
+            'url' => '/shipments',
+            'icon' => 'fas fa-truck',
+          ),
+        ),
+      ),
+      9 => 
+      array (
+        'header' => 'MAGAZZINO',
+      ),
+      10 => 
       array (
         'text' => 'Magazzino',
         'icon' => 'fas fa-warehouse',
@@ -307,11 +326,11 @@
           ),
         ),
       ),
-      9 => 
+      11 => 
       array (
         'header' => 'TABELLE',
       ),
-      10 => 
+      12 => 
       array (
         'text' => 'Tabella',
         'icon' => 'fas fa-table',
@@ -350,11 +369,11 @@
           ),
         ),
       ),
-      11 => 
+      13 => 
       array (
         'header' => 'SISTEMA',
       ),
-      12 => 
+      14 => 
       array (
         'text' => 'Impostazioni',
         'url' => '/settings',

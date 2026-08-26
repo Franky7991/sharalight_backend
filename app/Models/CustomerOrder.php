@@ -95,6 +95,40 @@ class CustomerOrder extends Model
         return $this->products()->where('warehouses_allocated', false)->doesntExist();
     }
 
+    /**
+     * Percentuale di produzione dell'ordine (0-100), basata sulla somma
+     * di qnt_produced dei prodotti (richiede il caricamento di
+     * products_sum_qnt_produced via withSum('products', 'qnt_produced')).
+     */
+    public function productionProgress(): float
+    {
+        $qnt = (float) $this->qnt;
+
+        if ($qnt <= 0) {
+            return 0.0;
+        }
+
+        $produced = (float) ($this->products_sum_qnt_produced ?? 0);
+
+        return min(100, round($produced / $qnt * 100, 1));
+    }
+
+    /**
+     * L'ordine è interamente prodotto (progressbar al 100%).
+     */
+    public function isFullyProduced(): bool
+    {
+        $qnt = (float) $this->qnt;
+
+        if ($qnt <= 0) {
+            return false;
+        }
+
+        $produced = (float) ($this->products_sum_qnt_produced ?? 0);
+
+        return $produced >= $qnt;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -103,5 +137,10 @@ class CustomerOrder extends Model
     public function products()
     {
         return $this->hasMany(CustomerOrderHasProduct::class);
+    }
+
+    public function shipmentDetails()
+    {
+        return $this->hasMany(ShipmentDetail::class);
     }
 }

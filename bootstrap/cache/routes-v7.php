@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::KhBdLU5k0EjV7coD',
+            '_route' => 'generated::NYVyEWhMOaqH5jWn',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VgqD6cqQUMAPIA0P',
+            '_route' => 'generated::JCUtlRHdNpwMfSZp',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::djRs9cHsEMbQpyFx',
+            '_route' => 'generated::xHE06MstzU6brWDF',
           ),
           1 => NULL,
           2 => 
@@ -276,6 +276,80 @@ app('router')->setCompiledRoutes(
           0 => 
           array (
             '_route' => 'production-orders.index',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/shipments/list/table' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.datatable',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/shipments/delete' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.delete',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/shipments' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.store',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.index',
           ),
           1 => NULL,
           2 => 
@@ -1118,7 +1192,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/c(?|ustomer\\-orders/([^/]++)(?|(*:39)|/(?|s(?|tate(*:58)|ummary(*:71))|products(?|/(?|list/table(*:104)|([^/]++)(?|(*:123)|/(?|warehouses(?|(*:148))|details(?|/config(*:174)|(*:182)))))|(*:194)))|(*:204))|ausals/([^/]++)(?|(*:231)|/edit(*:244)|(*:252)))|/product(?|ion\\-orders/([^/]++)(?|(*:296)|/(?|state(*:313)|produc(?|e(*:331)|ts/([^/]++)/requirements(*:363))|details(?|/(?|list/table(*:396)|([^/]++)(*:412))|(*:421)))|(*:431))|s/([^/]++)(?|/(?|tree(*:461)|edit(*:473))|(*:482))|\\-categories/([^/]++)(?|(*:515)|/edit(*:528)|(*:536)))|/movements/([^/]++)(*:565)|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:610)|/edit(*:623)|(*:631))|conversions/([^/]++)(?|(*:663)|/edit(*:676)|(*:684)))|sers/([^/]++)(?|(*:710)|/edit(*:723)|(*:731)))|/warehouses/([^/]++)(?|(*:764)|/edit(*:777)|(*:785))|/recipe(?|s/(?|list/table/([^/]++)(*:828)|([^/]++)(?|(*:847)))|\\-details/(?|list/(?|details/([^/]++)(*:894)|products/([^/]++)(*:919))|([^/]++)(*:936)))|/storage/(.*)(*:959))/?$}sDu',
+      0 => '{^(?|/c(?|ustomer\\-orders/([^/]++)(?|(*:39)|/(?|s(?|tate(*:58)|ummary(*:71))|products(?|/(?|list/table(*:104)|([^/]++)(?|(*:123)|/(?|warehouses(?|(*:148))|details(?|/config(*:174)|(*:182)))))|(*:194)))|(*:204))|ausals/([^/]++)(?|(*:231)|/edit(*:244)|(*:252)))|/product(?|ion\\-orders/([^/]++)(?|(*:296)|/(?|state(*:313)|produc(?|e(*:331)|ts/([^/]++)/requirements(*:363))|details(?|/(?|list/table(*:396)|([^/]++)(*:412))|(*:421)))|(*:431))|s/([^/]++)(?|/(?|tree(*:461)|edit(*:473))|(*:482))|\\-categories/([^/]++)(?|(*:515)|/edit(*:528)|(*:536)))|/s(?|hipments/([^/]++)(?|(*:571)|/(?|orders(?|/(?|list/table(*:606)|([^/]++)(*:622))|(*:631))|products/list/table(*:659)))|torage/(.*)(*:680))|/movements/([^/]++)(*:708)|/u(?|nit\\-(?|of\\-measures/([^/]++)(?|(*:753)|/edit(*:766)|(*:774))|conversions/([^/]++)(?|(*:806)|/edit(*:819)|(*:827)))|sers/([^/]++)(?|(*:853)|/edit(*:866)|(*:874)))|/warehouses/([^/]++)(?|(*:907)|/edit(*:920)|(*:928))|/recipe(?|s/(?|list/table/([^/]++)(*:971)|([^/]++)(?|(*:990)))|\\-details/(?|list/(?|details/([^/]++)(*:1037)|products/([^/]++)(*:1063))|([^/]++)(*:1081))))/?$}sDu',
     ),
     3 => 
     array (
@@ -1872,7 +1946,180 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      565 => 
+      571 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.update',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+        2 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipments.show',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      606 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipment-details.datatable',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      622 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipment-details.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+            1 => 'detail',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      631 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipment-details.store',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      659 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'shipment-products.datatable',
+          ),
+          1 => 
+          array (
+            0 => 'shipment',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      680 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'storage.local',
+          ),
+          1 => 
+          array (
+            0 => 'path',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      708 => 
       array (
         0 => 
         array (
@@ -1894,7 +2141,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      610 => 
+      753 => 
       array (
         0 => 
         array (
@@ -1917,7 +2164,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      623 => 
+      766 => 
       array (
         0 => 
         array (
@@ -1940,7 +2187,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      631 => 
+      774 => 
       array (
         0 => 
         array (
@@ -1982,7 +2229,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      663 => 
+      806 => 
       array (
         0 => 
         array (
@@ -2005,7 +2252,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      676 => 
+      819 => 
       array (
         0 => 
         array (
@@ -2028,7 +2275,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      684 => 
+      827 => 
       array (
         0 => 
         array (
@@ -2070,7 +2317,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      710 => 
+      853 => 
       array (
         0 => 
         array (
@@ -2093,7 +2340,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      723 => 
+      866 => 
       array (
         0 => 
         array (
@@ -2116,7 +2363,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      731 => 
+      874 => 
       array (
         0 => 
         array (
@@ -2158,7 +2405,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      764 => 
+      907 => 
       array (
         0 => 
         array (
@@ -2181,7 +2428,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      777 => 
+      920 => 
       array (
         0 => 
         array (
@@ -2204,7 +2451,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      785 => 
+      928 => 
       array (
         0 => 
         array (
@@ -2246,7 +2493,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      828 => 
+      971 => 
       array (
         0 => 
         array (
@@ -2268,7 +2515,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      847 => 
+      990 => 
       array (
         0 => 
         array (
@@ -2309,7 +2556,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      894 => 
+      1037 => 
       array (
         0 => 
         array (
@@ -2331,7 +2578,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      919 => 
+      1063 => 
       array (
         0 => 
         array (
@@ -2353,7 +2600,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      936 => 
+      1081 => 
       array (
         0 => 
         array (
@@ -2368,29 +2615,6 @@ app('router')->setCompiledRoutes(
           2 => 
           array (
             'DELETE' => 0,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => true,
-          6 => NULL,
-        ),
-      ),
-      959 => 
-      array (
-        0 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'storage.local',
-          ),
-          1 => 
-          array (
-            0 => 'path',
-          ),
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
           ),
           3 => NULL,
           4 => false,
@@ -2449,7 +2673,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::KhBdLU5k0EjV7coD' => 
+    'generated::NYVyEWhMOaqH5jWn' => 
     array (
       'methods' => 
       array (
@@ -2478,7 +2702,7 @@ app('router')->setCompiledRoutes(
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
                 }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010d0000000000000000";}}',
-        'as' => 'generated::KhBdLU5k0EjV7coD',
+        'as' => 'generated::NYVyEWhMOaqH5jWn',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2494,7 +2718,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VgqD6cqQUMAPIA0P' => 
+    'generated::JCUtlRHdNpwMfSZp' => 
     array (
       'methods' => 
       array (
@@ -2510,13 +2734,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:57:"function () {
     return \\redirect()->route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005300000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000052f0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::VgqD6cqQUMAPIA0P',
+        'as' => 'generated::JCUtlRHdNpwMfSZp',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2569,7 +2793,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::djRs9cHsEMbQpyFx' => 
+    'generated::xHE06MstzU6brWDF' => 
     array (
       'methods' => 
       array (
@@ -2589,7 +2813,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::djRs9cHsEMbQpyFx',
+        'as' => 'generated::xHE06MstzU6brWDF',
       ),
       'fallback' => false,
       'defaults' => 
@@ -3744,6 +3968,415 @@ app('router')->setCompiledRoutes(
         array (
         ),
         'as' => 'production-order-details.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.delete' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments/delete',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@delete',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@delete',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.delete',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@store',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'shipments/{shipment}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@update',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.update',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'shipments/{shipment}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@destroy',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'shipments/{shipment}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@show',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@show',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.show',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipments.index' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'shipments',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentController@index',
+        'controller' => 'App\\Http\\Controllers\\ShipmentController@index',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipments.index',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipment-details.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments/{shipment}/orders/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentDetailController@listDataTable',
+        'controller' => 'App\\Http\\Controllers\\ShipmentDetailController@listDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipment-details.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipment-products.datatable' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments/{shipment}/products/list/table',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentDetailController@listProductsDataTable',
+        'controller' => 'App\\Http\\Controllers\\ShipmentDetailController@listProductsDataTable',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipment-products.datatable',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipment-details.store' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'shipments/{shipment}/orders',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentDetailController@store',
+        'controller' => 'App\\Http\\Controllers\\ShipmentDetailController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipment-details.store',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'shipment-details.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'shipments/{shipment}/orders/{detail}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ShipmentDetailController@destroy',
+        'controller' => 'App\\Http\\Controllers\\ShipmentDetailController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'shipment-details.destroy',
       ),
       'fallback' => false,
       'defaults' => 
@@ -6774,7 +7407,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005330000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005320000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,
