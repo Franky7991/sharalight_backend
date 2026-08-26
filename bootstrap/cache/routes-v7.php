@@ -32,7 +32,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::C6Vp2KRTOgPfOdA4',
+            '_route' => 'generated::KhBdLU5k0EjV7coD',
           ),
           1 => NULL,
           2 => 
@@ -52,7 +52,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::mDFKNc3KSZxNm6XN',
+            '_route' => 'generated::VgqD6cqQUMAPIA0P',
           ),
           1 => NULL,
           2 => 
@@ -89,7 +89,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::BfgqR1HAHKcVxqB6',
+            '_route' => 'generated::djRs9cHsEMbQpyFx',
           ),
           1 => NULL,
           2 => 
@@ -2449,7 +2449,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::C6Vp2KRTOgPfOdA4' => 
+    'generated::KhBdLU5k0EjV7coD' => 
     array (
       'methods' => 
       array (
@@ -2477,8 +2477,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'C:\\\\project\\\\shara_light\\\\backend\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010f0000000000000000";}}',
-        'as' => 'generated::C6Vp2KRTOgPfOdA4',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000010d0000000000000000";}}',
+        'as' => 'generated::KhBdLU5k0EjV7coD',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2494,7 +2494,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::mDFKNc3KSZxNm6XN' => 
+    'generated::VgqD6cqQUMAPIA0P' => 
     array (
       'methods' => 
       array (
@@ -2510,13 +2510,13 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:57:"function () {
     return \\redirect()->route(\'login\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000008c90000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005300000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::mDFKNc3KSZxNm6XN',
+        'as' => 'generated::VgqD6cqQUMAPIA0P',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2569,7 +2569,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::BfgqR1HAHKcVxqB6' => 
+    'generated::djRs9cHsEMbQpyFx' => 
     array (
       'methods' => 
       array (
@@ -2589,7 +2589,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::BfgqR1HAHKcVxqB6',
+        'as' => 'generated::djRs9cHsEMbQpyFx',
       ),
       'fallback' => false,
       'defaults' => 
@@ -6774,7 +6774,7 @@ app('router')->setCompiledRoutes(
                         $config,
                         $isProduction
                     ))($request, $path);
-                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000008cc0000000000000000";}}',
+                }";s:5:"scope";s:47:"Illuminate\\Filesystem\\FilesystemServiceProvider";s:4:"this";N;s:4:"self";s:32:"00000000000005330000000000000000";}}',
         'as' => 'storage.local',
       ),
       'fallback' => false,

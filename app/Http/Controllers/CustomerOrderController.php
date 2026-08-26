@@ -30,7 +30,10 @@ class CustomerOrderController extends Controller
 
     public function listDataTable(Request $request)
     {
-        $query = CustomerOrder::query()->with('user')->get();
+        $query = CustomerOrder::query()
+            ->with('user')
+            ->withSum('products', 'qnt_produced')
+            ->get();
 
         return datatables($query)
             ->addColumn('user_name', fn($r) => $r->user?->name ?? '-')
@@ -38,7 +41,41 @@ class CustomerOrderController extends Controller
             ->addColumn('state_label', function ($r) {
                 return '<span class="badge badge-secondary">' . $r->stateLabel() . '</span>';
             })
-            ->rawColumns(['state_label'])
+            ->addColumn('progress_pct', function ($r) {
+                $qnt      = (float) $r->qnt;
+                $produced = (float) ($r->products_sum_qnt_produced ?? 0);
+
+                return $qnt > 0 ? round($produced / $qnt * 100, 1) : 0.0;
+            })
+            ->addColumn('progress_bar_html', function ($r) {
+                $qnt      = (float) $r->qnt;
+                $produced = (float) ($r->products_sum_qnt_produced ?? 0);
+                $pct      = $qnt > 0 ? min(100, (int) round($produced / $qnt * 100)) : 0;
+
+                if ($qnt <= 0) {
+                    return '<span class="text-muted small">0%</span>';
+                }
+
+                if ($pct >= 100) {
+                    $class = 'bg-success';
+                } elseif ($pct > 0) {
+                    $class = 'bg-info progress-bar-striped';
+                } else {
+                    $class = 'bg-secondary';
+                }
+
+                $label = number_format($produced, 2, ',', '.') . ' / ' . number_format($qnt, 2, ',', '.');
+
+                return '<div class="d-flex align-items-center">'
+                    . '<div class="progress" style="height:16px; flex:1;">'
+                    . '<div class="progress-bar ' . $class . '" role="progressbar"'
+                    . ' style="width:' . $pct . '%;" aria-valuenow="' . $pct . '"'
+                    . ' aria-valuemin="0" aria-valuemax="100" title="' . e($label) . '">'
+                    . '</div></div>'
+                    . '<small class="mb-0 ml-2" style="min-width:56px; text-align:right;">' . $pct . '%</small>'
+                    . '</div>';
+            })
+            ->rawColumns(['state_label', 'progress_bar_html'])
             ->toJson();
     }
 
@@ -215,3 +252,4 @@ class CustomerOrderController extends Controller
         ]);
     }
 }
+

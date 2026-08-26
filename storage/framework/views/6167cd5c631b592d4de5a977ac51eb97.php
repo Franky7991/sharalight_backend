@@ -28,6 +28,7 @@
                     <th>Indirizzo</th>
                     <th>Utente</th>
                     <th>Stato</th>
+                    <th class="text-center" style="width:200px;">Produzione</th>
                     <th style="width:80px;">Azioni</th>
                 </tr>
             </thead>
@@ -55,7 +56,7 @@
 
                 <input type="hidden" id="order_id" value="">
 
-                
+            
                 <div class="form-group">
                     <label for="order_order_date">Data Ordine <span class="text-danger">*</span></label>
                     <div class="input-group">
@@ -66,7 +67,7 @@
                     </div>
                 </div>
 
-                
+            
                 <div class="form-group">
                     <label for="order_address">Indirizzo <span class="text-danger">*</span></label>
                     <div class="input-group">
@@ -114,6 +115,11 @@ $(document).ready(function () {
             { data: 'address',         name: 'address' },
             { data: 'user_name',       name: 'user_name' },
             { data: 'state_label',     name: 'state', orderable: false },
+            { data: 'progress_pct',    name: 'progress_pct', orderable: true, searchable: false,
+                render: function (data, type, row) {
+                    return (type === 'display') ? row.progress_bar_html : data;
+                }
+            },
             { data: 'id',              name: 'id', orderable: false, searchable: false },
         ],
         columnDefs: [
@@ -125,7 +131,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 6,
+                targets: 7,
                 render: function (id, type, row) {
                     return '<a href="/customer-orders/' + id + '" class="btn btn-info btn-xs mr-1" title="Apri">'
                          + '<i class="fa fa-eye"></i></a>'
