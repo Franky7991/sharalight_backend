@@ -13,11 +13,13 @@ class Setting extends Model
     const KEY_WAREHOUSE_LOAD_CAUSAL      = 'warehouse_load_causal_id';
     const KEY_PRODUCTION_UNLOAD_CAUSAL   = 'production_unload_causal_id';
     const KEY_PRODUCTION_LOAD_CAUSAL     = 'production_load_causal_id';
+    const KEY_SHIPMENT_UNLOAD_CAUSAL     = 'shipment_unload_causal_id';
 
     const KEYS = [
         self::KEY_WAREHOUSE_LOAD_CAUSAL    => 'Causale Carico in Magazzino',
         self::KEY_PRODUCTION_UNLOAD_CAUSAL => 'Causale Scarico per Produzione',
         self::KEY_PRODUCTION_LOAD_CAUSAL   => 'Causale Carico per Produzione',
+        self::KEY_SHIPMENT_UNLOAD_CAUSAL   => 'Causale Scarico per Spedizione',
     ];
 
     protected $fillable = [

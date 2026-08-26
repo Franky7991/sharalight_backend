@@ -24,11 +24,13 @@ class SettingController extends Controller
             Setting::KEY_WAREHOUSE_LOAD_CAUSAL    => ['nullable', 'exists:causals,id'],
             Setting::KEY_PRODUCTION_UNLOAD_CAUSAL => ['nullable', 'exists:causals,id'],
             Setting::KEY_PRODUCTION_LOAD_CAUSAL   => ['nullable', 'exists:causals,id'],
+            Setting::KEY_SHIPMENT_UNLOAD_CAUSAL   => ['nullable', 'exists:causals,id'],
         ]);
 
         Setting::set(Setting::KEY_WAREHOUSE_LOAD_CAUSAL,    $request->input(Setting::KEY_WAREHOUSE_LOAD_CAUSAL));
         Setting::set(Setting::KEY_PRODUCTION_UNLOAD_CAUSAL, $request->input(Setting::KEY_PRODUCTION_UNLOAD_CAUSAL));
         Setting::set(Setting::KEY_PRODUCTION_LOAD_CAUSAL,   $request->input(Setting::KEY_PRODUCTION_LOAD_CAUSAL));
+        Setting::set(Setting::KEY_SHIPMENT_UNLOAD_CAUSAL,   $request->input(Setting::KEY_SHIPMENT_UNLOAD_CAUSAL));
 
         return redirect()->route('settings.index')
             ->with('success', 'Impostazioni salvate con successo.');

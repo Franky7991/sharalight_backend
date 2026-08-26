@@ -101,6 +101,34 @@
 
                     <hr>
 
+                    {{-- ── Sezione Spedizione ────────────────────────────────────── --}}
+                    <h6 class="text-uppercase text-muted font-weight-bold mb-3" style="font-size:.7rem; letter-spacing:.08em;">
+                        <i class="fas fa-truck mr-1"></i> Spedizione
+                    </h6>
+
+                    @php $key = \App\Models\Setting::KEY_SHIPMENT_UNLOAD_CAUSAL; @endphp
+                    <div class="form-group">
+                        <label for="{{ $key }}">Causale <em>Scarico per Spedizione</em></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-arrow-circle-up text-danger"></i></span>
+                            </div>
+                            <select id="{{ $key }}" name="{{ $key }}"
+                                class="form-control @error($key) is-invalid @enderror">
+                                <option value="">— Nessuna —</option>
+                                @foreach($unloadCausals as $c)
+                                    <option value="{{ $c->id }}" {{ ($settings[$key] ?? '') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error($key)<div class="invalid-feedback">{{ $message }}</div>@enderror
+                        </div>
+                        <small class="form-text text-muted">Causale usata per scaricare i prodotti al momento della spedizione.</small>
+                    </div>
+
+                    <hr>
+
                     <div class="row">
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block btn-sm">
