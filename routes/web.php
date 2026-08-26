@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/shipments/delete',                  [App\Http\Controllers\ShipmentController::class, 'delete'])->name('shipments.delete');
     Route::post('/shipments',                         [App\Http\Controllers\ShipmentController::class, 'store'])->name('shipments.store');
     Route::put('/shipments/{shipment}',               [App\Http\Controllers\ShipmentController::class, 'update'])->name('shipments.update');
+    Route::put('/shipments/{shipment}/state',         [App\Http\Controllers\ShipmentController::class, 'changeState'])->name('shipments.change-state');
     Route::delete('/shipments/{shipment}',            [App\Http\Controllers\ShipmentController::class, 'destroy'])->name('shipments.destroy');
     Route::get('/shipments/{shipment}',               [App\Http\Controllers\ShipmentController::class, 'show'])->name('shipments.show');
     Route::get('/shipments',                          [App\Http\Controllers\ShipmentController::class, 'index'])->name('shipments.index');

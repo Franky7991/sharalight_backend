@@ -50,16 +50,45 @@ class ProductionOrderController extends Controller
 
     public function listDataTable(Request $request)
     {
-        $query = ProductionOrder::query()->with('warehouse')->get();
+        $orders = ProductionOrder::query()
+            ->with([
+                'warehouse',
+                'details.customerOrderHasProduct',
+            ])
+            ->get();
 
-        return datatables($query)
+        return datatables($orders)
             ->addColumn('warehouse_name', fn ($r) => $r->warehouse?->name ?? '-')
             ->addColumn('production_date_fmt', fn ($r) => $r->production_date?->format('d/m/Y') ?? '-')
             ->addColumn('production_date_ymd', fn ($r) => $r->production_date?->format('Y-m-d') ?? '')
+            ->addColumn('warehouse_id', fn ($r) => $r->warehouse_id)
+            ->addColumn('progress_pct', function ($r) {
+                $total    = $r->details->sum(fn($d) => (float) ($d->customerOrderHasProduct?->qnt ?? 0));
+                $produced = $r->details->sum(fn($d) => (float) ($d->customerOrderHasProduct?->qnt_produced ?? 0));
+                return $total > 0 ? min(100, round($produced / $total * 100, 1)) : 0.0;
+            })
+            ->addColumn('progress', function ($r) {
+                $total    = $r->details->sum(fn($d) => (float) ($d->customerOrderHasProduct?->qnt ?? 0));
+                $produced = $r->details->sum(fn($d) => (float) ($d->customerOrderHasProduct?->qnt_produced ?? 0));
+                $pct      = $total > 0 ? min(100, (int) round($produced / $total * 100)) : 0;
+
+                if ($total <= 0) {
+                    return '<span class="text-muted small">0%</span>';
+                }
+
+                $class = $pct >= 100 ? 'bg-success' : ($pct > 0 ? 'bg-info progress-bar-striped' : 'bg-secondary');
+
+                return '<div class="progress" style="height:18px;">'
+                     . '<div class="progress-bar ' . $class . '" role="progressbar"'
+                     . ' style="width:' . max($pct, 15) . '%; min-width:2em;"'
+                     . ' aria-valuenow="' . $pct . '" aria-valuemin="0" aria-valuemax="100">'
+                     . $pct . '%'
+                     . '</div></div>';
+            })
             ->addColumn('state_label', function ($r) {
                 return '<span class="badge badge-secondary">' . $r->stateLabel() . '</span>';
             })
-            ->rawColumns(['state_label'])
+            ->rawColumns(['state_label', 'progress'])
             ->toJson();
     }
 

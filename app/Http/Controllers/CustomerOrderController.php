@@ -56,24 +56,14 @@ class CustomerOrderController extends Controller
                     return '<span class="text-muted small">0%</span>';
                 }
 
-                if ($pct >= 100) {
-                    $class = 'bg-success';
-                } elseif ($pct > 0) {
-                    $class = 'bg-info progress-bar-striped';
-                } else {
-                    $class = 'bg-secondary';
-                }
+                $class = $pct >= 100 ? 'bg-success' : ($pct > 0 ? 'bg-info progress-bar-striped' : 'bg-secondary');
 
-                $label = number_format($produced, 2, ',', '.') . ' / ' . number_format($qnt, 2, ',', '.');
-
-                return '<div class="d-flex align-items-center">'
-                    . '<div class="progress" style="height:16px; flex:1;">'
-                    . '<div class="progress-bar ' . $class . '" role="progressbar"'
-                    . ' style="width:' . $pct . '%;" aria-valuenow="' . $pct . '"'
-                    . ' aria-valuemin="0" aria-valuemax="100" title="' . e($label) . '">'
-                    . '</div></div>'
-                    . '<small class="mb-0 ml-2" style="min-width:56px; text-align:right;">' . $pct . '%</small>'
-                    . '</div>';
+                return '<div class="progress" style="height:18px;">'
+                     . '<div class="progress-bar ' . $class . '" role="progressbar"'
+                     . ' style="width:' . max($pct, 15) . '%; min-width:2em;"'
+                     . ' aria-valuenow="' . $pct . '" aria-valuemin="0" aria-valuemax="100">'
+                     . $pct . '%'
+                     . '</div></div>';
             })
             ->rawColumns(['state_label', 'progress_bar_html'])
             ->toJson();

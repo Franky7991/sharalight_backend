@@ -1,8 +1,7 @@
-@extends('adminlte::page')
-@section('title', 'Ordini di Produzione')
-@section('content_header')@stop
+<?php $__env->startSection('title', 'Ordini di Produzione'); ?>
+<?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
         <div class="d-flex align-items-center justify-content-between">
@@ -71,9 +70,9 @@
                         </div>
                         <select id="po_warehouse_id" class="form-control">
                             <option value="">-- Seleziona --</option>
-                            @foreach($warehouses as $w)
-                                <option value="{{ $w->id }}">{{ $w->name }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $warehouses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $w): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($w->id); ?>"><?php echo e($w->name); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
                     </div>
                 </div>
@@ -90,8 +89,8 @@
         </div>
     </div>
 </div>
-@stop
-@section('js')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('js'); ?>
 <script>
 $(document).ready(function () {
 
@@ -102,7 +101,7 @@ $(document).ready(function () {
         pageLength: 25,
         ajax: {
             type: 'POST',
-            url: '{{ route('production-orders.datatable') }}',
+            url: '<?php echo e(route('production-orders.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': csrfToken },
         },
         columns: [
@@ -169,7 +168,7 @@ $(document).ready(function () {
         hideErrors();
         var id = $('#po_id').val();
         $.ajax({
-            url: id ? '/production-orders/' + id : '{{ route('production-orders.store') }}',
+            url: id ? '/production-orders/' + id : '<?php echo e(route('production-orders.store')); ?>',
             type: id ? 'PUT' : 'POST',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: {
@@ -217,7 +216,7 @@ $(document).ready(function () {
         if (!confirm('Eliminare gli ordini selezionati?')) return;
 
         $.ajax({
-            url: '{{ route('production-orders.delete') }}',
+            url: '<?php echo e(route('production-orders.delete')); ?>',
             type: 'POST',
             headers: { 'X-CSRF-TOKEN': csrfToken },
             data: { ids: ids },
@@ -248,4 +247,5 @@ $(document).ready(function () {
 
 });
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/production_order/index.blade.php ENDPATH**/ ?>

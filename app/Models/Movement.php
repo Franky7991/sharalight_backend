@@ -16,6 +16,7 @@ class Movement extends Model
         'qnt',
         'unit_of_measure_id',
         'production_record_id',
+        'composition_key',
     ];
 
     public function warehouse()

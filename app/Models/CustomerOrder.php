@@ -12,11 +12,13 @@ class CustomerOrder extends Model
     const STATE_CREATED = 'created';
     const STATE_PRODUCTS_DEFINED = 'products_defined';
     const STATE_PRODUCTS_ALLOCATED = 'products_allocated';
+    const STATE_SHIPPED = 'shipped';
 
     const STATES = [
         self::STATE_CREATED           => 'Creato',
         self::STATE_PRODUCTS_DEFINED  => 'Prodotti Definiti',
         self::STATE_PRODUCTS_ALLOCATED => 'Prodotti Allocati',
+        self::STATE_SHIPPED           => 'Spedito',
     ];
 
     protected $fillable = [
@@ -75,6 +77,14 @@ class CustomerOrder extends Model
     public function isProductsAllocated(): bool
     {
         return $this->state === self::STATE_PRODUCTS_ALLOCATED;
+    }
+
+    /**
+     * L'ordine è nello stato "Spedito".
+     */
+    public function isShipped(): bool
+    {
+        return $this->state === self::STATE_SHIPPED;
     }
 
     /**

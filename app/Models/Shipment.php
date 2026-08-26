@@ -10,9 +10,11 @@ class Shipment extends Model
     use HasFactory;
 
     const STATE_CREATED = 'created';
+    const STATE_SHIPPED = 'shipped';
 
     const STATES = [
         self::STATE_CREATED => 'Creato',
+        self::STATE_SHIPPED => 'Spedito',
     ];
 
     protected $fillable = [
@@ -54,6 +56,11 @@ class Shipment extends Model
     public function isCreated(): bool
     {
         return $this->state === self::STATE_CREATED;
+    }
+
+    public function isShipped(): bool
+    {
+        return $this->state === self::STATE_SHIPPED;
     }
 
     public function details()

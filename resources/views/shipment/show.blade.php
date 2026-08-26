@@ -24,7 +24,13 @@
                     </dd>
                 </dl>
                 <div class="mt-3">
-                    <a href="{{ route('shipments.index') }}" class="btn btn-secondary btn-sm btn-block">
+                    @if($shipment->isCreated())
+                        <button type="button" class="btn btn-success btn-sm btn-block" id="btn-mark-shipped"
+                                title="Conferma la spedizione: genera i movimenti di scarico e imposta gli ordini come Spediti">
+                            <i class="fa fa-truck mr-1"></i> Spedito
+                        </button>
+                    @endif
+                    <a href="{{ route('shipments.index') }}" class="btn btn-secondary btn-sm btn-block mt-1">
                         <i class="fa fa-backward mr-1"></i> Indietro
                     </a>
                 </div>
@@ -107,6 +113,7 @@
 $(document).ready(function () {
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    var isShipped = {{ $shipment->isShipped() ? 'true' : 'false' }};
 
     var ordersTable = $('#table_shipment_orders').DataTable({
         order: [[0, 'asc']],
@@ -126,6 +133,7 @@ $(document).ready(function () {
             {
                 targets: 3,
                 render: function (id, type, row) {
+                    if (isShipped) return '';
                     return '<button class="btn btn-danger btn-xs btn-remove-order"'
                          + ' data-id="' + id + '" title="Rimuovi"><i class="fa fa-trash"></i></button>';
                 }
@@ -192,6 +200,26 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 var msg = 'Errore durante la rimozione.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                alert(msg);
+            },
+        });
+    });
+
+    // ---- Marca come Spedito ----------------------------------------------
+    $('#btn-mark-shipped').on('click', function () {
+        if (!confirm('Confermare la spedizione? Verranno generati i movimenti di scarico e gli ordini clienti collegati passeranno allo stato "Spedito".')) return;
+
+        $.ajax({
+            url: '{{ route('shipments.change-state', $shipment->id) }}',
+            type: 'PUT',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            data: { state: 'shipped' },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (xhr) {
+                var msg = 'Errore durante la conferma della spedizione.';
                 if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
                 alert(msg);
             },

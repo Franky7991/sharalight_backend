@@ -16,6 +16,7 @@ class StockController extends Controller
     public function listDataTable(Request $request)
     {
         $query = Stock::query()
+            ->where('qnt', '>', 0)
             ->with(['warehouse', 'product', 'unitOfMeasure'])
             ->get();
 

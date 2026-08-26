@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\CustomerOrder;
 use App\Models\Shipment;
+use App\Services\ShipmentService;
 
 class ShipmentController extends Controller
 {
@@ -98,6 +99,49 @@ class ShipmentController extends Controller
         $shipment->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Cambia lo stato della spedizione.
+     * La transizione consentita è solo "created" → "shipped" (Spedito),
+     * che genera i movimenti di scarico e porta gli ordini collegati a "Spedito".
+     *
+     * PUT /shipments/{shipment}/state
+     */
+    public function changeState(Request $request, string $id)
+    {
+        $shipment = Shipment::query()->findOrFail($id);
+
+        $request->validate([
+            'state' => ['required', 'string', 'in:' . implode(',', array_keys(Shipment::STATES))],
+        ]);
+
+        $newState = $request->input('state');
+
+        // Passaggio da "created" a "shipped"
+        if ($shipment->isCreated() && $newState === Shipment::STATE_SHIPPED) {
+            try {
+                app(ShipmentService::class)->markAsShipped($shipment);
+            } catch (\RuntimeException $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+
+            $shipment->refresh();
+
+            return response()->json([
+                'success'     => true,
+                'state'       => $shipment->state,
+                'state_label' => $shipment->stateLabel(),
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Transizione di stato non valida.',
+        ], 422);
     }
 
     public function delete(Request $request)

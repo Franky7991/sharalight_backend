@@ -36,13 +36,11 @@ class MovementObserver
             ? $movement->qnt * $sign
             : $movement->qnt * $sign * -1;
 
-        // Calcola la chiave di composizione SOLO per i movimenti di carico da produzione
-        // (ovvero quando un prodotto finito/semi-lavorato viene messo a magazzino).
-        // Gli scarichi di materie prime usano sempre stock generico (composition_key = null).
         $compositionKey  = null;
         $compositionData = null;
 
-        if ($movement->production_record_id && $causal->type === Causal::TYPE_LOAD) {
+        if ($causal->type === Causal::TYPE_LOAD && $movement->production_record_id) {
+            // Carico da produzione: calcola la composition_key dagli ingredienti del record
             $record = $movement->productionRecord
                 ?? ProductionRecord::with('customerOrderHasProduct.details.product')->find($movement->production_record_id);
 
@@ -53,11 +51,9 @@ class MovementObserver
                 $details = $cop->details->sortBy('recipe_id');
 
                 if ($details->isNotEmpty()) {
-                    // Chiave: hash degli ingredienti scelti ordinati per recipe_id
                     $keyParts = $details->map(fn($d) => $d->recipe_id . ':' . $d->product_id)->toArray();
                     $compositionKey = substr(md5(implode('|', $keyParts)), 0, 16);
 
-                    // Dati per la visualizzazione
                     $compositionData = $details->map(function ($d) {
                         return [
                             'product_name' => $d->product?->name ?? '?',
@@ -66,6 +62,10 @@ class MovementObserver
                     })->values()->toArray();
                 }
             }
+        } elseif ($causal->type === Causal::TYPE_UNLOAD && $movement->composition_key) {
+            // Scarico (es. spedizione): usa la composition_key passata direttamente
+            // sul movimento per colpire lo stock corretto
+            $compositionKey = $movement->composition_key;
         }
 
         $stock = Stock::query()->firstOrCreate(
