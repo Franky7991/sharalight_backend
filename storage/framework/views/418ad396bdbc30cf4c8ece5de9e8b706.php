@@ -1,21 +1,19 @@
-@extends('adminlte::page')
-@section('title', 'Dashboard')
-@section('content_header')@stop
 
-@section('content')
+<?php $__env->startSection('title', 'Dashboard'); ?>
+<?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
 
-{{-- ================================================================
-     Riga 1 – KPI cards
-     ================================================================ --}}
+<?php $__env->startSection('content'); ?>
+
+
 <div class="row">
     <div class="col-6 col-md-3">
         <div class="info-box">
             <span class="info-box-icon bg-info"><i class="fas fa-file-alt"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">Ordini Cliente</span>
-                <span class="info-box-number">{{ $ordersTotal }}</span>
+                <span class="info-box-number"><?php echo e($ordersTotal); ?></span>
                 <div class="progress"><div class="progress-bar bg-info" style="width:100%"></div></div>
-                <span class="progress-description">{{ $ordersCreated }} creati &middot; {{ $ordersShipped }} spediti</span>
+                <span class="progress-description"><?php echo e($ordersCreated); ?> creati &middot; <?php echo e($ordersShipped); ?> spediti</span>
             </div>
         </div>
     </div>
@@ -24,9 +22,9 @@
             <span class="info-box-icon bg-warning"><i class="fas fa-industry"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">Produzione</span>
-                <span class="info-box-number">{{ $prodTotal }}</span>
+                <span class="info-box-number"><?php echo e($prodTotal); ?></span>
                 <div class="progress"><div class="progress-bar bg-warning" style="width:100%"></div></div>
-                <span class="progress-description">{{ $prodInProcess }} in lav. &middot; {{ $prodCompleted }} completati</span>
+                <span class="progress-description"><?php echo e($prodInProcess); ?> in lav. &middot; <?php echo e($prodCompleted); ?> completati</span>
             </div>
         </div>
     </div>
@@ -35,92 +33,88 @@
             <span class="info-box-icon bg-success"><i class="fas fa-truck"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">Spedizioni</span>
-                <span class="info-box-number">{{ $shipTotal }}</span>
+                <span class="info-box-number"><?php echo e($shipTotal); ?></span>
                 <div class="progress"><div class="progress-bar bg-success" style="width:100%"></div></div>
-                <span class="progress-description">{{ $shipCreated }} in corso &middot; {{ $shipShipped }} spedite</span>
+                <span class="progress-description"><?php echo e($shipCreated); ?> in corso &middot; <?php echo e($shipShipped); ?> spedite</span>
             </div>
         </div>
     </div>
     <div class="col-6 col-md-3">
-        <div class="info-box {{ $negativeStocks->isNotEmpty() ? 'bg-danger' : '' }}">
-            <span class="info-box-icon {{ $negativeStocks->isNotEmpty() ? 'bg-danger' : 'bg-secondary' }}">
+        <div class="info-box <?php echo e($negativeStocks->isNotEmpty() ? 'bg-danger' : ''); ?>">
+            <span class="info-box-icon <?php echo e($negativeStocks->isNotEmpty() ? 'bg-danger' : 'bg-secondary'); ?>">
                 <i class="fas fa-exclamation-triangle"></i>
             </span>
             <div class="info-box-content">
                 <span class="info-box-text">Stock Negativi</span>
-                <span class="info-box-number">{{ $negativeStocks->count() }}</span>
-                <div class="progress"><div class="progress-bar {{ $negativeStocks->isNotEmpty() ? 'bg-danger' : 'bg-secondary' }}" style="width:100%"></div></div>
+                <span class="info-box-number"><?php echo e($negativeStocks->count()); ?></span>
+                <div class="progress"><div class="progress-bar <?php echo e($negativeStocks->isNotEmpty() ? 'bg-danger' : 'bg-secondary'); ?>" style="width:100%"></div></div>
                 <span class="progress-description">prodotti sotto zero</span>
             </div>
         </div>
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 1b – KPI secondari
-     ================================================================ --}}
+
 <div class="row">
-    {{-- Produzioni completate questo mese --}}
+    
     <div class="col-6 col-md-3">
         <div class="small-box bg-teal">
             <div class="inner">
-                <h3>{{ $prodThisMonth }}</h3>
+                <h3><?php echo e($prodThisMonth); ?></h3>
                 <p>Prod. completate questo mese</p>
             </div>
             <div class="icon"><i class="fas fa-check-circle"></i></div>
             <div class="small-box-footer">
-                Mese scorso: <strong>{{ $prodLastMonth }}</strong>
-                @if($prodThisMonth > $prodLastMonth)
+                Mese scorso: <strong><?php echo e($prodLastMonth); ?></strong>
+                <?php if($prodThisMonth > $prodLastMonth): ?>
                     <i class="fas fa-arrow-up ml-1"></i>
-                @elseif($prodThisMonth < $prodLastMonth)
+                <?php elseif($prodThisMonth < $prodLastMonth): ?>
                     <i class="fas fa-arrow-down ml-1"></i>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
-    {{-- Ordini in attesa (non spediti) --}}
+    
     <div class="col-6 col-md-3">
         <div class="small-box bg-primary">
             <div class="inner">
-                <h3>{{ $ordersTotal - $ordersShipped }}</h3>
+                <h3><?php echo e($ordersTotal - $ordersShipped); ?></h3>
                 <p>Ordini aperti (non spediti)</p>
             </div>
             <div class="icon"><i class="fas fa-hourglass-half"></i></div>
-            <a href="{{ route('customer-orders.index') }}" class="small-box-footer">
+            <a href="<?php echo e(route('customer-orders.index')); ?>" class="small-box-footer">
                 Vai agli ordini <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
     </div>
-    {{-- Ordini in ritardo --}}
+    
     <div class="col-6 col-md-3">
-        <div class="small-box {{ $lateOrders->isNotEmpty() ? 'bg-danger' : 'bg-secondary' }}">
+        <div class="small-box <?php echo e($lateOrders->isNotEmpty() ? 'bg-danger' : 'bg-secondary'); ?>">
             <div class="inner">
-                <h3>{{ $lateOrders->count() }}</h3>
+                <h3><?php echo e($lateOrders->count()); ?></h3>
                 <p>Ordini in ritardo</p>
             </div>
             <div class="icon"><i class="fas fa-clock"></i></div>
             <span class="small-box-footer">data consegna superata</span>
         </div>
     </div>
-    {{-- Spedizioni aperte --}}
+    
     <div class="col-6 col-md-3">
         <div class="small-box bg-indigo">
             <div class="inner">
-                <h3>{{ $shipCreated }}</h3>
+                <h3><?php echo e($shipCreated); ?></h3>
                 <p>Spedizioni in corso</p>
             </div>
             <div class="icon"><i class="fas fa-shipping-fast"></i></div>
-            <a href="{{ route('shipments.index') }}" class="small-box-footer">
+            <a href="<?php echo e(route('shipments.index')); ?>" class="small-box-footer">
                 Vai alle spedizioni <i class="fas fa-arrow-circle-right"></i>
             </a>
         </div>
     </div>
 </div>
 
-{{-- ================================================================
-     Riga avvisi – checklist azioni pendenti
-     ================================================================ --}}
-@if($alerts->isNotEmpty())
+
+<?php if($alerts->isNotEmpty()): ?>
 <div class="row">
     <div class="col-12">
         <div class="card card-outline card-danger">
@@ -128,13 +122,13 @@
                 <h5 class="mb-0">
                     <i class="fas fa-bell mr-1 text-danger"></i>
                     Avvisi &amp; Azioni Pendenti
-                    <span class="badge badge-danger ml-1">{{ $alerts->count() }}</span>
+                    <span class="badge badge-danger ml-1"><?php echo e($alerts->count()); ?></span>
                 </h5>
             </div>
             <div class="card-body p-0">
                 <div class="accordion" id="alertsAccordion">
-                    @foreach($alerts as $i => $alert)
-                    @php
+                    <?php $__currentLoopData = $alerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
                         $colClass = match($alert['level']) {
                             'danger'    => 'list-group-item-danger',
                             'warning'   => 'list-group-item-warning',
@@ -147,47 +141,45 @@
                             'info'    => 'badge-info',
                             default   => 'badge-secondary',
                         };
-                    @endphp
+                    ?>
                     <div class="card mb-0 border-0 border-bottom">
-                        <div class="card-header p-0" id="alertHead{{ $i }}">
+                        <div class="card-header p-0" id="alertHead<?php echo e($i); ?>">
                             <button class="btn btn-block text-left d-flex align-items-center px-3 py-2"
                                     type="button"
                                     data-toggle="collapse"
-                                    data-target="#alertCollapse{{ $i }}"
-                                    aria-expanded="{{ $i === 0 ? 'true' : 'false' }}"
-                                    aria-controls="alertCollapse{{ $i }}">
-                                <i class="{{ $alert['icon'] }} mr-2 text-{{ $alert['level'] === 'secondary' ? 'muted' : $alert['level'] }}"></i>
-                                <span class="flex-grow-1 font-weight-bold">{{ $alert['title'] }}</span>
-                                <span class="badge {{ $badgeClass }} ml-2">{{ $alert['items']->count() }}</span>
+                                    data-target="#alertCollapse<?php echo e($i); ?>"
+                                    aria-expanded="<?php echo e($i === 0 ? 'true' : 'false'); ?>"
+                                    aria-controls="alertCollapse<?php echo e($i); ?>">
+                                <i class="<?php echo e($alert['icon']); ?> mr-2 text-<?php echo e($alert['level'] === 'secondary' ? 'muted' : $alert['level']); ?>"></i>
+                                <span class="flex-grow-1 font-weight-bold"><?php echo e($alert['title']); ?></span>
+                                <span class="badge <?php echo e($badgeClass); ?> ml-2"><?php echo e($alert['items']->count()); ?></span>
                                 <i class="fas fa-chevron-down ml-2 small"></i>
                             </button>
                         </div>
-                        <div id="alertCollapse{{ $i }}"
-                             class="collapse {{ $i === 0 ? 'show' : '' }}"
-                             aria-labelledby="alertHead{{ $i }}"
+                        <div id="alertCollapse<?php echo e($i); ?>"
+                             class="collapse <?php echo e($i === 0 ? 'show' : ''); ?>"
+                             aria-labelledby="alertHead<?php echo e($i); ?>"
                              data-parent="#alertsAccordion">
                             <ul class="list-group list-group-flush">
-                                @foreach($alert['items'] as $item)
-                                <li class="list-group-item {{ $colClass }} py-1 px-4 d-flex align-items-center">
+                                <?php $__currentLoopData = $alert['items']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li class="list-group-item <?php echo e($colClass); ?> py-1 px-4 d-flex align-items-center">
                                     <i class="fas fa-arrow-right mr-2 small"></i>
-                                    <a href="{{ $item['url'] }}" class="text-dark">{{ $item['label'] }}</a>
+                                    <a href="<?php echo e($item['url']); ?>" class="text-dark"><?php echo e($item['label']); ?></a>
                                 </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
                     </div>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
-{{-- ================================================================
-     Riga 2 – Grafici principali
-     ================================================================ --}}<div class="row">
-    {{-- Movimenti 30 giorni --}}
+<div class="row">
+    
     <div class="col-md-8">
         <div class="card">
             <div class="card-header pb-0">
@@ -198,7 +190,7 @@
             </div>
         </div>
     </div>
-    {{-- Donut ordini per stato --}}
+    
     <div class="col-md-4">
         <div class="card">
             <div class="card-header pb-0">
@@ -208,21 +200,19 @@
                 <canvas id="chartOrdersState" style="max-height:200px;"></canvas>
             </div>
             <div class="card-footer p-2">
-                @foreach($ordersByState as $label => $count)
+                <?php $__currentLoopData = $ordersByState; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label => $count): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="d-flex justify-content-between small px-2">
-                    <span>{{ $label }}</span><strong>{{ $count }}</strong>
+                    <span><?php echo e($label); ?></span><strong><?php echo e($count); ?></strong>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 3 – Trend ordini + Spedizioni per mese
-     ================================================================ --}}
+
 <div class="row">
-    {{-- Ordini cliente per mese --}}
+    
     <div class="col-md-6">
         <div class="card">
             <div class="card-header pb-0">
@@ -233,7 +223,7 @@
             </div>
         </div>
     </div>
-    {{-- Spedizioni per mese --}}
+    
     <div class="col-md-6">
         <div class="card">
             <div class="card-header pb-0">
@@ -246,11 +236,9 @@
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 4 – Top prodotti prodotti + Stock per magazzino
-     ================================================================ --}}
+
 <div class="row">
-    {{-- Top 5 prodotti prodotti --}}
+    
     <div class="col-md-6">
         <div class="card">
             <div class="card-header pb-0">
@@ -261,7 +249,7 @@
             </div>
         </div>
     </div>
-    {{-- Stock totale per magazzino --}}
+    
     <div class="col-md-6">
         <div class="card">
             <div class="card-header pb-0">
@@ -274,11 +262,9 @@
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 5 – Donut prodotti per tipo + Fabbisogno materie prime
-     ================================================================ --}}
+
 <div class="row">
-    {{-- Prodotti per tipo --}}
+    
     <div class="col-md-4">
         <div class="card">
             <div class="card-header pb-0">
@@ -288,15 +274,15 @@
                 <canvas id="chartProductsType" style="max-height:200px;"></canvas>
             </div>
             <div class="card-footer p-2">
-                @foreach($productsByType as $label => $count)
+                <?php $__currentLoopData = $productsByType; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $label => $count): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <div class="d-flex justify-content-between small px-2">
-                    <span>{{ $label }}</span><strong>{{ $count }}</strong>
+                    <span><?php echo e($label); ?></span><strong><?php echo e($count); ?></strong>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div>
     </div>
-    {{-- Fabbisogno materie prime --}}
+    
     <div class="col-md-8">
         <div class="card">
             <div class="card-header pb-0">
@@ -306,9 +292,9 @@
                 </h5>
             </div>
             <div class="card-body p-0">
-                @if($rawMaterialNeeds->isEmpty())
+                <?php if($rawMaterialNeeds->isEmpty()): ?>
                     <p class="text-muted text-center py-3 mb-0">Nessun fabbisogno calcolato.</p>
-                @else
+                <?php else: ?>
                 <table class="table table-sm mb-0">
                     <thead class="thead-light">
                         <tr>
@@ -318,24 +304,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($rawMaterialNeeds as $n)
+                        <?php $__currentLoopData = $rawMaterialNeeds; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $n): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $n->product?->name ?? '-' }}</td>
-                            <td class="text-right font-weight-bold">{{ number_format((float)$n->total, 2, ',', '.') }}</td>
-                            <td>{{ $n->unitOfMeasure?->symbol ?? '-' }}</td>
+                            <td><?php echo e($n->product?->name ?? '-'); ?></td>
+                            <td class="text-right font-weight-bold"><?php echo e(number_format((float)$n->total, 2, ',', '.')); ?></td>
+                            <td><?php echo e($n->unitOfMeasure?->symbol ?? '-'); ?></td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 6 – Produzioni in lavorazione + Ordini in ritardo
-     ================================================================ --}}
+
 <div class="row">
     <div class="col-md-6">
         <div class="card">
@@ -343,77 +327,75 @@
                 <h5 class="mb-0">
                     <i class="fas fa-industry mr-1 text-warning"></i>
                     Produzioni in Lavorazione
-                    <span class="badge badge-warning ml-1">{{ $inProcessOrders->count() }}</span>
+                    <span class="badge badge-warning ml-1"><?php echo e($inProcessOrders->count()); ?></span>
                 </h5>
             </div>
             <div class="card-body p-0">
-                @if($inProcessOrders->isEmpty())
+                <?php if($inProcessOrders->isEmpty()): ?>
                     <p class="text-muted text-center py-3 mb-0">Nessuna produzione in corso.</p>
-                @else
+                <?php else: ?>
                 <table class="table table-sm mb-0">
                     <thead class="thead-light">
                         <tr><th>Progressivo</th><th>Magazzino</th><th>Data</th><th>Avanzamento</th></tr>
                     </thead>
                     <tbody>
-                        @foreach($inProcessOrders as $po)
-                        @php $pct = $po['pct']; $cls = $pct>=100?'bg-success':($pct>0?'bg-info progress-bar-striped':'bg-secondary'); @endphp
+                        <?php $__currentLoopData = $inProcessOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $po): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $pct = $po['pct']; $cls = $pct>=100?'bg-success':($pct>0?'bg-info progress-bar-striped':'bg-secondary'); ?>
                         <tr>
-                            <td><a href="/production-orders/{{ $po['id'] }}">{{ $po['progressive'] }}</a></td>
-                            <td>{{ $po['warehouse'] }}</td>
-                            <td>{{ $po['date'] }}</td>
+                            <td><a href="/production-orders/<?php echo e($po['id']); ?>"><?php echo e($po['progressive']); ?></a></td>
+                            <td><?php echo e($po['warehouse']); ?></td>
+                            <td><?php echo e($po['date']); ?></td>
                             <td style="min-width:110px;">
                                 <div class="progress" style="height:18px;">
-                                    <div class="progress-bar {{ $cls }}" style="width:{{ max($pct,15) }}%; min-width:2em;"
-                                         aria-valuenow="{{ $pct }}" aria-valuemin="0" aria-valuemax="100">{{ $pct }}%</div>
+                                    <div class="progress-bar <?php echo e($cls); ?>" style="width:<?php echo e(max($pct,15)); ?>%; min-width:2em;"
+                                         aria-valuenow="<?php echo e($pct); ?>" aria-valuemin="0" aria-valuemax="100"><?php echo e($pct); ?>%</div>
                                 </div>
                             </td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 
     <div class="col-md-6">
-        <div class="card {{ $lateOrders->isNotEmpty() ? 'border-danger' : '' }}">
-            <div class="card-header pb-0 {{ $lateOrders->isNotEmpty() ? 'bg-danger text-white' : '' }}">
+        <div class="card <?php echo e($lateOrders->isNotEmpty() ? 'border-danger' : ''); ?>">
+            <div class="card-header pb-0 <?php echo e($lateOrders->isNotEmpty() ? 'bg-danger text-white' : ''); ?>">
                 <h5 class="mb-0">
                     <i class="fas fa-clock mr-1"></i> Ordini in Ritardo
-                    @if($lateOrders->isNotEmpty())
-                        <span class="badge badge-light ml-1">{{ $lateOrders->count() }}</span>
-                    @endif
+                    <?php if($lateOrders->isNotEmpty()): ?>
+                        <span class="badge badge-light ml-1"><?php echo e($lateOrders->count()); ?></span>
+                    <?php endif; ?>
                 </h5>
             </div>
             <div class="card-body p-0">
-                @if($lateOrders->isEmpty())
+                <?php if($lateOrders->isEmpty()): ?>
                     <p class="text-muted text-center py-3 mb-0">Nessun ordine in ritardo.</p>
-                @else
+                <?php else: ?>
                 <table class="table table-sm mb-0">
                     <thead class="thead-light">
                         <tr><th>Progressivo</th><th>Cliente</th><th>Data Ordine</th><th>Stato</th></tr>
                     </thead>
                     <tbody>
-                        @foreach($lateOrders as $o)
+                        <?php $__currentLoopData = $lateOrders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $o): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td><a href="/customer-orders/{{ $o->id }}">{{ $o->progressive }}</a></td>
-                            <td>{{ $o->user?->name ?? '-' }}</td>
-                            <td class="text-danger font-weight-bold">{{ $o->order_date?->format('d/m/Y') }}</td>
-                            <td><span class="badge badge-secondary">{{ $o->stateLabel() }}</span></td>
+                            <td><a href="/customer-orders/<?php echo e($o->id); ?>"><?php echo e($o->progressive); ?></a></td>
+                            <td><?php echo e($o->user?->name ?? '-'); ?></td>
+                            <td class="text-danger font-weight-bold"><?php echo e($o->order_date?->format('d/m/Y')); ?></td>
+                            <td><span class="badge badge-secondary"><?php echo e($o->stateLabel()); ?></span></td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-{{-- ================================================================
-     Riga 7 – Top stock + Stock negativi
-     ================================================================ --}}
+
 <div class="row">
     <div class="col-md-6">
         <div class="card">
@@ -421,91 +403,91 @@
                 <h5 class="mb-0"><i class="fas fa-boxes mr-1 text-success"></i> Top 10 Stock</h5>
             </div>
             <div class="card-body p-0">
-                @if($topStocks->isEmpty())
+                <?php if($topStocks->isEmpty()): ?>
                     <p class="text-muted text-center py-3 mb-0">Nessun prodotto in stock.</p>
-                @else
+                <?php else: ?>
                 <table class="table table-sm mb-0">
                     <thead class="thead-light">
                         <tr><th>Prodotto</th><th class="text-right">Quantità</th><th>U.M.</th></tr>
                     </thead>
                     <tbody>
-                        @foreach($topStocks as $s)
+                        <?php $__currentLoopData = $topStocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $s->product?->name ?? '-' }}</td>
-                            <td class="text-right">{{ number_format((float)$s->qnt, 2, ',', '.') }}</td>
-                            <td>{{ $s->unitOfMeasure?->symbol ?? '-' }}</td>
+                            <td><?php echo e($s->product?->name ?? '-'); ?></td>
+                            <td class="text-right"><?php echo e(number_format((float)$s->qnt, 2, ',', '.')); ?></td>
+                            <td><?php echo e($s->unitOfMeasure?->symbol ?? '-'); ?></td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card {{ $negativeStocks->isNotEmpty() ? 'border-danger' : '' }}">
+        <div class="card <?php echo e($negativeStocks->isNotEmpty() ? 'border-danger' : ''); ?>">
             <div class="card-header pb-0">
                 <h5 class="mb-0">
-                    <i class="fas fa-exclamation-triangle mr-1 {{ $negativeStocks->isNotEmpty() ? 'text-danger' : 'text-muted' }}"></i>
+                    <i class="fas fa-exclamation-triangle mr-1 <?php echo e($negativeStocks->isNotEmpty() ? 'text-danger' : 'text-muted'); ?>"></i>
                     Stock Negativi
                 </h5>
             </div>
             <div class="card-body p-0">
-                @if($negativeStocks->isEmpty())
+                <?php if($negativeStocks->isEmpty()): ?>
                     <p class="text-muted text-center py-3 mb-0">Nessun prodotto con stock negativo.</p>
-                @else
+                <?php else: ?>
                 <table class="table table-sm mb-0">
                     <thead class="thead-light">
                         <tr><th>Prodotto</th><th>Magazzino</th><th class="text-right">Quantità</th><th>U.M.</th></tr>
                     </thead>
                     <tbody>
-                        @foreach($negativeStocks as $s)
+                        <?php $__currentLoopData = $negativeStocks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
-                            <td>{{ $s->product?->name ?? '-' }}</td>
-                            <td>{{ $s->warehouse?->name ?? '-' }}</td>
-                            <td class="text-right text-danger font-weight-bold">{{ number_format((float)$s->qnt, 2, ',', '.') }}</td>
-                            <td>{{ $s->unitOfMeasure?->symbol ?? '-' }}</td>
+                            <td><?php echo e($s->product?->name ?? '-'); ?></td>
+                            <td><?php echo e($s->warehouse?->name ?? '-'); ?></td>
+                            <td class="text-right text-danger font-weight-bold"><?php echo e(number_format((float)$s->qnt, 2, ',', '.')); ?></td>
+                            <td><?php echo e($s->unitOfMeasure?->symbol ?? '-'); ?></td>
                         </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
 
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 (function () {
 
     // ── Dati dal server ───────────────────────────────────────────────────
-    var movDays    = {!! json_encode($days->values()) !!};
-    var loads      = {!! json_encode(array_values($loadsByDay->toArray())) !!};
-    var unloads    = {!! json_encode(array_values($unloadsByDay->toArray())) !!};
+    var movDays    = <?php echo json_encode($days->values()); ?>;
+    var loads      = <?php echo json_encode(array_values($loadsByDay->toArray())); ?>;
+    var unloads    = <?php echo json_encode(array_values($unloadsByDay->toArray())); ?>;
 
     var movLabels  = movDays.map(function (d) { var p=d.split('-'); return p[2]+'/'+p[1]; });
 
-    var orderMonthLabels  = {!! json_encode($orderMonthLabels->values()) !!};
-    var ordersPerMonth    = {!! json_encode($ordersPerMonth->values()) !!};
+    var orderMonthLabels  = <?php echo json_encode($orderMonthLabels->values()); ?>;
+    var ordersPerMonth    = <?php echo json_encode($ordersPerMonth->values()); ?>;
 
-    var shipMonthLabels   = {!! json_encode($shipMonthLabels->values()) !!};
-    var shipmentsPerMonth = {!! json_encode($shipmentsPerMonth->values()) !!};
+    var shipMonthLabels   = <?php echo json_encode($shipMonthLabels->values()); ?>;
+    var shipmentsPerMonth = <?php echo json_encode($shipmentsPerMonth->values()); ?>;
 
-    var stateLabels = {!! json_encode(array_keys($ordersByState)) !!};
-    var stateCounts = {!! json_encode(array_values($ordersByState)) !!};
+    var stateLabels = <?php echo json_encode(array_keys($ordersByState)); ?>;
+    var stateCounts = <?php echo json_encode(array_values($ordersByState)); ?>;
 
-    var topProdLabels = {!! json_encode($topProduced->map(fn($r) => $r->product?->name ?? '?')->values()) !!};
-    var topProdData   = {!! json_encode($topProduced->map(fn($r) => round((float)$r->total_produced, 2))->values()) !!};
+    var topProdLabels = <?php echo json_encode($topProduced->map(fn($r) => $r->product?->name ?? '?')->values()); ?>;
+    var topProdData   = <?php echo json_encode($topProduced->map(fn($r) => round((float)$r->total_produced, 2))->values()); ?>;
 
-    var whLabels = {!! json_encode($stockByWarehouse->pluck('name')) !!};
-    var whData   = {!! json_encode($stockByWarehouse->pluck('total')) !!};
+    var whLabels = <?php echo json_encode($stockByWarehouse->pluck('name')); ?>;
+    var whData   = <?php echo json_encode($stockByWarehouse->pluck('total')); ?>;
 
-    var ptLabels = {!! json_encode(array_keys($productsByType)) !!};
-    var ptData   = {!! json_encode(array_values($productsByType)) !!};
+    var ptLabels = <?php echo json_encode(array_keys($productsByType)); ?>;
+    var ptData   = <?php echo json_encode(array_values($productsByType)); ?>;
 
     // ── Palette colori ────────────────────────────────────────────────────
     var palette = ['#007bff','#28a745','#ffc107','#dc3545','#17a2b8','#6f42c1','#fd7e14','#20c997'];
@@ -604,4 +586,6 @@
 
 })();
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/home.blade.php ENDPATH**/ ?>
