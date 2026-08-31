@@ -43,6 +43,7 @@
                                 </th>
                                 <th>Nome</th>
                                 <th>Email</th>
+                                <th class="text-center">Tipo</th>
                                 <th>Azioni</th>
                             </tr>
                         </thead>
@@ -87,6 +88,24 @@
                 },
                 { data: "name", name: "name" },
                 { data: "email", name: "email" },
+                {
+                    data: "app",
+                    name: "app",
+                    className: "text-center",
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            return data
+                                ? '<span class="badge badge-success">Webapp</span>'
+                                : '<span class="badge badge-secondary">Backend</span>';
+                        }
+                        if (type === 'filter') {
+                            // ricerca testuale ("Webapp" / "Backend")
+                            return data ? 'Webapp' : 'Backend';
+                        }
+                        // sort / type: valore ordinabile
+                        return data ? 1 : 0;
+                    }
+                },
                 { data: "id", name: "id" },
             ],
             sDom: '<"dataTables_top"lfBr>t<"dataTables_bottom"ip><"clear">',
@@ -105,7 +124,7 @@
                         return '<button type="button" class="btn btn-primary btn-sm btn_edit" data-id="' +
                             data + '"><i class="fa fa-edit"></i></button>';
                     },
-                    targets: 3
+                    targets: 4
                 },
             ],
         });

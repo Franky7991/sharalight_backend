@@ -23,7 +23,13 @@
                     </dd>
                 </dl>
                 <div class="mt-3">
-                    <a href="<?php echo e(route('shipments.index')); ?>" class="btn btn-secondary btn-sm btn-block">
+                    <?php if($shipment->isCreated()): ?>
+                        <button type="button" class="btn btn-success btn-sm btn-block" id="btn-mark-shipped"
+                                title="Conferma la spedizione: genera i movimenti di scarico e imposta gli ordini come Spediti">
+                            <i class="fa fa-truck mr-1"></i> Spedito
+                        </button>
+                    <?php endif; ?>
+                    <a href="<?php echo e(route('shipments.index')); ?>" class="btn btn-secondary btn-sm btn-block mt-1">
                         <i class="fa fa-backward mr-1"></i> Indietro
                     </a>
                 </div>
@@ -67,7 +73,6 @@
                             <th>Progressivo</th>
                             <th>Data Ordine</th>
                             <th>Indirizzo</th>
-                            <th>Produzione</th>
                             <th style="width:60px;">Azioni</th>
                         </tr>
                     </thead>
@@ -89,6 +94,7 @@
                 <tr>
                     <th>Ordine</th>
                     <th>Prodotto</th>
+                    <th>Composizione</th>
                     <th class="text-right">Quantità</th>
                     <th>U.M.</th>
                     <th class="text-right">Q.ta Prodotta</th>
@@ -105,6 +111,7 @@
 $(document).ready(function () {
 
     var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    var isShipped = <?php echo e($shipment->isShipped() ? 'true' : 'false'); ?>;
 
     var ordersTable = $('#table_shipment_orders').DataTable({
         order: [[0, 'asc']],
@@ -118,17 +125,13 @@ $(document).ready(function () {
             { data: 'progressive',     name: 'progressive' },
             { data: 'order_date_fmt',  name: 'order_date_fmt', orderable: false },
             { data: 'address',         name: 'address', orderable: false },
-            { data: 'progress_pct',    name: 'progress_pct', orderable: false,
-                render: function (data, type, row) {
-                    return (type === 'display') ? row.progress_bar_html : data;
-                }
-            },
             { data: 'id',              name: 'id', orderable: false, searchable: false },
         ],
         columnDefs: [
             {
-                targets: 4,
+                targets: 3,
                 render: function (id, type, row) {
+                    if (isShipped) return '';
                     return '<button class="btn btn-danger btn-xs btn-remove-order"'
                          + ' data-id="' + id + '" title="Rimuovi"><i class="fa fa-trash"></i></button>';
                 }
@@ -148,6 +151,7 @@ $(document).ready(function () {
         columns: [
             { data: 'order_progressive',      name: 'order_progressive' },
             { data: 'product_name',           name: 'product_name' },
+            { data: 'composition_html',       name: 'composition_html', orderable: false },
             { data: 'qnt_fmt',                name: 'qnt', className: 'text-right' },
             { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
             { data: 'qnt_produced_fmt',       name: 'qnt_produced', className: 'text-right' },
@@ -194,6 +198,26 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 var msg = 'Errore durante la rimozione.';
+                if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
+                alert(msg);
+            },
+        });
+    });
+
+    // ---- Marca come Spedito ----------------------------------------------
+    $('#btn-mark-shipped').on('click', function () {
+        if (!confirm('Confermare la spedizione? Verranno generati i movimenti di scarico e gli ordini clienti collegati passeranno allo stato "Spedito".')) return;
+
+        $.ajax({
+            url: '<?php echo e(route('shipments.change-state', $shipment->id)); ?>',
+            type: 'PUT',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+            data: { state: 'shipped' },
+            success: function () {
+                window.location.reload();
+            },
+            error: function (xhr) {
+                var msg = 'Errore durante la conferma della spedizione.';
                 if (xhr.responseJSON && xhr.responseJSON.message) msg = xhr.responseJSON.message;
                 alert(msg);
             },

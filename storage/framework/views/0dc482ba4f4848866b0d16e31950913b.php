@@ -24,6 +24,7 @@
                     <th>Progressivo</th>
                     <th>Data Produzione</th>
                     <th>Magazzino</th>
+                    <th class="text-center" style="width:200px;">Avanzamento</th>
                     <th>Stato</th>
                     <th style="width:80px;">Azioni</th>
                 </tr>
@@ -108,6 +109,11 @@ $(document).ready(function () {
             { data: 'progressive',         name: 'progressive' },
             { data: 'production_date_fmt', name: 'production_date' },
             { data: 'warehouse_name',      name: 'warehouse_name', orderable: false },
+            { data: 'progress_pct',        name: 'progress_pct', orderable: true, searchable: false,
+                render: function (data, type, row) {
+                    return (type === 'display') ? row.progress : data;
+                }
+            },
             { data: 'state_label',         name: 'state', orderable: false },
             { data: 'id',                  name: 'id', orderable: false, searchable: false },
         ],
@@ -120,7 +126,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 5,
+                targets: 6,
                 render: function (id, type, row) {
                     var html = '<a href="/production-orders/' + id + '" class="btn btn-info btn-xs mr-1" title="Apri">'
                              + '<i class="fa fa-eye"></i></a>';

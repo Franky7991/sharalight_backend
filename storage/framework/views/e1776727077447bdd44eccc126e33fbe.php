@@ -147,6 +147,49 @@ unset($__errorArgs, $__bag); ?>
 
                     <hr>
 
+                    
+                    <h6 class="text-uppercase text-muted font-weight-bold mb-3" style="font-size:.7rem; letter-spacing:.08em;">
+                        <i class="fas fa-truck mr-1"></i> Spedizione
+                    </h6>
+
+                    <?php $key = \App\Models\Setting::KEY_SHIPMENT_UNLOAD_CAUSAL; ?>
+                    <div class="form-group">
+                        <label for="<?php echo e($key); ?>">Causale <em>Scarico per Spedizione</em></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-arrow-circle-up text-danger"></i></span>
+                            </div>
+                            <select id="<?php echo e($key); ?>" name="<?php echo e($key); ?>"
+                                class="form-control <?php $__errorArgs = [$key];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                                <option value="">— Nessuna —</option>
+                                <?php $__currentLoopData = $unloadCausals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($c->id); ?>" <?php echo e(($settings[$key] ?? '') == $c->id ? 'selected' : ''); ?>>
+                                        <?php echo e($c->name); ?>
+
+                                    </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
+                            <?php $__errorArgs = [$key];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+                        <small class="form-text text-muted">Causale usata per scaricare i prodotti al momento della spedizione.</small>
+                    </div>
+
+                    <hr>
+
                     <div class="row">
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block btn-sm">
