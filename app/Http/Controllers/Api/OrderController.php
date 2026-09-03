@@ -68,6 +68,7 @@ class OrderController extends Controller
                 'type_label'             => $p->typeLabel(),
                 'category_id'            => $p->product_category_id,
                 'category_name'          => $p->productCategory?->name ?? '',
+                'product_category_id'    => $p->product_category_id,
                 'unit_of_measure_id'     => $p->productCategory?->unit_of_measure_id,
                 'unit_of_measure_symbol' => $p->productCategory?->unitOfMeasure?->symbol ?? '',
             ]);
