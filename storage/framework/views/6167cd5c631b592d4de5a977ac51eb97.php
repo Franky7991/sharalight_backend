@@ -12,9 +12,9 @@
                         data-list="table_orders" data-url="<?php echo e(route('customer-orders.delete')); ?>">
                     <i class="fa fa-trash"></i> Cancella
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="btn-new-order">
+                <!-- <button type="button" class="btn btn-primary btn-sm" id="btn-new-order">
                     <i class="fa fa-plus"></i> Nuovo
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
