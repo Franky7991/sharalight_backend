@@ -73,12 +73,16 @@ class CustomerOrderController extends Controller
     {
         $request->validate([
             'address'    => ['required', 'string', 'max:500'],
+            'lat'        => ['nullable', 'numeric', 'between:-90,90', 'required_with:lng'],
+            'lng'        => ['nullable', 'numeric', 'between:-180,180', 'required_with:lat'],
             'order_date' => ['required', 'date', 'after:today'],
         ]);
 
         CustomerOrder::query()->create([
             'progressive' => CustomerOrder::generateProgressive(),
             'address'     => $request->address,
+            'lat'         => $request->filled('lat') ? $request->lat : null,
+            'lng'         => $request->filled('lng') ? $request->lng : null,
             'user_id'     => auth()->id(),
             'order_date'  => $request->order_date,
             'state'       => CustomerOrder::STATE_CREATED,
@@ -93,13 +97,28 @@ class CustomerOrderController extends Controller
 
         $request->validate([
             'address'    => ['required', 'string', 'max:500'],
+            'lat'        => ['nullable', 'numeric', 'between:-90,90', 'required_with:lng'],
+            'lng'        => ['nullable', 'numeric', 'between:-180,180', 'required_with:lat'],
             'order_date' => ['required', 'date', 'after:today'],
         ]);
 
-        $order->update([
+        $data = [
             'address'    => $request->address,
             'order_date' => $request->order_date,
-        ]);
+        ];
+
+        // Coordinate: aggiornate solo se fornite. Se l'indirizzo testuale cambia
+        // senza nuove coordinate, quelle salvate non sarebbero più coerenti e
+        // vengono azzerate (verranno ricalcolate dal geocoding nella webapp).
+        if ($request->filled('lat') && $request->filled('lng')) {
+            $data['lat'] = $request->lat;
+            $data['lng'] = $request->lng;
+        } elseif ($request->address !== $order->address) {
+            $data['lat'] = null;
+            $data['lng'] = null;
+        }
+
+        $order->update($data);
 
         return response()->json(['success' => true]);
     }

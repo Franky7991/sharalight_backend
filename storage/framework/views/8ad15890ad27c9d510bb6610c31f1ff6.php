@@ -12,9 +12,9 @@
                         data-list="table_orders" data-url="<?php echo e(route('customer-orders.delete')); ?>">
                     <i class="fa fa-trash"></i> Cancella
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" id="btn-new-order">
+                <!-- <button type="button" class="btn btn-primary btn-sm" id="btn-new-order">
                     <i class="fa fa-plus"></i> Nuovo
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
@@ -29,7 +29,7 @@
                     <th>Utente</th>
                     <th>Stato</th>
                     <th class="text-center" style="width:200px;">Produzione</th>
-                    <th style="width:80px;">Azioni</th>
+                    <th style="width:110px;">Azioni</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -133,7 +133,22 @@ $(document).ready(function () {
             {
                 targets: 7,
                 render: function (id, type, row) {
-                    return '<a href="/customer-orders/' + id + '" class="btn btn-info btn-xs mr-1" title="Apri">'
+                    if (type !== 'display') return id;
+
+                    var lat = Number(row.lat);
+                    var lng = Number(row.lng);
+                    var hasCoordinates = row.lat !== null && row.lat !== undefined && String(row.lat).trim() !== ''
+                        && row.lng !== null && row.lng !== undefined && String(row.lng).trim() !== ''
+                        && Number.isFinite(lat) && lat >= -90 && lat <= 90
+                        && Number.isFinite(lng) && lng >= -180 && lng <= 180;
+                    var mapButton = hasCoordinates
+                        ? '<a href="https://www.openstreetmap.org/?mlat=' + lat + '&amp;mlon=' + lng
+                            + '#map=16/' + lat + '/' + lng + '" target="_blank" rel="noopener noreferrer"'
+                            + ' class="btn btn-success btn-xs mr-1" title="Apri mappa" aria-label="Apri mappa">'
+                            + '<i class="fas fa-map-marker-alt" aria-hidden="true"></i></a>'
+                        : '';
+
+                    return mapButton + '<a href="/customer-orders/' + id + '" class="btn btn-info btn-xs mr-1" title="Apri">'
                          + '<i class="fa fa-eye"></i></a>'
                          + '<button class="btn btn-primary btn-xs btn-edit-order mr-1"'
                          + ' data-id="' + id + '"'

@@ -2418,3 +2418,13 @@ Did you mean one of these?
 #19 C:/project/shara_light/backend/artisan(13): Illuminate/Foundation/Application->handleCommand(Object(Symfony/Component/Console/Input/ArgvInput))
 #20 {main}
 "} 
+[2026-09-17 15:31:42] local.ERROR: Undefined property: stdClass::$After {"exception":"[object] (ErrorException(code: 0): Undefined property: stdClass::$After at C:/project/shara_light/backend/_tmp_latlng_check.php:22)
+[stacktrace]
+#0 C:/project/shara_light/backend/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(258): Illuminate/Foundation/Bootstrap/HandleExceptions->handleError(2, 'Undefined prope...', 'C://project//shar...', 22)
+#1 C:/project/shara_light/backend/_tmp_latlng_check.php(22): Illuminate/Foundation/Bootstrap/HandleExceptions->{closure:Illuminate/Foundation/Bootstrap/HandleExceptions::forwardsTo():257}(2, 'Undefined prope...', 'C://project//shar...', 22)
+#2 [internal function]: {closure:C:/project/shara_light/backend/_tmp_latlng_check.php:20}(Object(stdClass), 3)
+#3 C:/project/shara_light/backend/vendor/laravel/framework/src/Illuminate/Collections/Arr.php(609): array_map(Object(Closure), Array, Array)
+#4 C:/project/shara_light/backend/vendor/laravel/framework/src/Illuminate/Collections/Collection.php(799): Illuminate/Support/Arr::map(Array, Object(Closure))
+#5 C:/project/shara_light/backend/_tmp_latlng_check.php(20): Illuminate/Support/Collection->map(Object(Closure))
+#6 {main}
+"} 

@@ -27,7 +27,7 @@ class OrderController extends Controller
             ->with('user')
             ->withCount('products')
             ->withSum('products', 'qnt')
-            ->orderByDesc('order_date')
+            ->orderByDesc('created_at')
             ->orderByDesc('id')
             ->get()
             ->map(function ($order) {
@@ -120,6 +120,8 @@ class OrderController extends Controller
      * POST /api/orders
      * body: {
      *   address: string,
+     *   lat: number (-90..90, opzionale),
+     *   lng: number (-180..180, opzionale),
      *   order_date: YYYY-MM-DD,
      *   products: [
      *     {
@@ -138,6 +140,8 @@ class OrderController extends Controller
     {
         $request->validate([
             'address'    => ['required', 'string', 'max:500'],
+            'lat'        => ['nullable', 'numeric', 'between:-90,90', 'required_with:lng'],
+            'lng'        => ['nullable', 'numeric', 'between:-180,180', 'required_with:lat'],
             'order_date' => ['required', 'date', 'after:today'],
             'products'   => ['required', 'array', 'min:1'],
 
@@ -155,6 +159,10 @@ class OrderController extends Controller
         ], [
             'address.required'         => 'L\'indirizzo di consegna è obbligatorio.',
             'address.max'              => 'L\'indirizzo non può superare :max caratteri.',
+            'lat.between'              => 'Latitudine non valida.',
+            'lng.between'              => 'Longitudine non valida.',
+            'lat.required_with'        => 'Coordinate indirizzo incomplete.',
+            'lng.required_with'        => 'Coordinate indirizzo incomplete.',
             'order_date.required'      => 'La data ordine è obbligatoria.',
             'order_date.after'         => 'La data ordine deve essere successiva a oggi.',
             'products.required'        => 'Aggiungi almeno un prodotto all\'ordine.',
@@ -171,6 +179,8 @@ class OrderController extends Controller
             $order = CustomerOrder::query()->create([
                 'progressive' => CustomerOrder::generateProgressive(),
                 'address'     => $request->address,
+                'lat'         => $request->filled('lat') ? $request->lat : null,
+                'lng'         => $request->filled('lng') ? $request->lng : null,
                 'user_id'     => $request->user()->id,
                 'order_date'  => $request->order_date,
                 'state'       => CustomerOrder::STATE_PRODUCTS_DEFINED,

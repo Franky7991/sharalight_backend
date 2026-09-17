@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GeocodeController;
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders',          [OrderController::class, 'index'])->name('api.orders.index');
     Route::get('/orders/catalog',  [OrderController::class, 'catalog'])->name('api.orders.catalog');
     Route::post('/orders',         [OrderController::class, 'store'])->name('api.orders.store');
+
+    // Autocomplete indirizzi (il provider esterno è contattato solo dal backend)
+    Route::get('/geocode', [GeocodeController::class, 'search'])->name('api.geocode.search');
 });
 
 

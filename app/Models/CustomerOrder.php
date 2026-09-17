@@ -26,6 +26,8 @@ class CustomerOrder extends Model
     protected $fillable = [
         'progressive',
         'address',
+        'lat',
+        'lng',
         'user_id',
         'order_date',
         'state',
@@ -56,6 +58,8 @@ class CustomerOrder extends Model
     {
         return [
             'order_date' => 'date',
+            'lat' => 'decimal:7',
+            'lng' => 'decimal:7',
             'qnt' => 'decimal:2',
             'qnt_produced' => 'decimal:2',
         ];

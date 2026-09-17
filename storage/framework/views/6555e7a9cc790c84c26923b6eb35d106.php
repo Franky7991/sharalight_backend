@@ -324,6 +324,11 @@ $(document).ready(function () {
         } else if (orderState === '<?php echo e(\App\Models\CustomerOrder::STATE_PRODUCTS_ALLOCATED); ?>') {
             $('#btn-define-products').addClass('d-none');
             $('#btn-allocate-products').addClass('d-none');
+        } else {
+            // "In Spedizione" / "Spedito": stato gestito dalla spedizione,
+            // nessuna transizione manuale disponibile
+            $('#btn-define-products').addClass('d-none');
+            $('#btn-allocate-products').addClass('d-none');
         }
     }
 
@@ -382,7 +387,8 @@ $(document).ready(function () {
                              + '<button class="btn btn-danger btn-xs btn-delete-op" data-id="' + id + '" title="Rimuovi">'
                              + '<i class="fa fa-trash"></i></button>';
                     }
-                    if (orderState === 'products_allocated') return '';
+                    if (orderState === '<?php echo e(\App\Models\CustomerOrder::STATE_PRODUCTS_ALLOCATED); ?>'
+                        || orderState === '<?php echo e(\App\Models\CustomerOrder::STATE_IN_SHIPMENT); ?>') return '';
                     var allocated = row.warehouses_allocated == 1;
                     var saved = allocated ? ' btn-success' : ' btn-outline-success';
                     var icon = allocated ? 'fa-check-circle' : 'fa-warehouse';
