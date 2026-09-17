@@ -12,12 +12,14 @@ class CustomerOrder extends Model
     const STATE_CREATED = 'created';
     const STATE_PRODUCTS_DEFINED = 'products_defined';
     const STATE_PRODUCTS_ALLOCATED = 'products_allocated';
+    const STATE_IN_SHIPMENT = 'in_shipment';
     const STATE_SHIPPED = 'shipped';
 
     const STATES = [
         self::STATE_CREATED           => 'Creato',
         self::STATE_PRODUCTS_DEFINED  => 'Prodotti Definiti',
         self::STATE_PRODUCTS_ALLOCATED => 'Prodotti Allocati',
+        self::STATE_IN_SHIPMENT       => 'In Spedizione',
         self::STATE_SHIPPED           => 'Spedito',
     ];
 
@@ -27,6 +29,7 @@ class CustomerOrder extends Model
         'user_id',
         'order_date',
         'state',
+        'state_before_shipment',
         'qnt',
         'qnt_produced',
     ];
@@ -80,11 +83,61 @@ class CustomerOrder extends Model
     }
 
     /**
+     * L'ordine è nello stato "In Spedizione".
+     */
+    public function isInShipment(): bool
+    {
+        return $this->state === self::STATE_IN_SHIPMENT;
+    }
+
+    /**
      * L'ordine è nello stato "Spedito".
      */
     public function isShipped(): bool
     {
         return $this->state === self::STATE_SHIPPED;
+    }
+
+    /**
+     * Porta l'ordine nello stato "In Spedizione" (aggiunta a una spedizione).
+     * Lo stato corrente viene memorizzato in state_before_shipment per poterlo
+     * ripristinare in caso di rimozione dalla spedizione.
+     * Non comporta movimenti di magazzino.
+     */
+    public function markAsInShipment(): void
+    {
+        // Già in spedizione (es. ordine presente in un'altra spedizione)
+        // oppure già spedito: lo stato precedente non va sovrascritto.
+        if ($this->isInShipment() || $this->isShipped()) {
+            return;
+        }
+
+        $this->update([
+            'state_before_shipment' => $this->state,
+            'state'                 => self::STATE_IN_SHIPMENT,
+        ]);
+    }
+
+    /**
+     * Ripristina lo stato precedente all'inserimento in spedizione
+     * (rimozione dell'ordine dalla spedizione o eliminazione della spedizione).
+     * Se l'ordine è ancora presente in un'altra spedizione resta
+     * "In Spedizione". Non comporta movimenti di magazzino.
+     */
+    public function restoreStateAfterShipmentRemoval(): void
+    {
+        if (! $this->isInShipment()) {
+            return;
+        }
+
+        if ($this->shipmentDetails()->exists()) {
+            return;
+        }
+
+        $this->update([
+            'state'                 => $this->state_before_shipment ?: self::STATE_PRODUCTS_ALLOCATED,
+            'state_before_shipment' => null,
+        ]);
     }
 
     /**

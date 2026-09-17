@@ -19,23 +19,16 @@ class ShipmentController extends Controller
     {
         $shipment = Shipment::query()->with('details.customerOrder')->findOrFail($id);
 
-        // Ordini disponibili per l'aggiunta: solo quelli interamente prodotti
-        // e non ancora presenti in questa spedizione.
-        $alreadyIds = $shipment->details->pluck('customer_order_id');
-
+        // Ordini disponibili per l'aggiunta: solo quelli nello stato
+        // "Prodotti Allocati", interamente prodotti (progressbar 100%) e non
+        // ancora inseriti in nessuna spedizione.
         $availableOrders = CustomerOrder::query()
+            ->where('state', CustomerOrder::STATE_PRODUCTS_ALLOCATED)
+            ->whereDoesntHave('shipmentDetails')
             ->with(['user'])
             ->withSum('products', 'qnt_produced')
             ->get()
-            ->filter(function ($order) use ($alreadyIds) {
-                if (! $order->isFullyProduced()) {
-                    return false;
-                }
-                if ($alreadyIds->contains($order->id)) {
-                    return false;
-                }
-                return true;
-            })
+            ->filter(fn ($order) => $order->isFullyProduced())
             ->values();
 
         return view('shipment.show', compact('shipment', 'availableOrders'));
@@ -96,7 +89,10 @@ class ShipmentController extends Controller
     public function destroy(string $id)
     {
         $shipment = Shipment::query()->findOrFail($id);
-        $shipment->delete();
+
+        // Ripristina lo stato precedente degli ordini clienti collegati
+        // (nessun movimento di magazzino).
+        app(ShipmentService::class)->deleteShipment($shipment);
 
         return response()->json(['success' => true]);
     }
@@ -147,13 +143,16 @@ class ShipmentController extends Controller
     public function delete(Request $request)
     {
         $deleted = 0;
+        $service = app(ShipmentService::class);
 
         foreach (($request->ids ?? []) as $id) {
             $shipment = Shipment::find($id);
             if (! $shipment) {
                 continue;
             }
-            $shipment->delete();
+            // Ripristina lo stato precedente degli ordini clienti collegati
+            // (nessun movimento di magazzino).
+            $service->deleteShipment($shipment);
             $deleted++;
         }
 

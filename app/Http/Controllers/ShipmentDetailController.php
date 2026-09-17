@@ -8,6 +8,7 @@ use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\Shipment;
 use App\Models\ShipmentDetail;
+use Illuminate\Support\Facades\DB;
 
 class ShipmentDetailController extends Controller
 {
@@ -43,16 +44,18 @@ class ShipmentDetailController extends Controller
             'customer_order_id' => ['required', 'exists:customer_orders,id'],
         ]);
 
-        // Solo ordini interamente prodotti (progressbar al 100%).
+        // Solo ordini con "Prodotti Allocati", interamente prodotti
+        // (progressbar al 100%) e non ancora inseriti in una spedizione.
         $order = CustomerOrder::query()
             ->where('id', $request->customer_order_id)
+            ->whereDoesntHave('shipmentDetails')
             ->withSum('products', 'qnt_produced')
             ->first();
 
-        if (! $order || ! $order->isFullyProduced()) {
+        if (! $order || ! $order->isProductsAllocated() || ! $order->isFullyProduced()) {
             return response()->json([
                 'success' => false,
-                'message' => 'È possibile aggiungere solo ordini clienti interamente prodotti (progressbar al 100%).',
+                'message' => 'È possibile aggiungere solo ordini clienti con "Prodotti Allocati" e interamente prodotti (progressbar al 100%).',
             ], 422);
         }
 
@@ -68,10 +71,17 @@ class ShipmentDetailController extends Controller
             ], 422);
         }
 
-        ShipmentDetail::query()->create([
-            'shipment_id'        => $shipmentId,
-            'customer_order_id'  => $order->id,
-        ]);
+        DB::transaction(function () use ($shipmentId, $order) {
+            ShipmentDetail::query()->create([
+                'shipment_id'        => $shipmentId,
+                'customer_order_id'  => $order->id,
+            ]);
+
+            // L'ordine passa nello stato "In Spedizione".
+            // Nessun movimento di magazzino: lo scarico avviene alla conferma
+            // della spedizione (ShipmentService::markAsShipped).
+            $order->markAsInShipment();
+        });
 
         return response()->json(['success' => true]);
     }
@@ -87,10 +97,19 @@ class ShipmentDetailController extends Controller
             ], 403);
         }
 
-        ShipmentDetail::query()
+        $detail = ShipmentDetail::query()
             ->where('shipment_id', $shipmentId)
-            ->findOrFail($id)
-            ->delete();
+            ->findOrFail($id);
+
+        DB::transaction(function () use ($detail) {
+            $order = $detail->customerOrder;
+
+            $detail->delete();
+
+            // L'ordine torna allo stato che aveva prima di essere inserito
+            // nella spedizione (nessun movimento di magazzino).
+            $order?->restoreStateAfterShipmentRemoval();
+        });
 
         return response()->json(['success' => true]);
     }

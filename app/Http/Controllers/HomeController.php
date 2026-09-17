@@ -159,8 +159,9 @@ class HomeController extends Controller
         $ordersCreated   = CustomerOrder::where('state', CustomerOrder::STATE_CREATED)->count();
         $ordersDefined   = CustomerOrder::where('state', CustomerOrder::STATE_PRODUCTS_DEFINED)->count();
         $ordersAllocated = CustomerOrder::where('state', CustomerOrder::STATE_PRODUCTS_ALLOCATED)->count();
+        $ordersInShipment = CustomerOrder::where('state', CustomerOrder::STATE_IN_SHIPMENT)->count();
         $ordersShipped   = CustomerOrder::where('state', CustomerOrder::STATE_SHIPPED)->count();
-        $ordersTotal     = $ordersCreated + $ordersDefined + $ordersAllocated + $ordersShipped;
+        $ordersTotal     = $ordersCreated + $ordersDefined + $ordersAllocated + $ordersInShipment + $ordersShipped;
 
         // ── KPI produzione ────────────────────────────────────────────────
         $prodTotal     = ProductionOrder::count();
@@ -275,6 +276,7 @@ class HomeController extends Controller
             CustomerOrder::STATES[CustomerOrder::STATE_CREATED]            => $ordersCreated,
             CustomerOrder::STATES[CustomerOrder::STATE_PRODUCTS_DEFINED]   => $ordersDefined,
             CustomerOrder::STATES[CustomerOrder::STATE_PRODUCTS_ALLOCATED] => $ordersAllocated,
+            CustomerOrder::STATES[CustomerOrder::STATE_IN_SHIPMENT]        => $ordersInShipment,
             CustomerOrder::STATES[CustomerOrder::STATE_SHIPPED]            => $ordersShipped,
         ];
 

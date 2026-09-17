@@ -528,7 +528,7 @@
         type: 'doughnut',
         data: {
             labels: stateLabels,
-            datasets: [{ data: stateCounts, backgroundColor:['#6c757d','#17a2b8','#ffc107','#28a745'], borderWidth:1 }],
+            datasets: [{ data: stateCounts, backgroundColor:['#6c757d','#17a2b8','#ffc107','#6f42c1','#28a745'], borderWidth:1 }],
         },
         options: { responsive:true, plugins:{ legend:{position:'bottom'} }, cutout:'65%' },
     });

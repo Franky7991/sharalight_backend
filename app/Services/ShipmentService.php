@@ -79,9 +79,31 @@ class ShipmentService
             $shipment->update(['state' => Shipment::STATE_SHIPPED]);
 
             // 3. Stato ordini clienti collegati
+            // (state_before_shipment non serve più: la spedizione è confermata)
             CustomerOrder::query()
                 ->whereIn('id', $orders->pluck('id'))
-                ->update(['state' => CustomerOrder::STATE_SHIPPED]);
+                ->update([
+                    'state'                 => CustomerOrder::STATE_SHIPPED,
+                    'state_before_shipment' => null,
+                ]);
+        });
+    }
+
+    /**
+     * Elimina una spedizione riportando gli ordini clienti collegati allo stato
+     * precedente all'inserimento in spedizione (se non presenti in altre
+     * spedizioni). Non comporta movimenti di magazzino.
+     */
+    public function deleteShipment(Shipment $shipment): void
+    {
+        DB::transaction(function () use ($shipment) {
+            $orders = $shipment->customerOrders()->get();
+
+            $shipment->delete();
+
+            foreach ($orders as $order) {
+                $order->restoreStateAfterShipmentRemoval();
+            }
         });
     }
 }
