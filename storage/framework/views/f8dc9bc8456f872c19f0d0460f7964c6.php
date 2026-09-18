@@ -35,6 +35,7 @@
                             <th>Nome</th>
                             <th>Categoria</th>
                             <th>Tipo</th>
+                            <th>Prezzo</th>
                             <th>Azioni</th>
                         </tr>
                     </thead>
@@ -108,6 +109,7 @@ $(document).ready(function () {
             { data: "name",                  name: "name" },
             { data: "product_category_name", name: "product_category_name" },
             { data: "type_label",            name: "type_label" },
+            { data: "price",                 name: "price" },
             { data: "id",                    name: "id" },
         ],
         columnDefs: [
@@ -119,7 +121,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 4,
+                targets: 5,
                 render: function (data, type, row) {
                     var treeBtn = '';
                     if (row.has_recipe) {

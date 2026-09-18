@@ -91,6 +91,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/products/list/table', [App\Http\Controllers\ProductController::class, 'listDataTable'])->name('products.datatable');
     Route::post('/products/delete', [App\Http\Controllers\ProductController::class, 'delete'])->name('products.delete');
     Route::get('/products/{product}/tree', [App\Http\Controllers\ProductController::class, 'tree'])->name('products.tree');
+    // Storico prezzi prodotto (vanno PRIMA del resource per evitare conflitti)
+    Route::post('/products/{product}/price-histories/list/table', [App\Http\Controllers\ProductController::class, 'listPriceHistories'])->name('products.price-histories.datatable');
     Route::resource('products', App\Http\Controllers\ProductController::class);
 
     Route::post('/product-categories/list/table', [App\Http\Controllers\ProductCategoryController::class, 'listDataTable'])->name('product-categories.datatable');

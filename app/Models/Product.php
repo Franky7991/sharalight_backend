@@ -30,7 +30,15 @@ class Product extends Model
         'name',
         'product_category_id',
         'type',
+        'price',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
+    }
 
     // ---- Helper ----
 
@@ -54,5 +62,10 @@ class Product extends Model
     public function recipes()
     {
         return $this->hasMany(Recipe::class);
+    }
+
+    public function priceHistories()
+    {
+        return $this->hasMany(ProductPriceHistory::class);
     }
 }

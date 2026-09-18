@@ -1,8 +1,8 @@
-@extends('adminlte::page')
-@section('title', 'Prodotti')
-@section('content_header')@stop
 
-@section('content')
+<?php $__env->startSection('title', 'Prodotti'); ?>
+<?php $__env->startSection('content_header'); ?><?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="card">
     <div class="card-header pb-0">
         <h4 class="mb-0">Prodotti</h4>
@@ -14,12 +14,12 @@
                     <div class="col-6"></div>
                     <div class="col-3">
                         <button type="button" class="btn btn-danger btn-block btn-sm js-delete"
-                            data-list="table_list" data-url="{{ route('products.delete') }}">
+                            data-list="table_list" data-url="<?php echo e(route('products.delete')); ?>">
                             <i class="fa fa-trash"></i> Cancella
                         </button>
                     </div>
                     <div class="col-3">
-                        <a href="{{ route('products.create') }}">
+                        <a href="<?php echo e(route('products.create')); ?>">
                             <button type="button" class="btn btn-primary btn-block btn-sm">
                                 <i class="fa fa-plus"></i> Nuovo
                             </button>
@@ -46,7 +46,7 @@
     </div>
 </div>
 
-{{-- Modal grafo ingredienti --}}
+
 <div class="modal fade" id="modal-product-tree" tabindex="-1" role="dialog"
      aria-labelledby="modal-product-tree-label" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -80,9 +80,9 @@
         </div>
     </div>
 </div>
-@stop
+<?php $__env->stopSection(); ?>
 
-@section('js')
+<?php $__env->startSection('js'); ?>
 <script src="https://unpkg.com/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
 <script>
 $(document).ready(function () {
@@ -92,7 +92,7 @@ $(document).ready(function () {
 
     // ---- DataTable prodotti ---------------------------------------------
     $(document).on('click', '.btn_edit', function () {
-        var url = "{{ route('products.show', ['_id_']) }}";
+        var url = "<?php echo e(route('products.show', ['_id_'])); ?>";
         window.location.href = url.replace('_id_', $(this).data('id'));
     });
 
@@ -101,7 +101,7 @@ $(document).ready(function () {
         pageLength: -1,
         ajax: {
             type: 'POST',
-            url: '{{ route('products.datatable') }}',
+            url: '<?php echo e(route('products.datatable')); ?>',
             headers: { 'X-CSRF-TOKEN': csrfToken },
         },
         columns: [
@@ -295,4 +295,6 @@ $(document).ready(function () {
 
 });
 </script>
-@stop
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('adminlte::page', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\project\shara_light\backend\resources\views/product/index.blade.php ENDPATH**/ ?>

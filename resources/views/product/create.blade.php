@@ -62,6 +62,16 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-6">
+                    <label for="price">Prezzo (€)</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                        </div>
+                        <input type="number" id="price" name="price" value="{{ old('price') }}"
+                            class="form-control" placeholder="0.00" step="0.01" min="0">
+                    </div>
+                </div>
                 <div class="col-12">
                     <div class="row">
                         <div class="col-3">

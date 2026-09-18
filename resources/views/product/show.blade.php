@@ -70,6 +70,17 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="price">Prezzo (€)</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-euro-sign"></i></span>
+                            </div>
+                            <input type="number" id="price" name="price" value="{{ $product->price }}"
+                                class="form-control" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
                     <div class="row mt-3">
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block btn-sm">
@@ -101,6 +112,12 @@
                         </a>
                     </li>
                     @endif
+                    <li class="nav-item">
+                        <a class="nav-link {{ $product->hasRecipe() ? '' : 'active' }}" id="tab-price-history"
+                            data-toggle="tab" href="#pane-price-history" role="tab">
+                            <i class="fas fa-history mr-1"></i> Storico Prezzi
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body">
@@ -115,6 +132,10 @@
                         La tab Ricetta è disponibile solo per Semi Lavorati e Prodotti Finiti.
                     </div>
                     @endif
+                    <div class="tab-pane fade {{ $product->hasRecipe() ? '' : 'show active' }}"
+                        id="pane-price-history" role="tabpanel">
+                        @include('product.tabs.price_history', ['product' => $product])
+                    </div>
                 </div>
             </div>
         </div>
@@ -124,6 +145,37 @@
 @stop
 
 @section('js')
+<script>
+$(document).ready(function () {
+
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+    // ---- DataTable storico prezzi ----------------------------------------
+    $("#table_price_history").DataTable({
+        order: [0, 'desc'],
+        pageLength: 10,
+        ajax: {
+            type: 'POST',
+            url: '{{ route('products.price-histories.datatable', $product->id) }}',
+            headers: { 'X-CSRF-TOKEN': csrfToken },
+        },
+        columns: [
+            { data: "created_at", name: "created_at" },
+            { data: "price",      name: "price", class: "text-right" },
+            { data: "user_name",  name: "user_name" },
+        ],
+        columnDefs: [
+            {
+                targets: 0,
+                render: function (data, type, row) {
+                    return type === 'display' ? row.created_at_fmt : data;
+                }
+            },
+        ],
+    });
+
+});
+</script>
 @if($product->hasRecipe())
 <style>
     /* Fix backdrop per modal annidate (Bootstrap 4) */

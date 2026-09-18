@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductPriceHistory;
 use App\Models\UnitOfMeasure;
 use App\Models\Recipe;
 
@@ -30,6 +32,7 @@ class ProductController extends Controller
                 $color = $colors[$row->type] ?? 'secondary';
                 return '<span class="badge badge-' . $color . '">' . $row->typeLabel() . '</span>';
             })
+            ->addColumn('price', fn($row) => $row->price === null ? '-' : number_format((float) $row->price, 2, ',', '.') . ' €')
             ->addColumn('has_recipe', fn($row) => $row->hasRecipe())
             ->rawColumns(['type_label'])
             ->toJson();
@@ -138,17 +141,24 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['price' => $this->normalizePrice($request->input('price'))]);
+
         $request->validate([
             'name'                => ['required', 'string', 'max:255'],
             'product_category_id' => ['required', 'exists:product_categories,id'],
             'type'                => ['required', 'in:' . implode(',', array_keys(Product::TYPES))],
+            'price'               => ['nullable', 'numeric', 'min:0'],
         ]);
 
-        Product::query()->create([
+        $product = Product::query()->create([
             'name'                => $request->name,
             'product_category_id' => $request->product_category_id,
             'type'                => $request->type,
+            'price'               => $request->price,
         ]);
+
+        // Storico: primo prezzo assegnato al prodotto
+        $this->recordPriceHistory($product, $product->price);
 
         return redirect(route('products.index'));
     }
@@ -166,17 +176,28 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail($id);
 
+        $request->merge(['price' => $this->normalizePrice($request->input('price'))]);
+
         $request->validate([
             'name'                => ['required', 'string', 'max:255'],
             'product_category_id' => ['required', 'exists:product_categories,id'],
             'type'                => ['required', 'in:' . implode(',', array_keys(Product::TYPES))],
+            'price'               => ['nullable', 'numeric', 'min:0'],
         ]);
+
+        $oldPrice = $product->price;
 
         $product->update([
             'name'                => $request->name,
             'product_category_id' => $request->product_category_id,
             'type'                => $request->type,
+            'price'               => $request->price,
         ]);
+
+        // Storico: registra il prezzo solo quando cambia (inclusa la rimozione)
+        if ($product->price != $oldPrice) {
+            $this->recordPriceHistory($product, $product->price);
+        }
 
         return redirect(route('products.index'));
     }
@@ -197,5 +218,51 @@ class ProductController extends Controller
             $item->delete();
         }
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * DataTable dello storico prezzi di un prodotto.
+     */
+    public function listPriceHistories(string $productId)
+    {
+        $histories = ProductPriceHistory::query()
+            ->with('user')
+            ->where('product_id', $productId)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->get();
+
+        return datatables($histories)
+            ->editColumn('price', fn($row) => $row->price === null ? '-' : number_format((float) $row->price, 2, ',', '.') . ' €')
+            ->addColumn('user_name', fn($row) => $row->user?->name ?? '-')
+            ->addColumn('created_at_fmt', fn($row) => $row->created_at?->format('d/m/Y H:i'))
+            ->toJson();
+    }
+
+    /**
+     * Normalizza il prezzo ricevuto dal form: accetta la virgola come
+     * separatore decimale e la stringa vuota come "nessun prezzo".
+     */
+    private function normalizePrice(mixed $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $value = trim((string) $value);
+
+        return $value === '' ? null : str_replace(',', '.', $value);
+    }
+
+    /**
+     * Registra una riga di storico per il prezzo del prodotto.
+     */
+    private function recordPriceHistory(Product $product, mixed $price): void
+    {
+        ProductPriceHistory::query()->create([
+            'product_id' => $product->id,
+            'price'      => $price,
+            'user_id'    => Auth::id(),
+        ]);
     }
 }
