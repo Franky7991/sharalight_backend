@@ -93,6 +93,8 @@
                                     <th>Prodotto</th>
                                     <th class="text-right">Quantità</th>
                                     <th>U.M.</th>
+                                    <th class="text-right">Prezzo</th>
+                                    <th class="text-right">Totale</th>
                                     <th style="width:80px;">Azioni</th>
                                 </tr>
                             </thead>
@@ -372,7 +374,11 @@ $(document).ready(function () {
             { data: 'qnt',                    name: 'qnt', className: 'text-right' },
             // 3 - u.m.
             { data: 'unit_of_measure_symbol', name: 'unit_of_measure_symbol', orderable: false },
-            // 4 - azioni
+            // 4 - prezzo unitario = (candela + ingredienti scelti)
+            { data: 'price',                  name: 'price', orderable: false, searchable: false, className: 'text-right' },
+            // 5 - totale riga = prezzo unitario × quantità
+            { data: 'price_total',            name: 'price_total', orderable: false, searchable: false, className: 'text-right' },
+            // 6 - azioni
             { data: 'id',                     name: 'id', orderable: false, searchable: false },
             // 5 - warehouses_allocated (hidden, used for rendering)
             { data: 'warehouses_allocated',   name: 'warehouses_allocated', orderable: false, searchable: false, visible: false },
@@ -389,7 +395,14 @@ $(document).ready(function () {
                 render: function (data) { return formatIt(data, 2); }
             },
             {
-                targets: 4,
+                targets: [4, 5],
+                render: function (data, type) {
+                    if (type !== 'display') return data;
+                    return (data === null || data === undefined) ? '—' : formatIt(data, 2) + ' €';
+                }
+            },
+            {
+                targets: 6,
                 render: function (id, type, row) {
                     if (canModify) {
                         return '<button class="btn btn-info btn-xs btn-config-op mr-1" data-id="' + id + '" title="Ingredienti">'

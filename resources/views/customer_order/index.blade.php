@@ -28,6 +28,7 @@
                     <th>Indirizzo</th>
                     <th>Utente</th>
                     <th>Stato</th>
+                    <th>Prezzo</th>
                     <th class="text-center" style="width:200px;">Produzione</th>
                     <th style="width:110px;">Azioni</th>
                 </tr>
@@ -117,6 +118,7 @@ $(document).ready(function () {
             { data: 'address',         name: 'address' },
             { data: 'user_name',       name: 'user_name' },
             { data: 'state_label',     name: 'state', orderable: false },
+            { data: 'price',           name: 'price', orderable: true, searchable: false },
             { data: 'progress_pct',    name: 'progress_pct', orderable: true, searchable: false,
                 render: function (data, type, row) {
                     return (type === 'display') ? row.progress_bar_html : data;
@@ -133,7 +135,7 @@ $(document).ready(function () {
                 }
             },
             {
-                targets: 7,
+                targets: 8,
                 render: function (id, type, row) {
                     if (type !== 'display') return id;
 

@@ -41,6 +41,11 @@ class CustomerOrderController extends Controller
             ->addColumn('state_label', function ($r) {
                 return '<span class="badge badge-secondary">' . $r->stateLabel() . '</span>';
             })
+            ->addColumn('price', function ($r) {
+                return (float) $r->price > 0
+                    ? number_format((float) $r->price, 2, ',', '.') . ' €'
+                    : '-';
+            })
             ->addColumn('progress_pct', function ($r) {
                 $qnt      = (float) $r->qnt;
                 $produced = (float) ($r->products_sum_qnt_produced ?? 0);

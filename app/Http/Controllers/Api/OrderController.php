@@ -41,6 +41,7 @@ class OrderController extends Controller
                     'state_label'    => $order->stateLabel(),
                     'qnt'            => (float) ($order->products_sum_qnt ?? 0),
                     'products_count' => (int) $order->products_count,
+                    'price'          => (float) ($order->price ?? 0),
                     'user_name'      => $order->user?->name ?? '-',
                 ];
             });
@@ -71,6 +72,7 @@ class OrderController extends Controller
                 'product_category_id'    => $p->product_category_id,
                 'unit_of_measure_id'     => $p->productCategory?->unit_of_measure_id,
                 'unit_of_measure_symbol' => $p->productCategory?->unitOfMeasure?->symbol ?? '',
+                'price'                  => $p->price !== null ? (float) $p->price : null,
             ]);
 
         $unitOfMeasures = UnitOfMeasure::query()->orderBy('name')->get()
@@ -148,6 +150,7 @@ class OrderController extends Controller
             'products.*.product_id'         => ['required', 'exists:products,id'],
             'products.*.qnt'                => ['required', 'regex:/^\d{1,15}([.,]\d{1,2})?$/'],
             'products.*.unit_of_measure_id' => ['required', 'exists:unit_of_measures,id'],
+            'products.*.price'              => ['nullable', 'numeric', 'min:0'],
 
             'products.*.details'                          => ['nullable', 'array'],
             'products.*.details.*.recipe_id'              => ['required', 'exists:recipes,id'],
@@ -156,6 +159,7 @@ class OrderController extends Controller
             'products.*.details.*.original_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
             'products.*.details.*.conversion_qnt'         => ['nullable', 'numeric'],
             'products.*.details.*.conversion_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
+            'products.*.details.*.price'                  => ['nullable', 'numeric', 'min:0'],
         ], [
             'address.required'         => 'L\'indirizzo di consegna è obbligatorio.',
             'address.max'              => 'L\'indirizzo non può superare :max caratteri.',
@@ -171,6 +175,8 @@ class OrderController extends Controller
             'products.*.qnt.required'  => 'Indica la quantità del prodotto.',
             'products.*.qnt.regex'     => 'Quantità prodotto non valida.',
             'products.*.unit_of_measure_id.required' => 'Unità di misura prodotto mancante.',
+            'products.*.price.numeric' => 'Prezzo prodotto non valido.',
+            'products.*.price.min'     => 'Il prezzo del prodotto non può essere negativo.',
         ]);
 
         $order = DB::transaction(function () use ($request) {
@@ -191,6 +197,44 @@ class OrderController extends Controller
                 $qnt = (float) str_replace(',', '.', $productData['qnt']);
                 $totalQnt += $qnt;
 
+                $product = Product::query()->find($productData['product_id']);
+
+                // Prezzo "candela": quello inviato dal client oppure, in
+                // assenza, il prezzo di listino attuale del prodotto.
+                $basePrice = $productData['price'] ?? ($product?->price ?? null);
+
+                // Prezzo degli ingredienti scelti: si sommano solo le materie
+                // prime (prodotti senza ricetta), così semi-lavorati e loro
+                // componenti non vengono conteggiati due volte.
+                $ingredientPrice = 0;
+                $detailRows = [];
+
+                foreach ($productData['details'] ?? [] as $selection) {
+                    $detailProduct = Product::query()->find($selection['product_id']);
+                    $detailPrice   = $selection['price'] ?? ($detailProduct?->price ?? null);
+
+                    if ($detailProduct
+                        && $detailProduct->type === Product::TYPE_RAW_MATERIAL
+                        && $detailPrice !== null) {
+                        $ingredientPrice += (float) $detailPrice;
+                    }
+
+                    $detailRows[] = [
+                        'recipe_id'                     => $selection['recipe_id'],
+                        'product_id'                    => $selection['product_id'],
+                        'original_qnt'                  => $selection['original_qnt'] ?? null,
+                        'original_unit_of_measure_id'   => $selection['original_unit_of_measure_id'] ?? null,
+                        'conversion_qnt'                => $selection['conversion_qnt'] ?? null,
+                        'conversion_unit_of_measure_id' => $selection['conversion_unit_of_measure_id'] ?? null,
+                        'price'                         => $detailPrice,
+                    ];
+                }
+
+                // Prezzo unitario riga = prezzo candela + ingredienti scelti
+                $unitPrice = ($basePrice === null && $ingredientPrice <= 0)
+                    ? null
+                    : (float) $basePrice + $ingredientPrice;
+
                 $orderProduct = CustomerOrderHasProduct::query()->create([
                     'customer_order_id'    => $order->id,
                     'product_id'           => $productData['product_id'],
@@ -198,22 +242,22 @@ class OrderController extends Controller
                     'qnt_produced'         => 0,
                     'unit_of_measure_id'   => $productData['unit_of_measure_id'],
                     'warehouses_allocated' => false,
+                    'price'                => $unitPrice,
                 ]);
 
-                foreach ($productData['details'] ?? [] as $selection) {
-                    CustomerOrderHasProductDetail::query()->create([
-                        'customer_order_has_product_id' => $orderProduct->id,
-                        'recipe_id'                     => $selection['recipe_id'],
-                        'product_id'                    => $selection['product_id'],
-                        'original_qnt'                  => $selection['original_qnt'] ?? null,
-                        'original_unit_of_measure_id'   => $selection['original_unit_of_measure_id'] ?? null,
-                        'conversion_qnt'                => $selection['conversion_qnt'] ?? null,
-                        'conversion_unit_of_measure_id' => $selection['conversion_unit_of_measure_id'] ?? null,
-                    ]);
+                foreach ($detailRows as $detailRow) {
+                    CustomerOrderHasProductDetail::query()->create(
+                        $detailRow + ['customer_order_has_product_id' => $orderProduct->id]
+                    );
                 }
             }
 
-            $order->update(['qnt' => $totalQnt]);
+            // Totale ordine = somma di (prezzo unitario riga × quantità)
+            $orderPrice = (float) CustomerOrderHasProduct::query()
+                ->where('customer_order_id', $order->id)
+                ->sum(DB::raw('qnt * price'));
+
+            $order->update(['qnt' => $totalQnt, 'price' => $orderPrice]);
 
             return $order;
         });
@@ -226,6 +270,7 @@ class OrderController extends Controller
                 'progressive' => $order->progressive,
                 'state'       => $order->state,
                 'state_label' => $order->stateLabel(),
+                'price'       => (float) $order->price,
             ],
         ], 201);
     }

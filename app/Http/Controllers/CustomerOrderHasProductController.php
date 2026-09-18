@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\CustomerOrderHasProductWarehouse;
+use App\Models\Product;
 use App\Models\Warehouse;
 use App\Services\UnitConversionService;
 
@@ -31,6 +32,8 @@ class CustomerOrderHasProductController extends Controller
         return datatables($rows)
             ->addColumn('product_name',          fn($r) => $r->product?->name          ?? '-')
             ->addColumn('unit_of_measure_symbol', fn($r) => $r->unitOfMeasure?->symbol ?? '-')
+            ->addColumn('price',       fn($r) => $r->price === null ? null : (float) $r->price)
+            ->addColumn('price_total', fn($r) => $r->price === null ? null : round((float) $r->price * (float) $r->qnt, 2))
             ->addColumn('warehouses_allocated',  fn($r) => $r->warehouses_allocated ? 1 : 0)
             ->addColumn('warehouses_html', function ($r) use ($warehouses) {
                 $allocations = $r->warehouses->keyBy('warehouse_id');
@@ -82,9 +85,13 @@ class CustomerOrderHasProductController extends Controller
                             . ($uomSym ? ' ' . e($uomSym) : '')
                             . '</span>';
 
+                    $priceStr = $d->price !== null
+                        ? ' <span class="text-muted">· ' . number_format((float) $d->price, 2, ',', '.') . ' €</span>'
+                        : '';
+
                     return '<span class="badge badge-light border mr-1">'
                          . '<strong>' . e($cat) . ':</strong> '
-                         . e($prod) . ' ' . $qntStr
+                         . e($prod) . ' ' . $qntStr . $priceStr
                          . '</span>';
                 });
 
@@ -111,14 +118,20 @@ class CustomerOrderHasProductController extends Controller
             'unit_of_measure_id' => ['required', 'exists:unit_of_measures,id'],
         ]);
 
-        CustomerOrderHasProduct::query()->create([
+        // Il prezzo unitario non si imposta a mano: è calcolato come
+        // (prezzo candela + prezzo ingredienti scelti). Gli ingredienti si
+        // scelgono dopo, nella configurazione della riga.
+        $row = CustomerOrderHasProduct::query()->create([
             'customer_order_id'  => $orderId,
             'product_id'         => $request->product_id,
             'qnt'                => str_replace(',', '.', $request->qnt),
             'unit_of_measure_id' => $request->unit_of_measure_id,
+            'price'              => null,
         ]);
 
+        $row->recalculatePrice();
         $this->recalculateOrderQnt($order);
+        $order->recalculatePrice();
 
         return response()->json(['success' => true]);
     }
@@ -141,6 +154,7 @@ class CustomerOrderHasProductController extends Controller
         $row->delete();
 
         $this->recalculateOrderQnt($order);
+        $order->recalculatePrice();
 
         return response()->json(['success' => true]);
     }

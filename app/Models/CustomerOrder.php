@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class CustomerOrder extends Model
 {
@@ -34,6 +35,7 @@ class CustomerOrder extends Model
         'state_before_shipment',
         'qnt',
         'qnt_produced',
+        'price',
     ];
 
     /**
@@ -54,6 +56,18 @@ class CustomerOrder extends Model
         return $year . '-' . str_pad($next, 5, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Ricalcola il prezzo totale dell'ordine:
+     * somma di (prezzo unitario riga × quantità), dove il prezzo unitario è
+     * (prezzo candela + prezzo ingredienti scelti).
+     */
+    public function recalculatePrice(): void
+    {
+        $total = $this->products()->sum(DB::raw('qnt * price'));
+
+        $this->update(['price' => (float) $total]);
+    }
+
     protected function casts(): array
     {
         return [
@@ -62,6 +76,7 @@ class CustomerOrder extends Model
             'lng' => 'decimal:7',
             'qnt' => 'decimal:2',
             'qnt_produced' => 'decimal:2',
+            'price' => 'decimal:2',
         ];
     }
 

@@ -17,7 +17,15 @@ class CustomerOrderHasProductDetail extends Model
         'original_unit_of_measure_id',
         'conversion_qnt',
         'conversion_unit_of_measure_id',
+        'price',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+        ];
+    }
 
     public function customerOrderHasProduct()
     {

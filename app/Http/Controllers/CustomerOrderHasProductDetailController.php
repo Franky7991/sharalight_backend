@@ -199,9 +199,14 @@ class CustomerOrderHasProductDetailController extends Controller
             'selections.*.original_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
             'selections.*.conversion_qnt'         => ['nullable', 'numeric'],
             'selections.*.conversion_unit_of_measure_id' => ['nullable', 'exists:unit_of_measures,id'],
+            'selections.*.price'                  => ['nullable', 'numeric', 'min:0'],
         ]);
 
         foreach ($request->selections as $sel) {
+            // Snapshot del prezzo unitario dell'ingrediente scelto: quello
+            // indicato esplicitamente oppure il prezzo di listino del prodotto.
+            $detailProduct = Product::query()->find($sel['product_id']);
+
             CustomerOrderHasProductDetail::query()->updateOrCreate(
                 [
                     'customer_order_has_product_id' => $orderProduct->id,
@@ -213,9 +218,16 @@ class CustomerOrderHasProductDetailController extends Controller
                     'original_unit_of_measure_id'   => $sel['original_unit_of_measure_id'] ?? null,
                     'conversion_qnt'                => $sel['conversion_qnt'] ?? null,
                     'conversion_unit_of_measure_id' => $sel['conversion_unit_of_measure_id'] ?? null,
+                    'price'                         => $sel['price'] ?? ($detailProduct?->price ?? null),
                 ]
             );
         }
+
+        // Il prezzo unitario della riga dipende dagli ingredienti scelti:
+        // (prezzo candela + prezzo ingredienti scelti) e il totale ordine
+        // va quindi ricalcolato.
+        $orderProduct->recalculatePrice();
+        $order->recalculatePrice();
 
         return response()->json(['success' => true]);
     }
