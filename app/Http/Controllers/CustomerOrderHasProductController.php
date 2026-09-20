@@ -85,8 +85,16 @@ class CustomerOrderHasProductController extends Controller
                             . ($uomSym ? ' ' . e($uomSym) : '')
                             . '</span>';
 
-                    $priceStr = $d->price !== null
-                        ? ' <span class="text-muted">· ' . number_format((float) $d->price, 2, ',', '.') . ' €</span>'
+                    // Prezzo dell'ingrediente: SOLO per le materie prime.
+                    // Semi-lavorati e prodotti finiti possono comparire come
+                    // ingredienti, ma il loro prezzo di listino non è un costo
+                    // ingrediente (non entra nel prezzo della riga: vedi
+                    // CustomerOrderHasProduct::recalculatePrice) e non va
+                    // mostrato.
+                    $ingredientPrice = $d->visibleIngredientPrice();
+
+                    $priceStr = $ingredientPrice !== null
+                        ? ' <span class="text-muted">· ' . number_format($ingredientPrice, 2, ',', '.') . ' €</span>'
                         : '';
 
                     return '<span class="badge badge-light border mr-1">'

@@ -29,7 +29,7 @@ class CustomerOrderHasProductDetailController extends Controller
 
         $recipes = Recipe::query()
             ->where('product_id', $orderProduct->product_id)
-            ->with(['productCategory.unitOfMeasure', 'unitOfMeasure'])
+            ->with(['productCategory.unitOfMeasure', 'unitOfMeasure', 'details'])
             ->get();
 
         $saved       = $orderProduct->details->keyBy('recipe_id');
@@ -49,14 +49,19 @@ class CustomerOrderHasProductDetailController extends Controller
             $qntConverted = $conv->convert($orderQnt, $orderUomId, $recipeUomId);
             $total        = $recipeQnt * $qntConverted;
 
-            $availableProducts = Product::query()
-                ->where('product_category_id', $category->id)
-                ->where('id', '!=', $orderProduct->product_id)
-                ->with('productCategory.unitOfMeasure')
-                ->orderBy('name')
-                ->get();
+            $savedProductId = $saved->get($recipe->id)?->product_id;
 
-            $selectedProduct = $availableProducts->firstWhere('id', $saved->get($recipe->id)?->product_id);
+            // Ingredienti proposti: filtrati dai prodotti abilitati nella
+            // ricetta (recipe_details), come nella webapp. La scelta già
+            // salvata resta sempre in elenco.
+            $availableProducts = $this->availableProductsForRecipe(
+                $recipe,
+                (int) $category->id,
+                [(int) $orderProduct->product_id],
+                $savedProductId !== null ? (int) $savedProductId : null
+            );
+
+            $selectedProduct = $availableProducts->firstWhere('id', $savedProductId);
             $categoryUomId = $selectedProduct?->productCategory?->unit_of_measure_id ?? $category->unit_of_measure_id;
             $categoryUomSym = $selectedProduct?->productCategory?->unitOfMeasure?->symbol ?? $category->unitOfMeasure?->symbol ?? '';
 
@@ -108,7 +113,7 @@ class CustomerOrderHasProductDetailController extends Controller
 
         $recipes = Recipe::query()
             ->where('product_id', $productId)
-            ->with(['productCategory.unitOfMeasure', 'unitOfMeasure'])
+            ->with(['productCategory.unitOfMeasure', 'unitOfMeasure', 'details'])
             ->get();
 
         return $recipes->map(function ($recipe) use ($parentQnt, $parentUomId, $conv, $saved, $depth, $excludeProductIds, $orderProduct) {
@@ -122,21 +127,24 @@ class CustomerOrderHasProductDetailController extends Controller
             $qntConverted = $conv->convert($parentQnt, $parentUomId, $recipeUomId);
             $total        = $recipeQnt * $qntConverted;
 
-            $availableProducts = Product::query()
-                ->where('product_category_id', $category->id)
-                ->whereNotIn('id', $excludeProductIds);
-
-            // Escludi anche il prodotto principale se disponibile
+            // Prodotti da escludere: gli antenati e il prodotto principale
+            $excludeIds = array_map('intval', $excludeProductIds);
             if ($orderProduct) {
-                $availableProducts->where('id', '!=', $orderProduct->product_id);
+                $excludeIds[] = (int) $orderProduct->product_id;
             }
 
-            $availableProducts = $availableProducts
-                ->with('productCategory.unitOfMeasure')
-                ->orderBy('name')
-                ->get();
+            $savedProductId = $saved->get($recipe->id)?->product_id;
 
-            $selectedProduct = $availableProducts->firstWhere('id', $saved->get($recipe->id)?->product_id);
+            // Ingredienti proposti: filtrati dai prodotti abilitati nella
+            // ricetta (recipe_details), come nella webapp.
+            $availableProducts = $this->availableProductsForRecipe(
+                $recipe,
+                (int) $category->id,
+                array_values(array_unique($excludeIds)),
+                $savedProductId !== null ? (int) $savedProductId : null
+            );
+
+            $selectedProduct = $availableProducts->firstWhere('id', $savedProductId);
             $categoryUomId = $selectedProduct?->productCategory?->unit_of_measure_id ?? $category->unit_of_measure_id;
             $categoryUomSym = $selectedProduct?->productCategory?->unitOfMeasure?->symbol ?? $category->unitOfMeasure?->symbol ?? '';
 
@@ -230,5 +238,64 @@ class CustomerOrderHasProductDetailController extends Controller
         $order->recalculatePrice();
 
         return response()->json(['success' => true]);
+    }
+
+    /**
+     * Prodotti proponibili per una riga di ricetta (lista guidata dalla
+     * ricetta, come nella webapp).
+     *
+     * `recipe_details` elenca i prodotti ABILITATI nella categoria della
+     * ricetta: se presente si propongono solo quelli, altrimenti si propone
+     * tutta la categoria. La scelta già salvata resta sempre in elenco (anche
+     * se non più abilitata), così un ordine già configurato non perde la
+     * scelta; se il filtro non lascia nessun prodotto si torna a proporre
+     * l'intera categoria, per non bloccare l'operatore.
+     *
+     * @param  int[]  $excludeProductIds  prodotti da escludere (il prodotto
+     *                                    della riga e i suoi antenati)
+     * @param  int|null  $selectedProductId  prodotto già scelto per la ricetta
+     */
+    private function availableProductsForRecipe(Recipe $recipe, int $categoryId, array $excludeProductIds, ?int $selectedProductId = null)
+    {
+        $enabledIds = $recipe->details->pluck('product_id')->map(fn ($id) => (int) $id)->all();
+
+        $products = $this->queryCategoryProducts($categoryId, $excludeProductIds, $enabledIds);
+
+        // Nessun prodotto abilitato disponibile (categorie o abilitazioni
+        // cambiate nel tempo): si propone di nuovo tutta la categoria.
+        if ($products->isEmpty() && $enabledIds !== []) {
+            $products = $this->queryCategoryProducts($categoryId, $excludeProductIds, []);
+        }
+
+        $productIds = $products->pluck('id')->map(fn ($id) => (int) $id)->all();
+
+        if ($selectedProductId !== null
+            && ! in_array($selectedProductId, $excludeProductIds, true)
+            && ! in_array($selectedProductId, $productIds, true)) {
+            $extra = Product::query()
+                ->with('productCategory.unitOfMeasure')
+                ->find($selectedProductId);
+
+            if ($extra) {
+                $products = $products->push($extra)->sortBy('name')->values();
+            }
+        }
+
+        return $products;
+    }
+
+    /**
+     * Prodotti di una categoria, opzionalmente limitati a un elenco di id
+     * abilitati e senza i prodotti da escludere.
+     */
+    private function queryCategoryProducts(int $categoryId, array $excludeProductIds, array $enabledIds)
+    {
+        return Product::query()
+            ->where('product_category_id', $categoryId)
+            ->when($excludeProductIds !== [], fn ($query) => $query->whereNotIn('id', $excludeProductIds))
+            ->when($enabledIds !== [], fn ($query) => $query->whereIn('id', $enabledIds))
+            ->with('productCategory.unitOfMeasure')
+            ->orderBy('name')
+            ->get();
     }
 }

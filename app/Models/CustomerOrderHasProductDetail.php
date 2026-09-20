@@ -27,6 +27,29 @@ class CustomerOrderHasProductDetail extends Model
         ];
     }
 
+    /**
+     * Prezzo dell'ingrediente da MOSTRARE: solo le materie prime (prodotti
+     * senza ricetta) hanno un prezzo ingrediente.
+     *
+     * I semi-lavorati e i prodotti finiti possono comparire come ingredienti
+     * (es. la Candela Piccola dentro la Candela Piccola con Busta), ma il loro
+     * prezzo di listino non è un costo ingrediente: non entra nel prezzo della
+     * riga (vedi CustomerOrderHasProduct::recalculatePrice) e quindi non va
+     * nemmeno mostrato.
+     *
+     * @return float|null  null = nessun prezzo da mostrare
+     */
+    public function visibleIngredientPrice(): ?float
+    {
+        if ($this->price === null) {
+            return null;
+        }
+
+        return $this->product?->type === Product::TYPE_RAW_MATERIAL
+            ? (float) $this->price
+            : null;
+    }
+
     public function customerOrderHasProduct()
     {
         return $this->belongsTo(CustomerOrderHasProduct::class);

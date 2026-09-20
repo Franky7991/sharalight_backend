@@ -80,3 +80,24 @@ routes/
 | PUT | /users/{id} | Aggiorna utente |
 | DELETE | /users/{id} | Elimina utente |
 | POST | /users/delete | Elimina multipli (bulk) |
+
+## Ordini cliente — regole su ingredienti e prezzi
+
+Regole valide **sia nel backend** (pagina ordine, modal "Ingredienti") **sia
+nella webapp** (`webapp/js/order-new.js`), così le due interfacce mostrano gli
+stessi dati:
+
+- **Ingredienti filtrati dalla ricetta** — ogni riga di ricetta
+  (`recipes` + `recipe_details`) abilita solo alcuni prodotti della categoria:
+  nel modal "Ingredienti" dell'ordine vengono proposti **solo quelli**. Se la
+  ricetta non abilita nessun prodotto la categoria è libera (tutti i prodotti
+  della categoria). La scelta già salvata resta comunque in elenco, anche se non
+  più abilitata, e se il filtro non lascia nessun prodotto si torna a proporre
+  l'intera categoria per non bloccare l'operatore.
+- **Prezzo ingrediente visibile solo per le materie prime** — i semi-lavorati e
+  i prodotti finiti possono comparire come ingredienti (es. *Candela Piccola*
+  dentro *Candela Piccola con Busta*), ma il loro prezzo di listino non è un
+  costo ingrediente: non entra nel prezzo della riga
+  (`CustomerOrderHasProduct::recalculatePrice()` somma solo
+  `products.type = raw_material`) e non viene mostrato nei badge ingredienti
+  (`CustomerOrderHasProductDetail::visibleIngredientPrice()`).
