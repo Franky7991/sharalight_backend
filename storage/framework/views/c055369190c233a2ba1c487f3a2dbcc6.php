@@ -64,7 +64,7 @@
 
 
 <?php if(! empty($config['responsive'])): ?>
-    <?php if (! $__env->hasRenderedOnce('bfbba9fe-0604-41fd-b3a7-ffb71a62db4a')): $__env->markAsRenderedOnce('bfbba9fe-0604-41fd-b3a7-ffb71a62db4a'); ?>
+    <?php if (! $__env->hasRenderedOnce('9e8779ac-f35f-4ba7-ae46-49bae385b891')): $__env->markAsRenderedOnce('9e8779ac-f35f-4ba7-ae46-49bae385b891'); ?>
     <?php $__env->startPush('css'); ?>
     <style type="text/css">
         .dataTable .child .dtr-details {

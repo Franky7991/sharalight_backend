@@ -1272,6 +1272,12 @@
       'title' => 'SharaLight',
       'max_tokens' => 2000,
     ),
+    'paypal' => 
+    array (
+      'mode' => 'live',
+      'client_id' => 'BAAzOS_hBVNFQkbEffYRstK045p_Q6iKUWrQHk5hAm1Py2UU3JPjgGOSqZdm_Ot1ngwLpd7aZwaqdEhZ40',
+      'secret' => 'EHyqay6awg1VVk1H2MvY3h_Xt9esYPZodWCmYwYi8ov8Kw7ZXvLUA3EW_1n2q_TaoYvixhnvbkdeFxGv',
+    ),
   ),
   'session' => 
   array (

@@ -225,4 +225,9 @@ class CustomerOrder extends Model
     {
         return $this->hasMany(ShipmentDetail::class);
     }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
 }

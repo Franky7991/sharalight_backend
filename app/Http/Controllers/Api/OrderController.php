@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CustomerOrder;
 use App\Models\CustomerOrderHasProduct;
 use App\Models\CustomerOrderHasProductDetail;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Recipe;
 use App\Models\UnitConversion;
@@ -25,6 +26,7 @@ class OrderController extends Controller
         $orders = CustomerOrder::query()
             ->where('user_id', $request->user()->id)
             ->with('user')
+            ->with('payment')
             ->withCount('products')
             ->withSum('products', 'qnt')
             ->orderByDesc('created_at')
@@ -43,6 +45,12 @@ class OrderController extends Controller
                     'products_count' => (int) $order->products_count,
                     'price'          => (float) ($order->price ?? 0),
                     'user_name'      => $order->user?->name ?? '-',
+                    'payment'        => $order->payment ? [
+                        'id' => $order->payment->id,
+                        'status' => $order->payment->status,
+                        'amount' => (float) $order->payment->amount,
+                        'paid_at' => $order->payment->paid_at?->format('d/m/Y H:i'),
+                    ] : null,
                 ];
             });
 
